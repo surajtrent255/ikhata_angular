@@ -1,0 +1,137 @@
+<ngx-smart-modal
+  identifier="selectProduct"
+  #selectProduct
+  [closable]="false"
+  [dismissable]="true"
+>
+  <div class="row mt-4" *ngIf="selectMenusForProduct.length > 0">
+    <h5 class="custom-modal-title">
+      Select Product {{ selectMenusForProduct.length }}
+    </h5>
+    <button
+      id="closeSelectProductPop"
+      type="button"
+      style="background-size: 50% !important"
+      class="btn-close registerBtn"
+      (click)="destroySelectProduct()"
+      aria-label="Close"
+    ></button>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-stripped">
+            <thead>
+              <tr>
+                <th class="last-child">Select</th>
+                <th>S.N</th>
+                <th
+                  class="first-child sortable"
+                  sortDir="asc"
+                  sortCol="organization_id"
+                  id="id"
+                >
+                  Name
+                </th>
+                <th>Barcode</th>
+                <th>Discount(%)</th>
+                <th>unit</th>
+              </tr>
+            </thead>
+            <tbody id="prodTable">
+              <tr
+                *ngFor="let product of selectMenusForProduct; let index = index"
+                id="company_{{ product.id }}"
+              >
+                <td>
+                  <span *ngIf="index === 0">
+                    <input
+                      type="radio"
+                      name="selectUniqueProd"
+                      *ngIf="index === 0"
+                      #selectedProductBtn
+                      checked
+                      (keyup)="onButtonKeyUp($event, product)"
+                      class="submit_btn border-rad"
+                    />
+                  </span>
+
+                  <span *ngIf="index !== 0">
+                    <input
+                      type="radio"
+                      (keyup)="onButtonKeyUp($event, product)"
+                      name="selectUniqueProd"
+                      class="submit_btn border-rad"
+                    />
+                  </span>
+                </td>
+                <td>{{ index + 1 }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.barcode }}</td>
+                <td>{{ product.discount }}</td>
+                <td>{{ product.unit }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- part 2 -->
+  <div class="custom-modal-content" *ngIf="selectMenusForProduct.length === 0">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">
+        <i class="fa-solid fa-circle-exclamation"></i> No record found. Would
+        you like to create product ? ?
+      </h5>
+      <!-- <button
+        #closeButton
+        type="button"
+        style="background-size: 50% !important"
+        class="btn-close closeButton"
+        aria-label="Close"
+      ></button> -->
+    </div>
+    <div class="row mt-1 mb-1">
+      <div class="col-md-3">
+        <span class="ml -3">
+          <input
+            #createProductBtn
+            type="radio"
+            style="margin-left: 2px"
+            name="createCustDecs"
+            value="1"
+            checked
+            (keyup)="onButtonKeyUpForDispalyAddProductPopup($event)"
+          />
+          <button class="submit_btn border-rad" (click)="alertYes()">
+            Yes
+          </button>
+          <button
+            style="display: none"
+            id="createNewProduct"
+            class="createNewTableRecord"
+          ></button>
+        </span>
+      </div>
+      <div class="col-md-3">
+        <span>
+          <input
+            type="radio"
+            style="margin-left: 2px"
+            name="createCustDecs"
+            value="0"
+            (keyup)="onButtonKeyUpForDispalyAddProductPopup($event)"
+          />
+          <button class="submit_btn border-rad" (click)="alertNo()">No</button>
+        </span>
+      </div>
+    </div>
+  </div></ngx-smart-modal
+>
+
+<app-create-product
+  [createProductEnable]="createProductEnable"
+  (emitToReset)="createProductEnable = !createProductEnable"
+  (productInfoEvent)="productAdded($event)"
+  (destroyCreateProd)="disableCreateProduct($event)"
+></app-create-product>

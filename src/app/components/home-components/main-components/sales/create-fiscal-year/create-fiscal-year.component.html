@@ -1,0 +1,245 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Create Fiscal Year</h5>
+  <button
+    id="closeCreateLoan"
+    type="button"
+    (click)="destroyComp()"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <form [formGroup]="fiscalYearInfoForm" (ngSubmit)="createFiscalYear()">
+      <table class="table table-striped">
+        <tr>
+          <td class="col-md-3"><mat-label>Fiscal Year </mat-label></td>
+          <td class="col-md-6">
+            <input
+              style="margin-left: 0.6rem; width: 65%"
+              matInput
+              type="text"
+              formControlName="fiscalYear"
+            />
+          </td>
+          <td class="col-md-3">
+            <div class="text-danger">
+              <span
+                *ngIf="
+                  fiscalYearInfoForm.get('fiscalYear')?.hasError('required') &&
+                  fiscalYearInfoForm.get('fiscalYear')?.touched
+                "
+                >* required</span
+              >
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <mat-label color="accent">First Quarter</mat-label>
+          </td>
+          <td class="col-md-6">
+            <mat-form-field color="accent">
+              <mat-date-range-input [rangePicker]="picker">
+                <input
+                  matStartDate
+                  formControlName="firstQuarterStart"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="firstQuarterEnd"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+                (click)="setCss($event)"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.firstQuarterStart.hasError(
+                    'matStartDateInvalid'
+                  )
+                "
+                >Invalid start date</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.firstQuarterEnd.hasError(
+                    'matEndDateInvalid'
+                  )
+                "
+                >Invalid end date</mat-error
+              >
+            </mat-form-field>
+          </td>
+          <td class="col-md-3"></td>
+        </tr>
+
+        <tr>
+          <td class="col-md-3">
+            <mat-label color="accent">Second Quarter</mat-label>
+          </td>
+          <td class="col-md-6">
+            <mat-form-field color="accent">
+              <mat-date-range-input [rangePicker]="secondQuarterPicker">
+                <input
+                  matStartDate
+                  formControlName="secondQuarterStart"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="secondQuarterEnd"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="secondQuarterPicker"
+                (click)="setCss($event)"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker
+                #secondQuarterPicker
+              ></mat-date-range-picker>
+
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.secondQuarterStart.hasError(
+                    'matStartDateInvalid'
+                  )
+                "
+                >Invalid start date</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.secondQuarterEnd.hasError(
+                    'matEndDateInvalid'
+                  )
+                "
+                >Invalid end date</mat-error
+              >
+            </mat-form-field>
+          </td>
+          <td class="col-md-3"></td>
+        </tr>
+
+        <tr>
+          <td class="col-md-3">
+            <mat-label color="accent">Third Quarter</mat-label>
+          </td>
+          <td class="col-md-6">
+            <mat-form-field color="accent">
+              <mat-date-range-input [rangePicker]="thirdQuarterPicker">
+                <input
+                  matStartDate
+                  formControlName="thirdQuarterStart"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="thirdQuarterEnd"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="thirdQuarterPicker"
+                (click)="setCss($event)"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker
+                #thirdQuarterPicker
+              ></mat-date-range-picker>
+
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.thirdQuarterStart.hasError(
+                    'matStartDateInvalid'
+                  )
+                "
+                >Invalid start date</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.thirdQuarterEnd.hasError(
+                    'matEndDateInvalid'
+                  )
+                "
+                >Invalid end date</mat-error
+              >
+            </mat-form-field>
+          </td>
+          <td class="col-md-3"></td>
+        </tr>
+
+        <tr>
+          <td class="col-md-3">
+            <mat-label color="accent">Fourth Quarter</mat-label>
+          </td>
+          <td class="col-md-6">
+            <mat-form-field color="accent">
+              <mat-date-range-input [rangePicker]="fourthQuarterPicker">
+                <input
+                  matStartDate
+                  formControlName="fourthQuarterStart"
+                  placeholder="Start date"
+                />
+                <input
+                  matEndDate
+                  formControlName="fourthQuarterEnd"
+                  placeholder="End date"
+                />
+              </mat-date-range-input>
+              <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="fourthQuarterPicker"
+                (click)="setCss($event)"
+              ></mat-datepicker-toggle>
+              <mat-date-range-picker
+                #fourthQuarterPicker
+              ></mat-date-range-picker>
+
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.fourthQuarterStart.hasError(
+                    'matStartDateInvalid'
+                  )
+                "
+                >Invalid start date</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  fiscalYearInfoForm.controls.fourthQuarterEnd.hasError(
+                    'matEndDateInvalid'
+                  )
+                "
+                >Invalid end date</mat-error
+              >
+            </mat-form-field>
+          </td>
+          <td class="col-md-3"></td>
+        </tr>
+      </table>
+      <div class="custom-modal-footer">
+        <input
+          type="submit"
+          class="btn btn-success border-rad"
+          id="submitCreateFiscalYear"
+          value="Add Fiscal Year"
+        />
+        <button type="button" class="btn btn-secondary" (click)="destroyComp()">
+          Close
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

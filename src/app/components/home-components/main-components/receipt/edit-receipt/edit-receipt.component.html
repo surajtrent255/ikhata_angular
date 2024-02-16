@@ -1,0 +1,85 @@
+<a
+  type="button"
+  #editReceiptDetailsPopup
+  id="editReceiptDetailsPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#editReceiptDetails"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="editReceiptDetails"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Expense Details</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <form class="p-3">
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount</label>
+              <input type="number" class="form-control" name="amount" />
+            </div>
+
+            <div class="mb-3">
+              <label for="topic" class="form-label">Topic</label>
+              <input type="text" class="form-control" name="topic" />
+            </div>
+
+            <div class="mb-3">
+              <label for="billNo" class="form-label">Bill No</label>
+              <input type="text" class="form-control" name="billNo" />
+            </div>
+
+            <div class="mb-3">
+              <label for="payTo" class="form-label">Pay To</label>
+              <input type="text" class="form-control" name="payTo" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Date</label>
+              <div class="input-group">
+                <span class="input-group-text">BS</span>
+                <input
+                  type="text"
+                  id="nepali-datepicker"
+                  placeholder="Select Date"
+                  class="form-control"
+                  name="date"
+                />
+              </div>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+              <button type="submit" class="btn btn-primary border-rad ml-2">
+                Update
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

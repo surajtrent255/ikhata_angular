@@ -1,0 +1,19 @@
+select {
+    width: 67%;
+    height:auto;
+    background-color: whitesmoke;
+}
+
+.date{
+    padding-left: 7px;;
+}
+
+.date input{
+    width: 69%;
+    /* height: 20%; */
+}
+
+tr{
+    margin-top: 2px;
+}
+

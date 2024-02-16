@@ -1,0 +1,157 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Print Credit Note</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">credit-note-invoice</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center mt-2 mb-2">
+          <h3>Print Credit Note</h3>
+          <hr class="border-2 mb-2" />
+          <div
+            class="recordsTableDiv"
+            #httptraceTable
+            style="width: auto"
+            id="httptrace-table"
+          >
+            <table class="table table-striped">
+              <thead class="heading-custom-table">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="text-align: center">बिक्रि फिर्ता खाता</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody class="remove-border">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: center">
+                    (नियम २३ को उपनियम (१) को खण्ड (ज) संग संबन्धित )
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: center">
+                    करदाता दर्ता(PAN) : {{ creditNote.panNumber }}
+                  </td>
+                  <td style="text-align: center">
+                    करदाताको नाम: {{ creditNote.customerName }}
+                  </td>
+                  <td style="text-align: center">साल: {{ year }}</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table
+              cellspacing="0"
+              cellpadding="0"
+              class="customRecorsTable"
+              id="ProductsRecordsTable"
+            >
+              <thead>
+                <tr>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="centered">बिजक</th>
+                  <th class="centered"></th>
+                  <th class="right"></th>
+                  <th></th>
+                  <th class="bottom"></th>
+                  <th class="bottom"></th>
+                  <th class="centered" style="text-align: center">
+                    करयोग्य फिर्ता
+                  </th>
+                  <th class="right"></th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>मिति</th>
+                  <th>बिजक नम्बर</th>
+                  <th>खरिदारको नाम</th>
+                  <th>खरिदारको स्थायी लेखा नम्बर</th>
+                  <th>बस्तु बा सेवाको परिमाण</th>
+                  <th>बस्तु बा सेवाको नाम</th>
+                  <th>बस्तु बा सेवाको एकाई</th>
+                  <th>जम्मा फिर्ता(रु)</th>
+                  <th>स्थानीय कर छुटको फिर्ता मुल्य(रु)</th>
+                  <th>मुल्य(रु)</th>
+                  <th>कर(रु)</th>
+                </tr>
+              </thead>
+              <tbody id="prodTable">
+                <tr *ngFor="let data of creditNoteDetails">
+                  <td>{{ creditNote.nepaliDate }}</td>
+                  <td>{{ data.billNumber }}</td>
+                  <td>{{ creditNote.customerName }}</td>
+                  <td>{{ creditNote.panNumber }}</td>
+                  <td>{{ data.productQty }}</td>
+                  <td>{{ data.productName }}</td>
+                  <td>
+                    {{ data.productUnit }}
+                  </td>
+                  <td>{{ data.totalCreditAmount }}</td>
+
+                  <td></td>
+                  <td>{{ data.creditAmount }}</td>
+                  <td>{{ data.creditTaxAmount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="container" style="margin: 20px; padding-top: 20px">
+            <div class="row">
+              <div class="col-md-12">
+                <button
+                  class="submit_btn border-rad"
+                  routerLink="/home/creditnote/credit-note-report"
+                >
+                  Cancel
+                </button>
+                <button
+                  (click)="exportToExcel()"
+                  type="button"
+                  class="submit_btn border-rad"
+                >
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                  Export to Excel
+                </button>
+
+                <button
+                  (click)="exportToPdf()"
+                  type="button"
+                  class="submit_btn border-rad"
+                >
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                  Export to pdf
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

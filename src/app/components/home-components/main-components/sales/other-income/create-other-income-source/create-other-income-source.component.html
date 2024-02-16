@@ -1,0 +1,52 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Create Other Income Source</h5>
+  <!-- <button (click)="destroyComp()"
+   
+      >X</button> -->
+  <button
+    #closeButton
+    type="button"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+    (click)="destroyComp()"
+  ></button>
+</div>
+<!-- <div class="row" *ngIf="catSelected"> -->
+<div class="row mt-4">
+  <div class="col-md-12">
+    <table class="offset-md-1 table table-striped" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="col1 pt-2">
+          <label for="name">Source Title:</label>
+        </td>
+        <td>
+          <input
+            style="margin-left: 3px"
+            type="text"
+            placeholder="income source"
+            #des
+            (keydown.enter)="addOtherIncomeSource(des.value)"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="custom-modal-footer text-end">
+  <button
+    type="submit"
+    class="btn btn-success"
+    (click)="addOtherIncomeSource(des.value)"
+  >
+    Submit
+  </button>
+  <button type="submit" class="btn btn-danger" (click)="destroyComp()">
+    Cancel
+  </button>
+</div>

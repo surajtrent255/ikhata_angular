@@ -1,0 +1,142 @@
+<div class="custom-modal-dialog">
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">Edit Payment Details</h5>
+      <button
+        #closeButton
+        type="button"
+        style="background-size: 50% !important"
+        class="btn-close closeButton"
+        aria-label="Close"
+      ></button>
+    </div>
+
+    <div class="card" style="margin: 0">
+      <div class="card-body">
+        <form class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <table class="table formSection">
+              <tr>
+                <td class="col-md-3">Party Id</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    #partyId="ngModel"
+                    [(ngModel)]="Payment.partyId"
+                    name="partyId"
+                    class="form-control mandatory"
+                  />
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">Amount<span class=""></span></td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    #amount="ngModel"
+                    [(ngModel)]="Payment.amount"
+                    name="amount"
+                    class="form-control"
+                  />
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">TDS</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    #tdsDeducted="ngModel"
+                    [(ngModel)]="Payment.tdsDeducted"
+                    name="tdsDeducted"
+                    class="form-control"
+                  />
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">Payment Mode</td>
+                <td class="col-md-6">
+                  <select
+                    class="form-control"
+                    #paymentModeId="ngModel"
+                    [(ngModel)]="Payment.paymentModeId"
+                    name="paymentModeId"
+                    (change)="paymentModeChange(selected.value)"
+                    #selected
+                  >
+                    <option selected disabled>Select the state</option>
+                    <option *ngFor="let mode of paymentMode" [value]="mode.id">
+                      {{ mode.modeName }}
+                    </option>
+                  </select>
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr *ngIf="cheque">
+                <td class="col-md-3">Cheque Number<span class=""></span></td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    #checkNo="ngModel"
+                    [(ngModel)]="Payment.checkNo"
+                    name="checkNo"
+                    class="form-control"
+                  />
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr *ngIf="cheque">
+                <td class="col-md-3">Post Check Date</td>
+                <td class="col-md-6">
+                  <select
+                    class="form-control"
+                    #postDateCheck="ngModel"
+                    [(ngModel)]="Payment.postDateCheck"
+                    name="postDateCheck"
+                    #selected
+                    (change)="postCheckDateChange($event)"
+                  >
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </select>
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+
+              <tr *ngIf="datePickerEnable && cheque">
+                <td class="col-md-3">Post Check Date<span class=""></span></td>
+                <td class="col-md-6">
+                  <input
+                    type="date"
+                    #postCheckDate="ngModel"
+                    [(ngModel)]="Payment.postCheckDate"
+                    name="postCheckDate"
+                    class="form-control"
+                  />
+                </td>
+                <td class="col-md-3"></td>
+              </tr>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="custom-modal-footer">
+      <button type="button" class="btn btn-secondary closeButton">Close</button>
+      <button
+        type="button"
+        (click)="editPaymentDetails()"
+        class="btn btn-primary"
+      >
+        Save changes
+      </button>
+    </div>
+  </div>
+</div>

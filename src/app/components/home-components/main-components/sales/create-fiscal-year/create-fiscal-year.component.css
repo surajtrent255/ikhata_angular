@@ -1,0 +1,4 @@
+.mat-datepicker-panel {
+    z-index: 1001; /* Set a higher value */
+  }
+  

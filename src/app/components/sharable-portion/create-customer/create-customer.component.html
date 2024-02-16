@@ -1,0 +1,282 @@
+<div id="modal-header" class="custom-modal-header">
+  <h5 class="custom-modal-title">Create {{ title }}</h5>
+  <button
+    #closeButton
+    type="button"
+    (click)="destroyComp()"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="row">
+  <form
+    id="createProduct"
+    #compForm="ngForm"
+    [formGroup]="CompanyRegistrationForm"
+    (ngSubmit)="registerCompany(compForm)"
+  >
+    <div class="form-group">
+      <label for="panNo">PAN/VAT:</label>
+      <span class="mandatorySign">*</span>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="panNo"
+        name="panNo"
+        required
+        (change)="getCompanyByPanNo($event)"
+        title="Enter Text"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Pan/VAT:</label>
+      <div>
+        <label>
+          <input
+            type="radio"
+            name="Pan"
+            value="PAN"
+            (change)="registrationChange($event)"
+          />
+          Pan
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="Pan"
+            value="VAT"
+            (change)="registrationChange($event)"
+          />
+          VAT
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name of Company:</label>
+      <span class="mandatorySign">*</span>
+      <input
+        type="text"
+        class="form-control"
+        name="name"
+        formControlName="name"
+        required
+        title="Enter Text"
+      />
+      <div
+        *ngIf="
+          CompanyRegistrationForm.get('name')?.invalid &&
+          (CompanyRegistrationForm.get('name')?.dirty ||
+            CompanyRegistrationForm.get('name')?.touched)
+        "
+        class="validationMsg"
+      >
+        <br />Please enter valid Name.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="ownerName">Company Owner:</label>
+      <span class="mandatorySign">*</span>
+      <input
+        type="text"
+        class="form-control"
+        title="Enter Text"
+        formControlName="ownerName"
+        id="ownerName"
+      />
+      <div
+        *ngIf="
+          CompanyRegistrationForm.get('ownerName')?.invalid &&
+          (CompanyRegistrationForm.get('ownerName')?.dirty ||
+            CompanyRegistrationForm.get('ownerName')?.touched)
+        "
+        class="validationMsg"
+      >
+        <br />Please enter valid owner name.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Mobile No:</label>
+      <span class="mandatorySign">*</span>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="phone"
+        title="Enter Text"
+        id="custPartMobile"
+      />
+      <div
+        *ngIf="
+          CompanyRegistrationForm.get('phone')?.invalid &&
+          (CompanyRegistrationForm.get('phone')?.dirty ||
+            CompanyRegistrationForm.get('phone')?.touched)
+        "
+        class="validationMsg"
+      >
+        <br />Please enter valid Phone.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address:</label>
+      <input
+        type="text"
+        class="form-control"
+        title="Enter Text"
+        formControlName="email"
+        id="custPartEmail"
+      />
+      <div
+        *ngIf="
+          CompanyRegistrationForm.get('email')?.invalid &&
+          (CompanyRegistrationForm.get('email')?.dirty ||
+            CompanyRegistrationForm.get('email')?.touched)
+        "
+        class="validationMsg"
+      >
+        <br />Please enter valid Email.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label"
+        >Tax Pay Type <span class="mandatorySign">*</span></label
+      >
+      <select formControlName="taxPayType" class="form-select">
+        <option selected disabled>Select the Tax Pay Type</option>
+        <option [value]="'monthly'">Monthly</option>
+        <option [value]="'quaterly'">Quaterly</option>
+        <option [value]="'yearly'">Yearly</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <input
+        type="text"
+        class="form-control"
+        title="Enter Text"
+        formControlName="description"
+        id="custPartDesc"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="state">Province:</label>
+      <span class="mandatorySign">*</span>
+      <select
+        class="form-control"
+        formControlName="state"
+        aria-label=".form-select-sm example"
+        name="state"
+        #state
+        (change)="stateChange(state.value)"
+      >
+        <option selected disabled>Select the state</option>
+        <option *ngFor="let province of province" [value]="province.provinceId">
+          {{ province.provinceName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="district">District:</label>
+      <span *ngIf="provinceId !== 8" class="mandatorySign">*</span>
+      <select
+        id="district"
+        formControlName="district"
+        class="form-control"
+        aria-label=".form-select-sm example"
+        #district
+        (change)="districtChange()"
+      >
+        <option
+          *ngFor="let district of districts"
+          [value]="district.districtId"
+        >
+          {{ district.districtName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="munVdc">Muncipality/VDC:</label>
+      <span *ngIf="provinceId !== 8" class="mandatorySign">*</span>
+      <select
+        id="municipality"
+        formControlName="munVdc"
+        class="form-control"
+        aria-label=".form-select-sm example"
+        #selected
+      >
+        <option
+          *ngFor="let municipality of municipality"
+          [value]="municipality.municipalityName"
+        >
+          {{ municipality.municipalityName }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="wardNo">Ward No:</label>
+      <span *ngIf="provinceId !== 8" class="mandatorySign">*</span>
+      <input
+        id="ward"
+        type="number"
+        class="form-control"
+        formControlName="wardNo"
+        title="Enter Text"
+      />
+      <small
+        class="text-danger"
+        [ngStyle]="{
+          display:
+            CompanyRegistrationForm.get('wardNo')?.invalid &&
+            (CompanyRegistrationForm.get('wardNo')?.dirty ||
+              CompanyRegistrationForm.get('wardNo')?.touched)
+              ? 'block'
+              : 'none'
+        }"
+      >
+        invalid No
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="landLineNo">Landline No:</label>
+      <input
+        id="landLine"
+        type="number"
+        class="form-control"
+        formControlName="landLineNo"
+        title="Enter Text"
+      />
+      <div
+        *ngIf="
+          CompanyRegistrationForm.get('landLineNo')?.invalid &&
+          (CompanyRegistrationForm.get('landLineNo')?.dirty ||
+            CompanyRegistrationForm.get('landLineNo')?.touched)
+        "
+        class="validationMsg"
+      >
+        <br />Please enter valid land line no.
+      </div>
+    </div>
+    <div style="margin-top: 10px" class="custom-modal-footer">
+      <input
+        type="submit"
+        value="Register"
+        class="btn btn-success border-rad"
+        [disabled]="CompanyRegistrationForm.invalid"
+      />
+      <button type="button" class="btn btn-secondary" (click)="destroyComp()">
+        Close
+      </button>
+    </div>
+  </form>
+</div>

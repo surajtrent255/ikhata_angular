@@ -1,0 +1,132 @@
+<!-- <div class="popupHeading">
+    <h2 class="fleft">Expense Flow</h2>
+    <a href="" class="closeButton fright"
+      ><img src="../../../assets/resources/images/removetablink.png" alt="close"
+    /></a>
+    <div class="cboth"></div>
+  </div>
+  <div class="popupSubHeadingDiv createProduct">
+    <h1 class="heading">Edit Expense Details</h1>
+    <div>Edit Details</div>
+  </div> -->
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Edit expense</h5>
+  <button
+    #closeButton
+    type="button"
+    (click)="destroyComp()"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+  ></button>
+</div>
+<!-- *ngIf="showForm" -->
+<div class="row">
+  <div class="col-md-12">
+    <form>
+      <div class="chooseColoumnsWrapper">
+        <div class="fieldDiv popUpFormSectionWrapper">
+          <table class="formSection" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="col1">Topic</td>
+              <td class="col3">
+                <input
+                  type="text"
+                  #topic="ngModel"
+                  [(ngModel)]="expense.topic"
+                  name="topic"
+                  class="inputText mandatory"
+                />
+              </td>
+              <td class="col3"></td>
+            </tr>
+
+            <tr>
+              <td class="col1">Bill No<span class=""></span></td>
+
+              <td class="col3">
+                <input
+                  type="text"
+                  #billNo="ngModel"
+                  [(ngModel)]="expense.billNo"
+                  name="billNo"
+                  class="inputText"
+                />
+              </td>
+              <td class="col3"></td>
+            </tr>
+
+            <tr>
+              <td class="col1">Pay To</td>
+
+              <td class="col3">
+                <input
+                  type="text"
+                  #payTo="ngModel"
+                  [(ngModel)]="expense.payTo"
+                  name="payTo"
+                  class="inputText"
+                />
+              </td>
+              <td class="col3"></td>
+            </tr>
+
+            <tr>
+              <td class="col1">Date</td>
+
+              <td class="col3">
+                <!-- <input
+                        type="date"
+                        #date="ngModel"
+                        [(ngModel)]="expense.date"
+                        name="date"
+                        class="inputText"
+                      /> -->
+                <div style="width: 280px">
+                  <div style="display: flex">
+                    <input
+                      type="text"
+                      id="nepali-datepicker"
+                      placeholder="Select  Date"
+                      style="height: 25px; padding-left: 3px"
+                      class="inputText"
+                    />
+                    <span style="margin: auto">BS </span>
+                  </div>
+                  <div style="display: flex; margin-top: 3px">
+                    <input
+                      style="height: 25px"
+                      disabled
+                      type="text"
+                      id="AdDate"
+                      [(ngModel)]="expense.date"
+                      class="inputText"
+                    />
+                    <span style="margin: auto">AD</span>
+                  </div>
+                </div>
+              </td>
+              <td class="col3"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <input
+          type="submit"
+          value="Update"
+          (click)="updateExpense()"
+          class="btn btn-success"
+          id=""
+        />
+
+        <input
+          type="button"
+          value="Cancel"
+          (click)="destroyComp()"
+          class="btn btn-danger"
+        />
+      </div>
+    </form>
+  </div>
+</div>

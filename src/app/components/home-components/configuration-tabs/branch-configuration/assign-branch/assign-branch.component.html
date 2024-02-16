@@ -1,0 +1,85 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#assignBranch"
+  [hidden]="true"
+  id="assignBranchPopup"
+>
+  Large Modal
+</button>
+
+<div class="modal fade" id="assignBranch" tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Branch</h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Assign</th>
+                  </tr>
+                </thead>
+
+                <tbody id="prodTable" *ngFor="let allUser of assignUserList">
+                  <tr *ngIf="allUser.userId != loggedInUserId">
+                    <td>
+                      <a>{{ allUser.firstName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.lastName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.email }}</a>
+                    </td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        (change)="
+                          onAssignBranchPopupCheckBoxChange(
+                            $event,
+                            allUser.userId
+                          )
+                        "
+                      />
+                      <label for="input"></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          (click)="onBranchAssignPopupSaveButtonClicked()"
+          type="button"
+          class="btn btn-success border-rad"
+        >
+          Save
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Large Modal-->

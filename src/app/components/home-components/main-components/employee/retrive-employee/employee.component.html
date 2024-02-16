@@ -1,0 +1,275 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>employee</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">employees</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Employee Table</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        [(ngModel)]="searchWildCard"
+                        (keydown.enter)="fetchLimitedEmloyees()"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <select
+                        name="s"
+                        class="selectSearchType"
+                        [(ngModel)]="searchBy"
+                        id=""
+                      >
+                        <option value="name">NAME</option>
+                        <option value="designation">DESIGNATION</option>
+                        <option value="panno">PANNO</option>
+                        <option value="employee_type">EMPLOYEE TYPE</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-4 mt-2">
+                    <div>
+                      <a (click)="onCreate()" style="cursor: pointer">
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create employee</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a
+                          class="page-link pe-auto"
+                          (click)="changePage('prev')"
+                          style="cursor: pointer"
+                          aria-label="Previous"
+                        >
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">{{ currentPageNumber }}</a>
+                      </li>
+                      <li class="page-item">
+                        <a
+                          class="page-link pe-auto"
+                          (click)="changePage('next')"
+                          style="cursor: pointer"
+                          aria-label="Next"
+                        >
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th
+                        class="first-child sortable"
+                        sortDir="asc"
+                        sortCol="organization_id"
+                        id="id"
+                      >
+                        Id
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="organization_name"
+                        id="name"
+                      >
+                        Name
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="customer_name"
+                        id="designation"
+                      >
+                        Designation
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="panNo"
+                      >
+                        Pan No
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="salary"
+                      >
+                        Salary
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="employee_type"
+                        id="employee_type"
+                      >
+                        Employee Type
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="married_group_name"
+                        id="married"
+                      >
+                        Married
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="employee_group_name"
+                        id="tax"
+                      >
+                        Join Date
+                      </th>
+
+                      <th class="last-child">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="employeeTable">
+                    <tr *ngIf="availableEmployees.length < 1">
+                      <td
+                        colspan="9"
+                        style="
+                          vertical-align: middle;
+                          text-align: center !important;
+                        "
+                      >
+                        <span class="noemployeeRecord">No records found</span>
+                      </td>
+                    </tr>
+                    <!-- <c:forEach items="${employees}" var="employee">  -->
+                    <tr
+                      *ngFor="let employee of availableEmployees; let i = index"
+                      id="emp_{{ employee.sn }}"
+                    >
+                      <td>{{ i + 1 }}</td>
+
+                      <td>{{ employee.name }}</td>
+                      <td>
+                        <span *ngFor="let design of designations"
+                          ><span *ngIf="design.id === employee.designation">{{
+                            design.title
+                          }}</span></span
+                        >
+                      </td>
+                      <td>{{ employee.panNo }}</td>
+                      <td>{{ employee.salary }}</td>
+                      <td>
+                        <span *ngFor="let emp of employeeTypes"
+                          ><span *ngIf="emp.id === employee.employeeType">{{
+                            emp.name
+                          }}</span></span
+                        >
+                      </td>
+                      <td>{{ employee.married }}</td>
+                      <td>{{ employee.joinDateNepali }}</td>
+                      <td class="last-child">
+                        <a
+                          id="editEmployee"
+                          (click)="editEmployee(employee.sn)"
+                          class="createNewTableRecord"
+                        >
+                          <img
+                            src="../../../../assets/resources/images/editRow.png"
+                          />
+                        </a>
+                        <a (click)="deleteEmployee(employee.sn)" class="">
+                          <img
+                            src="../../../../assets/resources/images/deleteRow.png"
+                          />
+                        </a>
+                      </td>
+                    </tr>
+                    <!-- </c:forEach>	 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<ngx-smart-modal
+  identifier="confirmAlertPopup"
+  id="confirmAlertpopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-confirm-alert
+    *ngIf="confirmAlertDisplay"
+    [msg]="'Are you sure to delete this employee ? '"
+    (destroyConfirmAlertSectionEmitter)="
+      destroyConfirmAlertSectionEmitter($event)
+    "
+  >
+  </app-confirm-alert>
+</ngx-smart-modal>
+
+<div class="popupWrapper" cdkDrag id="editEmployeePopup" style="display: none">
+  <app-update-employee
+    *ngIf="showEmployeeEditComp"
+    [updateEmployeeId]="employeeEditId"
+    (successfullyUpddatedEmployeeEvent)="employeeAddedSuccesfully($event)"
+    (destroyUpdateEmployeeCompEvent)="disableShowEditComp($event)"
+  ></app-update-employee>
+</div>
+
+<ngx-smart-modal
+  identifier="createNewEmployeePopup"
+  id="createNewEmployeepopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-create-employee
+    *ngIf="enableCreateEmployee"
+    (successfullyAddedEmployeeEvent)="destoryCreateEmployee($event)"
+  ></app-create-employee>
+</ngx-smart-modal>

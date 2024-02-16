@@ -1,0 +1,80 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#assignCounter"
+  [hidden]="true"
+  #assignCounterPopup
+  id="assignCounterPopup"
+>
+  Large Modal
+</button>
+
+<div class="modal fade" id="assignCounter" tabindex="-1">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Branch</h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Assign</th>
+                  </tr>
+                </thead>
+                <tbody id="prodTable" *ngFor="let data of assignCounterUsers">
+                  <tr *ngIf="data.userId != loginService.getUserId()">
+                    <td>
+                      <a> {{ data.firstName }} </a>
+                    </td>
+                    <td>
+                      <a> {{ data.lastName }} </a>
+                    </td>
+                    <td>
+                      <a>{{ data.email }} </a>
+                    </td>
+                    <td>
+                      <input
+                        (change)="assignCounterChange($event, data.userId)"
+                        type="checkbox"
+                      />
+                      <label for="input">Assign Counter</label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          (click)="onSave()"
+          class="btn btn-success border-rad"
+        >
+          Save
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Large Modal-->

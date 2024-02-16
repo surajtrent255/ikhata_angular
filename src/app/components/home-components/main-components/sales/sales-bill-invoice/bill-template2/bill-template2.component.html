@@ -1,0 +1,300 @@
+<div style="display: inline-flex; justify-content: space-between">
+  <div style="display: grid; justify-content: space-around">
+    <div
+      id="printable-content"
+      class="contentRecordsTableContainer MainContainer"
+      style="width: 100%; height: 100%"
+    >
+      <div class="recordTableWrapper" style="height: auto">
+        <div class="recordCategory">
+          <h2
+            *ngIf="!salesInvoice.salesBillDTO.billPrinted"
+            class="text-center"
+            id=""
+            style="font-weight: bold !important"
+          >
+            {{
+              salesInvoice.salesBillDTO.hasAbbr
+                ? "ABBREVATED TAX INVOICE"
+                : "TAX INVOICE"
+            }}
+          </h2>
+          <h2
+            *ngIf="salesInvoice.salesBillDTO.billPrinted"
+            class="text-center"
+            id=""
+            style="font-weight: bold !important"
+          >
+            {{
+              salesInvoice.salesBillDTO.hasAbbr
+                ? "ABBREVATED INVOICE"
+                : "INVOICE"
+            }}
+          </h2>
+        </div>
+        <div class="row">
+          <div class="text-center">
+            <span>{{ company.name }} </span><br />
+            <span
+              >{{ company.state }}, {{ company.district }},
+              {{ company.munVdc }}</span
+            ><br />
+            <span>Phone: </span>
+            <span>{{ company.phone }}</span
+            ><br />
+            <span>VAT/PAN : </span>
+            <span>{{ company.panNo }}</span
+            ><br />
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="text-center">
+            <img
+              class="img-fluid"
+              style="height: 100px; width: 100px"
+              src="{{ company.imageUrl }}"
+              alt=""
+            />
+          </div>
+        </div>
+        <div class="popupContentWrapper">
+          <div class="row">
+            <div class="col-md-6">
+              <span>
+                <span style="font-weight: bold !important"
+                  >Invoice Number:</span
+                >
+                {{
+                  salesInvoice.salesBillDTO.hasAbbr
+                    ? salesInvoice.salesBillDTO.billNo
+                    : salesInvoice.salesBillDTO.billNo
+                }}</span
+              ><br />
+              <span>
+                <span style="font-weight: bold !important">Buyer's Name:</span>
+                {{
+                  salesInvoice.salesBillDTO.customerName
+                    ? salesInvoice.salesBillDTO.customerName
+                    : "N/A"
+                }}</span
+              ><br />
+              <span>
+                <span style="font-weight: bold !important"
+                  >Buyer's Address:</span
+                >
+                {{
+                  salesInvoice.customerAddress
+                    ? salesInvoice.customerAddress
+                    : "N/A"
+                }} </span
+              ><br />
+              <span>
+                <span style="font-weight: bold !important">Buyer's PAN: </span>
+                <p style="display: inline; margin: 0">
+                  {{
+                    salesInvoice.salesBillDTO.customerPan > 0
+                      ? salesInvoice.salesBillDTO.customerPan
+                      : "N/A"
+                  }}
+                </p></span
+              >
+              <br />
+            </div>
+            <div class="col-md-4 offset-md-2">
+              <span>
+                <span style="font-weight: bold !important"
+                  >Transaction Date:</span
+                >
+                {{ currentDate }}( {{ nepaliDate }})
+              </span>
+              <br />
+              <span>
+                <span style="font-weight: bold !important"
+                  >Invoice Issue Date:</span
+                >
+                {{ salesInvoice.salesBillDTO.billDate }}({{
+                  salesInvoice.salesBillDTO.billDateNepali
+                }})</span
+              ><br />
+              <span></span>
+              <span>
+                <span style="font-weight: bold !important">
+                  Mode Of Payment :
+                </span>
+                {{
+                  salesInvoice.salesBillDTO.saleType === 1 ? "Cash" : "Credit"
+                }}</span
+              ><br />
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-striped">
+                  <thead>
+                    <th style="font-weight: bold !important">S.No</th>
+                    <th style="font-weight: bold !important">Product Name</th>
+                    <th style="font-weight: bold !important">Quantity</th>
+                    <th style="font-weight: bold !important">Unit</th>
+
+                    <th style="font-weight: bold !important">
+                      Per Unit Amount(Rs)
+                    </th>
+                    <th style="font-weight: bold !important">
+                      Total Amount(Rs)
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let invoice of salesInvoice.salesBillDetailsWithProd;
+                        let i = index
+                      "
+                    >
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ invoice.productName }}</td>
+                      <td>{{ invoice.qty }}</td>
+                      <td>{{ invoice.unit }}</td>
+                      <td>{{ invoice.rate | number : "1.2-2" }}</td>
+                      <td>
+                        {{ invoice.qty * invoice.rate | number : "1.2-2" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><span class="text text-bg">Net Amount:</span></td>
+                      <td>
+                        {{ netAmount | number : "1.2-2" }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><span class="text text-bg">Discount%: </span></td>
+                      <td>
+                        {{
+                          salesInvoice.salesBillDTO.discount | number : "1.2-2"
+                        }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr *ngIf="salesInvoice.salesBillDTO.hasAbbr === false">
+                      <td>
+                        <span class="text text-bg">Taxable Amount</span>
+                      </td>
+                      <td>
+                        {{
+                          salesInvoice.salesBillDTO.taxableAmount
+                            | number : "1.2-2"
+                        }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr *ngIf="salesInvoice.salesBillDTO.hasAbbr === false">
+                      <td><span class="text text-bg">VAT 13%</span></td>
+                      <td>
+                        {{
+                          salesInvoice.salesBillDTO.taxAmount | number : "1.2-2"
+                        }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td><span class="text text-bg">Total:</span></td>
+                      <td>
+                        {{
+                          salesInvoice.salesBillDTO.totalAmount
+                            | number : "1.2-2"
+                        }}
+                      </td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                (In Words:
+                {{ totalAmountInWordsBeforeDecimal }} Rupee and
+                {{ totalAmountInWordsAfterDecimal }} Paisa Only )
+              </div>
+            </div>
+            <div class="row text-center mt-1">
+              <span *ngIf="salesInvoice.salesBillDTO.billPrinted"
+                >This is second invoice
+              </span>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-start">
+                <div class="row">
+                  <span>.................................</span>
+                </div>
+                <div class="row">
+                  <b>Authorized Signature </b>
+                </div>
+                <div class="row">
+                  <p>{{ user.user.firstname }} {{ user.user.lastname }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <p>
+                {{ companyAdditionalInfo }} {{ companyAdditionalInfo }}
+                {{ companyAdditionalInfo }} {{ companyAdditionalInfo }}
+                {{ companyAdditionalInfo }}
+              </p>
+            </div>
+          </div>
+          <div class="row mt-5" *ngIf="salesInvoice.salesBillDTO.receipt">
+            <span class="text-center" style="font-weight: bold !important"
+              >Receipt</span
+            >
+            <table>
+              <thead>
+                <th>Receipt No.</th>
+                <th>Receipt Date(BS)</th>
+                <th>Amount(NRs.)</th>
+              </thead>
+              <tbody>
+                <td>
+                  <p>{{ salesInvoice.salesReceipt.receiptNo }}</p>
+                </td>
+                <td>
+                  <p>{{ salesInvoice.salesReceipt.receiptDate }}</p>
+                </td>
+                <td>
+                  <p>{{ salesInvoice.salesReceipt.receiptAmount }}</p>
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <button
+            *ngIf="printButtonVisiability"
+            class="btn btn-lg btn-success"
+            (click)="printTheBill(salesInvoice.salesBillDTO.id)"
+          >
+            Print
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

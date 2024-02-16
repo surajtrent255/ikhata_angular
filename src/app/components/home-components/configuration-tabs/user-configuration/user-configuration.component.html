@@ -1,0 +1,12 @@
+<app-users
+  (resetUserRole)="setTheBooleanToResetUserRole()"
+  (resetFeatureControlTable)="setTheBooleanToResetFeatureTable()"
+></app-users>
+<app-user-role
+  [resetTable]="toggleData"
+  (emitToReset)="toggleData = !toggleData"
+></app-user-role>
+<app-user-feature
+  [IsTriggered]="booleanToResetFeatureTable"
+  (emitToReset)="booleanToResetFeatureTable = !booleanToResetFeatureTable"
+></app-user-feature>

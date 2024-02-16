@@ -1,0 +1,140 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Update Other Income Source</h5>
+  <!-- <button (click)="destroyComp()"
+     
+        >X</button> -->
+  <button
+    #closeButton
+    type="button"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+    (click)="destroyComp()"
+  ></button>
+</div>
+<!-- <div class="row" *ngIf="catSelected"> -->
+<div class="row mt-4">
+  <div class="col-md-12">
+    <form [formGroup]="otherIncomeForm" (ngSubmit)="submitForm()">
+      <div class="chooseColoumnsWrapper">
+        <div class="fieldDiv popUpFormSectionWrapper">
+          <table class="table table-striped" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="col1 pt-2">
+                <label for="source">Source:</label>
+              </td>
+              <td class="col2">
+                <select
+                  name="source"
+                  id="source"
+                  formControlName="source"
+                  style="width: 200px"
+                >
+                  <option
+                    *ngFor="let source of otherIncomeSources"
+                    value="{{ source.id }}"
+                  >
+                    {{ source.name }}
+                  </option>
+                </select>
+              </td>
+              <td class="col3">
+                <!-- <a
+                                (click)="showOtherIncomeSourceComponent()"
+                                style="cursor: pointer"
+                              >
+                                <i class="fa-solid fa-plus"></i> Add
+                              </a> -->
+                <button
+                  id="createOtherIncomeSource"
+                  style="display: none"
+                  class="createNewTableRecord"
+                >
+                  Create New Other Income Source
+                </button>
+                <div
+                  *ngIf="isFieldInvalid('source')"
+                  class="error-message ml-2"
+                >
+                  required *
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="col1 pt-2">
+                <label for="amount">Amount:</label>
+              </td>
+              <td class="col2">
+                <input
+                  type="number"
+                  formControlName="amount"
+                  [class.error]="isFieldInvalid('amount')"
+                />
+              </td>
+              <td class="col3">
+                <div
+                  *ngIf="isFieldInvalid('amount')"
+                  class="error-message ml-2"
+                >
+                  required *
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="col1 pt-2">
+                <label for="dateNepali">Date (BS):</label>
+              </td>
+              <td class="col2">
+                <input
+                  type="text"
+                  id="nepali-datepicker"
+                  formControlName="dateNepali"
+                  placeholder="Select Date"
+                />
+                <span style="margin-top: 2px"></span>
+                <input
+                  formControlName="joinDate"
+                  type="text"
+                  hidden
+                  id="AdDate"
+                  style="
+                    height: 25px;
+                    width: 150px;
+                    background-color: white;
+                    font-size: small;
+                  "
+                />
+              </td>
+              <td class="col3"></td>
+            </tr>
+            <!-- <tr>
+                            <td class="col1 pt-2"></td>
+                            <td class="col2 pt-2 text-center">
+                              <button
+                                type="submit"
+                                class="submit_btn border-rad"
+                                [disabled]="otherIncomeForm.invalid"
+                              >
+                                Submit
+                              </button>
+                            </td>
+                            <td class="col3 pt-2"></td>
+                          </tr> -->
+          </table>
+        </div>
+      </div>
+      <div class="custom-modal-footer text-end">
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="otherIncomeForm.invalid"
+        >
+          Submit
+        </button>
+        <button type="submit" class="btn btn-danger" (click)="destroyComp()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,181 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Print Credit Note</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">credit-note-invoice</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <div class="card-body"></div>
+      <table
+        cellspacing="0"
+        cellpadding="0"
+        class="recordsTable"
+        id="ProductsRecordsTable"
+      >
+        <thead class="heading-custom-table">
+          <th></th>
+          <th></th>
+          <th></th>
+          <th style="text-align: center">बिक्रि खाता</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tbody class="remove-border">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: center">
+              (नियम २३ को उपनियम (१) को खण्ड (ज) संग संबन्धित )
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td style="text-align: center">
+              करदाता दर्ता(PAN) :
+              {{ company.panNo }}
+            </td>
+            <td style="text-align: center">करदाताको नाम: {{ company.name }}</td>
+            <td style="text-align: center">साल: {{ date.getFullYear() }}</td>
+            <td>
+              कर अवधि: {{ date.toLocaleString("en-US", { month: "long" }) }}
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table
+        cellspacing="0"
+        cellpadding="0"
+        class="customRecorsTable"
+        id="ProductsRecordsTable"
+      >
+        <thead>
+          <tr>
+            <th class="centered"></th>
+            <th class="centered"></th>
+            <th class="centered"></th>
+            <th class="centered">बिजक</th>
+            <th class="centered"></th>
+            <th class="centered"></th>
+            <th class="centered"></th>
+            <th class="bottom"></th>
+            <th class="bottom"></th>
+            <th class="centered" style="text-align: center">करयोग्य विक्रि</th>
+            <th class="right"></th>
+            <th class="centered"></th>
+            <th class="centered">निकासी</th>
+            <th class="centered"></th>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
+            <th>मिति</th>
+            <th>बिजक नम्बर</th>
+            <th>खरिदारको नाम</th>
+            <th>खरिदारको स्थायी लेखा नम्बर</th>
+            <th>बस्तु बा सेवाको परिमाण</th>
+            <th>बस्तु बा सेवाको नाम</th>
+            <th>बस्तु बा सेवाको एकाई</th>
+            <th>जम्मा फिर्ता(रु)</th>
+            <th>स्थानीय कर छुटको फिर्ता मुल्य(रु)</th>
+            <th>मुल्य(रु)</th>
+            <th>कर(रु)</th>
+            <th>निकासी गरेको देश</th>
+            <th>निकासी प्रज्यापनपत्र नम्बर</th>
+            <th>निकासी प्रज्यापनपत्र मिति</th>
+          </tr>
+        </thead>
+        <tbody id="prodTable">
+          <tr *ngFor="let data of salesBillInvoice.salesBillDetailsWithProd">
+            <td>{{ salesBillInvoice.salesBillDTO.billDate | date }}</td>
+            <td>{{ salesBillInvoice.salesBillDTO.billNo }}</td>
+            <td>
+              {{
+                salesBillInvoice.salesBillDTO.customerName
+                  ? salesBillInvoice.salesBillDTO.customerName
+                  : "N/A"
+              }}
+            </td>
+            <td>
+              {{
+                salesBillInvoice.salesBillDTO.customerPan
+                  ? salesBillInvoice.salesBillDTO.customerPan
+                  : "N/A"
+              }}
+            </td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.productName }}</td>
+            <td>{{ data.unit }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ data.rowTotal }}</td>
+            <td>
+              <span *ngFor="let vt of vatRateTypes"
+                ><p *ngIf="vt.id === data.taxRate">
+                  {{ vt.vatRate }}
+                </p></span
+              >
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="container" style="margin: 20px; padding-top: 20px">
+        <div class="row">
+          <div class="col-md-12">
+            <button
+              class="submit_btn border-rad"
+              routerLink="/home/sales/salesbill/report"
+            >
+              Cancel
+            </button>
+            <button
+              (click)="exportToExcel()"
+              type="button"
+              class="submit_btn border-rad"
+            >
+              <i class="fa fa-external-link" aria-hidden="true"></i>
+              Export to Excel
+            </button>
+
+            <button
+              (click)="exportToPdf()"
+              type="button"
+              class="submit_btn border-rad"
+            >
+              <i class="fa fa-external-link" aria-hidden="true"></i>
+              Export to pdf
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

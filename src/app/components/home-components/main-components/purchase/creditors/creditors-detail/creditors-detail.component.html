@@ -1,0 +1,175 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Creditors</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">creditors Detail</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div class="col-4 mt-2">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Bill Number"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                    (keydown.enter)="fetchLimitedbillsOfCreditor()"
+                    [(ngModel)]="searchInput"
+                  />
+                  <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer; margin-left: 6px"
+                    class="pe-auto mt-1 ml-2 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('prev')"
+                      class="page-link pe-auto"
+                      aria-label="Previous"
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">{{ currentPageNumber }}</a>
+                  </li>
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('next')"
+                      class="page-link pe-auto"
+                      aria-label="Next"
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="container">
+              <table class="table recordsTable" id="purchaseBillRecordsTable">
+                <thead>
+                  <tr>
+                    <th>S.N</th>
+                    <th>Bill Number</th>
+                    <th>Bill Amount</th>
+                    <th>Bill Date (Nep)</th>
+                    <th>Bill Date (Eng)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of creditor; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <a
+                        style="cursor: pointer"
+                        (click)="openBillDetail(data.purchaseBillNo)"
+                        class="link-info"
+                        >{{ data.purchaseBillNo }}</a
+                      >
+                    </td>
+                    <td>{{ data.totalAmount }}</td>
+                    <td>{{ data.billDateNepali }}</td>
+                    <td>{{ data.billDate | date }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button
+                class="submit_btn border-rad"
+                routerLink="/home/purchasebills/creditors/list"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  #BillDetailPopup
+  id="BillDetailPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#billDetail"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" data-bs-backdrop="false" id="billDetail" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Bill Detail</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div class="col-12 overflow-auto">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>S.N</th>
+                  <th>Product Name</th>
+                  <th>Quantity</th>
+                  <th>Per Unit Amount(Rs)</th>
+                  <th>Purchase At</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let invoice of purchaseBillInvoice.purchaseBillDetailsWithProd;
+                    let i = index
+                  "
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ invoice.productName }}</td>
+                  <td>{{ invoice.qty }}</td>
+                  <td>{{ invoice.rate }}</td>
+                  <td>{{ invoice.date | date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

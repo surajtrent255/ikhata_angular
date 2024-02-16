@@ -1,0 +1,20 @@
+.d-none{
+    display: none;
+}
+
+.mandatorySign {
+    background-color: transparent; 
+    color: black; 
+    margin: 0; 
+    padding: 0;
+    /* Override automatic styles */
+    /* color: black; */
+    /* font-weight: normal; */
+    /* font-size: 16px; */
+    /* Add more styles as needed */
+}
+
+/* select {
+    width: 300px;
+
+} */

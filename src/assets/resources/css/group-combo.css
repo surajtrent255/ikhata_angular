@@ -1,0 +1,17 @@
+.coloumnTwoTablesWrap{overflow:hidden;clear:both;}
+.coloumnTwoTables{width:441px;}
+.col_unid{width:60px;}
+.col_name{width:90px;}
+.col_Coloumn_name{width:135px;}
+.col_type{width:100px;}
+.col_name{width:80px;}
+.coloumnTwoTables .recordsTable th.last-child,.coloumnTwoTables .recordsTable td.last-child{width:10px;}
+.group_modifiersTable {border-spacing: 1px;}
+.chooseColoumnsWrapper.create_group_wrapper_popup .formSection td.col1{width:70px;}
+.marginL20{margin-left:20px;}
+.createGroupComboimg{background:#fff url(../images/create_group_comb.png) no-repeat 95% center;}
+#createGroupCombinationsPopup .attrTable th{text-align:left;color:#333;}
+.createProductimg{background:#fff url(../images/create_pricing_seq.png) no-repeat 95% center;}
+.popupwrapperSmall{width:345px;}
+.popupwrapperSmall input.inputText{width:215px;}
+.createCustomerimg{background:#fff url(../images/create_customer_attr.png) no-repeat 95% center;}

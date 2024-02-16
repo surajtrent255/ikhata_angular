@@ -1,0 +1,694 @@
+<main #main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Sales Bill</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Sales</a>
+        </li>
+        <li class="breadcrumb-item active">Invoice</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-end p-2">
+              <b style="font-weight: bold !important"
+                >Grand Total: {{ this.bsTotal | number : "1.2-2" }}</b
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+              "
+            >
+              <div>
+                <span
+                  >To: <em id="to">{{ customerName }}</em></span
+                >
+                <div style="display: flex; justify-content: space-between">
+                  <input
+                    type="text"
+                    #custPanOrPhoneInput
+                    [(ngModel)]="custPhoneOrPan"
+                    class="input-field"
+                    placeholder="PAN or Phone "
+                    [readOnly]="unknownCustomer"
+                    (keydown.enter)="fetchCustomerInfo()"
+                  />
+                  <button
+                    class="ml-3"
+                    class="submit_btn border-rad"
+                    style="margin: 0 5px"
+                    [disabled]="unknownCustomer"
+                    (click)="fetchCustomerInfo()"
+                  >
+                    Search
+                  </button>
+                  <button
+                    (click)="displayAddCustomerPopup()"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Create New Customer"
+                    style="width: 35px"
+                  >
+                    <i
+                      style="color: rebeccapurple"
+                      class="fa-solid fa-user-plus"
+                    ></i>
+                  </button>
+                </div>
+                <div style="display: flex; justify-content: flex-start">
+                  <input
+                    type="checkbox"
+                    style="margin-top: 8px; display: inline-block"
+                    name="unknownCustomer"
+                    id="unknownCustomer"
+                    [checked]="unknownCustomer"
+
+                    (click)="getUnknownCustomer()"
+                  />
+                  <span style="margin-left: 2px">Unknown Customer</span>
+                </div>
+              </div>
+              <div>
+                <span>Date:</span>
+                <div>
+                  <input
+                    type="text"
+                    id="nepali-datepicker"
+                    placeholder="Select  Date"
+                    disabled
+                    style="height: 25px; width: 150px"
+                    class="inputText"
+                  />
+                </div>
+                <div>
+                  <input
+                    disabled
+                    type="text"
+                    id="AdDate"
+                    disabled
+                    style="
+                      margin-top: 2px;
+                      height: 25px;
+                      width: 150px;
+                      background-color: white;
+                      font-size: small;
+                    "
+                  />
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between">
+                <div>
+                  <input
+                    type="radio"
+                    style="display: inline-block; margin-left: 3px"
+                    name="saleType"
+                    [checked]="saleType === 1"
+                    (change)="setSaleType(1)"
+                  /><span style="margin-left: 4px">Cash Sale</span>
+                </div>
+                <div style="margin-left: 13px">
+                  <input
+                    type="radio"
+                    style="display: inline-block"
+                    name="saleType"
+                    [disabled]="customerName.length === 0"
+                    [checked]="saleType === 2"
+                    (change)="setSaleType(2)"
+                  /><span style="margin-left: 4px">Credit Sale</span>
+                </div>
+              </div>
+            </div>
+            <hr />
+
+            <div style="display: flex; justify-content: space-between">
+              <div style="display: flex">
+                <span> {{ currentBranch }}</span>
+                <span style="margin-left: 60px"> Counter {{ counterId }} </span>
+              </div>
+
+              <div>
+                <input
+                  type="radio"
+                  id="allowEditDiscountPerUnit"
+                  disabled="true"
+                  name="discountApproach"
+                  [checked]="discountApproachSelect === 1"
+                  (change)="getDiscountMethod(1); updateBillSummary()"
+                />
+                <label style="padding-left: 3px">Discount Per Unit </label>
+              </div>
+
+              <div>
+                <input
+                  type="radio"
+                  style="display: inline-block"
+                  name="discountApproach"
+                  [checked]="discountApproachSelect === 2"
+                  (change)="getDiscountMethod(2); updateBillSummary()"
+                />
+                <label style="margin-left: 3px; display: inline-block"
+                  >OverAll Discount</label
+                >
+              </div>
+
+              <div>
+                <span
+                  ><input
+                    type="checkbox"
+                    [checked]="export"
+                    (change)="setAllVatToZero(); updateBillSummary()"
+                  />
+                  <i> Export</i></span
+                >
+              </div>
+
+              <div>
+                <span>Amounts are: </span>
+                <select
+                  style="width: 140px; appearance: auto"
+                  [(ngModel)]="taxApproach"
+                  name="taxType"
+                  id="taxType"
+                  class="inputText"
+                  (change)="getApproach($event); updateBillSummary()"
+                >
+                  <option value="1">Tax Inclusive</option>
+                  <option value="2">Tax Exclusive</option>
+                </select>
+              </div>
+            </div>
+            <hr />
+            <div class="">
+              <div class="offset-md-3">
+                <div style="text-align: left" class="mt-3">
+                  <div style="display: inline-block; width: 150px">
+                    Product Id:
+                  </div>
+                  <div style="display: inline-block">
+                    <input
+                      type="text"
+                      class="input-field"
+                      #productBarCodeInput
+                      [(ngModel)]="productBarCodeId"
+                      (keydown.enter)="addTheProductForSale()"
+                    />
+                    <!-- ;goToProductQtyField() -->
+                    <!-- (keydown.enter)="addTheProductForSale()" -->
+                  </div>
+                </div>
+                <div style="text-align: left" class="mt-3">
+                  <div style="display: inline-block; width: 150px">
+                    Product Name:
+                  </div>
+                  <div style="display: inline-block">
+                    <input
+                      type="text"
+                      class="input-field"
+                      #productName
+                      [(ngModel)]="prodWildCard"
+                      (keydown.enter)="getNameWildCard()"
+                    />
+                  </div>
+
+                  <span class="mt-1">
+                    <button
+                      style="margin-left: 5px"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Create New Product"
+                      (click)="displayAddProductPopup()"
+                    >
+                      <i
+                        style="color: rebeccapurple"
+                        class="fa-brands fa-product-hunt mr-1"
+                      ></i>
+                      <i
+                        style="color: rebeccapurple"
+                        class="fa-solid fa-plus"
+                      ></i>
+                    </button>
+                  </span>
+                </div>
+                <div style="text-align: left" class="mt-3">
+                  <div style="display: inline-block; width: 150px">
+                    Product Qty:
+                  </div>
+                  <div style="display: inline-block">
+                    <input
+                      type="text"
+                      class="input-field"
+                      #prodQtyInput
+                      [(ngModel)]="productQty"
+                      (keydown.enter)="
+                        changeProductQuantity(); updateBillSummary()
+                      "
+                    />
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <button
+                    class="submit_btn border-rad"
+                    style="display: none"
+                    (click)="addTheProductForSale(); updateBillSummary()"
+                  >
+                    Add to bill
+                  </button>
+                </div>
+              </div>
+              <!-- <table class="">
+                      <tr>
+                      <td>Enter product Id:</td>
+                      <td>
+                      <input
+                      class="input-field"
+                      [(ngModel)]="productBarCodeId"
+                      (keydown.enter)="addTheProductForSale()"
+                      />
+                      </td>
+                      </tr>
+                      <tr>
+                      <td>Enter product Name:</td>
+                      <td>
+                      <input class="input-field" type="text" readonly />
+                      </td>
+                      </tr>
+                      <td style="padding-top: 10px">
+                      <button
+                      class="submit_btn border-rad"
+                      (click)="addTheProductForSale()"
+                      >
+                      Add product
+                      </button>
+                      </td>
+                      </table> -->
+            </div>
+            <div class="recordsTableDiv">
+              <table class="table recordsTable table-striped">
+                <thead>
+                  <tr>
+                    <th>S.N</th>
+                    <th>Item</th>
+                    <!-- <th>Description</th> -->
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>
+                      Disc
+                      <input
+                        name="discountType"
+                        class="discountType"
+                        type="radio"
+                        style="display: inline; margin-left: 10px"
+                        value="1"
+                        [checked]="discountType === 1"
+                        [disabled]="!allowEditDiscountPerUnit"
+                        (change)="getDiscountType(1); updateBillSummary()"
+                      />
+                      <p style="display: inline">%</p>
+                      <input
+                        name="discountType"
+                        type="radio"
+                        class="discountType"
+                        value="2"
+                        style="display: inline; margin-left: 10px"
+                        [checked]="discountType === 2"
+                        [disabled]="!allowEditDiscountPerUnit"
+                        (change)="getDiscountType(2); updateBillSummary()"
+                      />
+                      <p style="display: inline">Rs.</p>
+                    </th>
+                    <!-- <th>Tax Rate</th> -->
+                    <th>Amount NPR</th>
+                    <th>Remove Item</th>
+                    <!-- <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Amount</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let prod of productsUserWantTosale; let i = index"
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ prod.name }}</td>
+                    <!-- <td>{{ prod.description | slice : 0 : 60 }}....</td> -->
+                    <td>
+                      <input
+                        type="number"
+                        style="width: 20%"
+                        id="qtyProd{{ i }}"
+                        value="1"
+                        (change)="updateTotalAmount(i); updateBillSummary()"
+                        (keydown.enter)="goToProductId()"
+                      />
+                      <!-- <span> {{ prod.unit }}</span> -->
+                      <span *ngIf="prod.stock <= 10"
+                        ><span
+                          class="badge rounded-pill bg-warning text-dark ml-1"
+                        >
+                          Only {{ prod.stock }} units remaining !</span
+                        >
+                      </span>
+                      <!-- (change)="updateProdQtyUserWantToSale($event, prod)" -->
+                    </td>
+                    <td>
+                      <input
+                        class="productSellingPrice"
+                        id="prodSellingPrice{{ i }}"
+                        type="number"
+                        [readonly]="!allowEditSellingPrice"
+                        (change)="updateTotalAmount(i); updateBillSummary()"
+                        value="{{ prod.sellingPrice }}"
+                      />
+                      <!-- value="{{ prod.sellingPrice | number : '1.2-2' }}" -->
+                    </td>
+                    <td>
+                      <input
+                        id="discountPerc{{ i }}"
+                        type="number"
+                        value="{{ prod.discount }}"
+                        [readOnly]="!allowEditDiscountPerUnit"
+                        (change)="updateTotalAmount(i); updateBillSummary()"
+                      />
+                    </td>
+                    <td style="display: none">
+                      <select
+                        name="vattypes{{ prod.name }}"
+                        id="vatRateTypes{{ i }}"
+                        (change)="updateTotalAmount(i); updateBillSummary()"
+                        disabled
+                      >
+                        <option
+                          *ngFor="let vat of vatRateTypes"
+                          value="{{ vat.id }}"
+                          [selected]="prod.tax === vat.id"
+                        >
+                          {{ vat.vatRate }}
+                        </option>
+                      </select>
+                    </td>
+                    <td id="totalAmount{{ i }}">
+                      {{ prod.sellingPrice }}
+                    </td>
+
+                    <!-- <td id="totalAmount{{ i }}" class="text-end">
+
+                          </td> -->
+                    <td style="text-align: center; vertical-align: middle">
+                      <i
+                        class="fa fa-remove text-danger"
+                        (click)="removeItemFromCart(i); updateBillSummary()"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="row mt-2 p-3">
+                <div class="col-md-4 offset-md-8">
+                  <div
+                    class="card bg-light"
+                    style="
+                      background-color: #620f0f;
+                      border-radius: 5px;
+                      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+                    "
+                  >
+                    <div class="text-center bg-secondary text-white">
+                      <h5
+                        class="card-title mb-0"
+                        style="font-family: 'Times New Roman'"
+                      >
+                        Billing Summary
+                      </h5>
+                    </div>
+                    <div>
+                      <table class="table2">
+                        <tr>
+                          <td style="">
+                            <h3 style="font-size: 14px">Total Amount:</h3>
+                          </td>
+                          <td class="align-right">
+                            <span id="total">
+                              {{ bsSubTotal | number : "1.2-2" }}</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="">
+                            <h3 style="font-size: 14px">Less Discount:</h3>
+                          </td>
+                          <td class="align-right">
+                            <span id="discount">
+                              {{ bsDiscountAmount | number : "1.2-2" }}</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="">
+                            <h3 style="font-size: 14px; padding-bottom: 2px">
+                              Re discount
+                            </h3>
+                          </td>
+                          <td class="aligin-right">
+                            <span>
+                              <input
+                                type="number"
+                                id="modifiableDiscount"
+                                [(ngModel)]="bsExtraDiscount"
+                                style="display: inline; width: 100%"
+                                (change)="discountAgain()"
+                              />
+                              <div
+                                style="
+                                  display: flex;
+                                  justify-content: space-between;
+                                "
+                              >
+                                <div style="display: inline-block">
+                                  <input
+                                    type="radio"
+                                    name="beforeAfterTax"
+                                    style="display: inline"
+                                    (click)="
+                                      setBeforeAfterTax(1); discountAgain()
+                                    "
+                                    [checked]="beforeAfterTax === 1"
+                                  />
+                                  <p style="display: inline; font-size: 12px">
+                                    before Tax
+                                  </p>
+                                </div>
+                                <div style="display: inline-block">
+                                  <input
+                                    type="radio"
+                                    name="beforeAfterTax"
+                                    style="display: inline; margin-left: 2px"
+                                    (click)="
+                                      setBeforeAfterTax(2); discountAgain()
+                                    "
+                                    [checked]="beforeAfterTax === 2"
+                                  />
+                                  <p style="display: inline; font-size: 12px">
+                                    After Tax
+                                  </p>
+                                </div>
+                              </div>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="">
+                            <h3 style="font-size: 14px">Taxable Amount:</h3>
+                          </td>
+                          <td class="align-right">
+                            <span id="total">
+                              {{ bsVatTaxableAmount | number : "1.2-2" }}</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="">
+                            <span style="font-size: 14px"> VAT @13% on</span>
+                          </td>
+                          <td class="align-right">
+                            <span id="vat">{{
+                              (13 / 100) * bsVatTaxableAmount | number : "1.2-2"
+                            }}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="">
+                            <h3 style="font-size: 14px">
+                              Total :
+                              <span style="display: none"
+                                >After Re Discount:</span
+                              >
+                            </h3>
+                          </td>
+                          <td class="align-right">
+                            <span id="subtotal">
+                              {{
+                                bsTotalAfterExtraDiscount | number : "1.2-2"
+                              }}</span
+                            >
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <span
+                ><input
+                  type="checkbox"
+                  [checked]="receipt"
+                  class="mb-1 ml-1"
+                  [disabled]="saleType === 2"
+                  (click)="changeReceiptStatus()"
+                />
+                Generate Receipt
+                <span style="display: none">({{ receipt }})</span></span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: flex-start;
+                flex-direction: row;
+              "
+            >
+              <div>
+                <button
+                  class="btn btn-primary"
+                  (click)="saleTheProducts(false)"
+                  #saleTheProductBtn
+                >
+                  Sale the Product
+                </button>
+              </div>
+              <div  style="margin-left: 2rem">
+                <button
+                  class="btn btn-success ml-3"
+                  (click)="saleTheProducts(true)"
+                >
+                  Save as a Draft
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <div class="popupContentWrapper">
+  <form>
+    <div class="contentDiv">
+      <div class="contentChildTextDiv">Are you sure ?</div>
+      <div class="contentChildTextDiv">
+        Click Yes to continue or Cancel to discard.
+      </div>
+    </div>
+    <div class="submitDiv tCenter">
+      <button
+        (click)="saleTheProducts(true)"
+        type="button"
+        class="submit_btn border-rad blueGradient resetSettings"
+      >
+        Yes
+      </button>
+      <button
+        type="button"
+        class="closeAlertPopperButton submit_btn border-rad"
+        id="closeAlertPopperButton"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div> -->
+
+<!-- <div
+  class="popupWrapper createCustomerPopUpWrapper"
+  id="createNewCustomer1Popup"
+  style="display: none"
+> -->
+
+<ngx-smart-modal
+  identifier="createNewCustomerPopup"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-create-customer
+    *ngIf="createCustomerEnable"
+    (customerAddedSuccessMsg)="
+      customerAddedSuccessfully($event); getCompanyList()
+    "
+    (destroyCreateCustComp)="destroyCreateCustomerComp($event)"
+    [title]="'Customer'"
+  ></app-create-customer>
+</ngx-smart-modal>
+
+<!-- </div> -->
+
+<!-- code start -->
+
+<!-- code end -->
+
+<!-- <app-select-customer
+  [toggleSelectCustomer]="toggleSelectCustomer"
+  (emitToReset)="toggleSelectCustomer = !toggleSelectCustomer"
+  [customerMetaData]="customerMetaData"
+  (compIdEvent)="setCustomerInfo($event)"
+  (destroySelectCompEmitter)="destroySelectCustomerComponent($event)"
+  (fetchCustomerEventEmitter)="fetchCustomerInfoOnlyForNameDisplay($event)"
+  [title]="'customer'"
+>
+</app-select-customer> -->
+
+<ngx-smart-modal
+  identifier="selectCustomerPopup"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-select-customer
+    *ngIf="selectCustomer"
+    identifier="customer"
+    [customerMetaData]="customerMetaData"
+    (compIdEvent)="setCustomerInfo($event)"
+    (destroySelectCompEmitter)="destroySelectCustomerComponent($event)"
+    (fetchCustomerEventEmitter)="fetchCustomerInfoOnlyForNameDisplay($event)"
+    [title]="'customer'"
+  ></app-select-customer>
+</ngx-smart-modal>
+
+<app-select-product
+  [toggleSelectProduct]="toggleSelectProduct"
+  (emitToReset)="toggleSelectProduct = !toggleSelectProduct"
+  [selectMenusForProduct]="selectMenusForProduct"
+  (prodSelectEmitter)="setProductSelectedByName($event)"
+  (destroySelectProdEmitter)="destroySelectProductComponent($event)"
+  (fetchProductEventEmitter)="getNameWildCard()"
+>
+</app-select-product>
+
+<!-- *ngIf="createProductEnable" -->
+
+<app-create-product
+  [createProductEnable]="createProductEnable"
+  (emitToReset)="createProductEnable = !createProductEnable"
+  (productInfoEvent)="productAdded($event)"
+  (destroyCreateProd)="disableCreateProduct($event)"
+></app-create-product>

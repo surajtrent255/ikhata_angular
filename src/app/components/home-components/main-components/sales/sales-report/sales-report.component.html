@@ -1,0 +1,236 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Sales</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">sales-report</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Sales Report</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <app-search
+                        (searchInput)="handleData($event)"
+                      ></app-search>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+                <table
+                  class="table table-bordered table-striped"
+                  id="salesBillsRecordsTable"
+                >
+                  <thead class="thead-dark">
+                    <tr>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="customer_name"
+                        id="costprice"
+                      >
+                        Bill No
+                      </th>
+                      <!-- <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="actions"
+                      >
+                        Draft
+                      </th> -->
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="organization_name"
+                        id="name"
+                      >
+                        Fiscal Year
+                      </th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="sellingprice"
+                      >
+                        Customer Name
+                      </th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="barcode"
+                      >
+                        Total Amount
+                      </th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="tax"
+                      >
+                        Tax
+                      </th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="tax"
+                      >
+                        syncWithIrd
+                      </th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="tax"
+                      >
+                        printedTime
+                      </th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Sale Type</th>
+                      <th
+                        scope="col"
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="salesBill_group_name"
+                        id="actions"
+                      >
+                        Actions
+                      </th>
+                      <th scope="col" class="last-child">Report</th>
+                    </tr>
+                  </thead>
+                  <tbody id="prodTable">
+                    <tr *ngIf="salesBills.length === 0">
+                      <td colspan="12" class="text-center">
+                        <span class="noProdRecord">No records found</span>
+                      </td>
+                    </tr>
+                    <tr
+                      *ngFor="let salesBill of salesBills"
+                      id="saleBill_{{ salesBill.billNo }}"
+                    >
+                      <td>{{ salesBill.billNo }}</td>
+                      <!-- <td>
+                        <span *ngIf="salesBill.draft" class="text-success"
+                          >Yes</span
+                        >
+                        <span *ngIf="!salesBill.draft" class="text-danger"
+                          >No</span
+                        >
+
+                        <i
+                          *ngIf="salesBill.draft && salesBill.status"
+                          class="fas fa-hand-pointer text-primary"
+                          style="float: right"
+                          (click)="ApproveTheBill(salesBill.id)"
+                          >Inspect</i
+                        >
+
+                        <i
+                          *ngIf="salesBill.draft && salesBill.status === false"
+                          class="fas fa-hand-pointer text-muted"
+                          style="float: right; text-decoration: line-through"
+                          >Inspect</i
+                        >
+                      </td> -->
+                      <td>{{ salesBill.fiscalYear }}</td>
+                      <td>{{ salesBill.customerName }}</td>
+                      <td>{{ salesBill.totalAmount | number : "1.0-0" }}</td>
+                      <td>{{ salesBill.taxAmount | number : "1.0-0" }}</td>
+                      <td>{{ salesBill.syncWithIrd }}</td>
+                      <td>
+                        {{
+                          salesBill.printedTime
+                            ? (salesBill.printedTime | date)
+                            : "not yet"
+                        }}
+                      </td>
+                      <td>
+                        <span
+                          *ngIf="salesBill.status && salesBill.draft"
+                          style="color: orange"
+                          >DRAFT</span
+                        >
+                        <span
+                          *ngIf="!salesBill.draft && salesBill.status"
+                          style="color: green"
+                          >ACTIVE</span
+                        >
+                        <span *ngIf="!salesBill.status" style="color: red"
+                          >CANCELED</span
+                        >
+                      </td>
+                      <td>
+                        <span *ngIf="salesBill.saleType === 1">Cash</span>
+                        <span *ngIf="salesBill.saleType === 2">Credit</span>
+                      </td>
+                      <td class="last-child">
+                        <a
+                          *ngIf="IsAuditor"
+                          routerLink="/home/salesbill/{{ salesBill.id }}"
+                        >
+                          <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                      </td>
+                      <td>
+                        <i
+                          class="fa-solid fa-bug"
+                          routerLink="/home/sales/salesbill/report/{{
+                            salesBill.id
+                          }}"
+                        ></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

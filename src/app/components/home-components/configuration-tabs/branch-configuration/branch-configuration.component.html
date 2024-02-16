@@ -1,0 +1,17 @@
+<app-branch-details
+  (ResetBranchUserTable)="toggleBranchUserTable()"
+  (ResetCounterTable)="resetCounterTable()"
+></app-branch-details>
+<app-branch-user-details
+  [resetTable]="toggleBranchUser"
+  (toggleInput)="toggleBranchUser = !toggleBranchUser"
+></app-branch-user-details>
+<app-counter
+  [resetCounterTable]="toggleCounter"
+  (toggleInput)="toggleCounter = !toggleCounter"
+  (triggerCounterList)="resetCounterUserTable()"
+></app-counter>
+<app-counter-user
+  [reloadList]="toggleCounterUser"
+  (toggleInput)="toggleCounterUser = !toggleCounterUser"
+></app-counter-user>

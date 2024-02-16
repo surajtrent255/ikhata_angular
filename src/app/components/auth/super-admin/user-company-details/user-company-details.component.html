@@ -1,0 +1,78 @@
+<a
+  type="button"
+  id="user-company-detailsPopUp"
+  data-bs-toggle="modal"
+  data-bs-target="#user-company-details"
+  [hidden]="true"
+  >click</a
+>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="true"
+  id="user-company-details"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User and Company Details</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Owner Name</th>
+              <th>Company Name</th>
+              <th>PAN/VAT</th>
+              <th>isApproved</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let data of userDetails">
+            <tr>
+              <td>{{ data.ownerName }}</td>
+              <td>{{ data.name }}</td>
+              <td>{{ data.panNo }}</td>
+              <td>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [checked]="data.isApproved"
+                    (change)="IsApprovedCheckboxChanged($event, data.companyId)"
+                    name=""
+                    id=""
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Multi Columns Form -->
+
+        <div class="modal-footer justify-content-center">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button (click)="onSubmit()" type="button" class="btn btn-primary">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

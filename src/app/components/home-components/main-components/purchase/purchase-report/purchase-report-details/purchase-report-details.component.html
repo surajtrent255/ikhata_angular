@@ -1,0 +1,197 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Print Purchase report</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">print-purchase-report</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center mt-2 mb-2">
+          <h3>Print Purchse Report</h3>
+          <hr class="border-2 mb-2" />
+          <div #httptraceTable style="width: auto" id="httptrace-table">
+            <table
+              cellspacing="0"
+              cellpadding="0"
+              class="recordsTable"
+              id="ProductsRecordsTable"
+            >
+              <thead class="heading-custom-table">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th style="text-align: center">खरिद खाता</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </thead>
+              <tbody class="remove-border">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: center">
+                    (नियम २३ को उपनियम (१) को खण्ड (ज) संग संबन्धित )
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td style="text-align: center">
+                    करदाता दर्ता(PAN) :
+                    {{ company.panNo }}
+                  </td>
+                  <td style="text-align: center">
+                    करदाताको नाम: {{ company.name }}
+                  </td>
+                  <td style="text-align: center">
+                    साल: {{ date.getFullYear() }}
+                  </td>
+                  <td>
+                    कर अवधि:
+                    {{ date.toLocaleString("en-US", { month: "long" }) }}
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table
+              cellspacing="0"
+              cellpadding="0"
+              class="customRecorsTable"
+              id="ProductsRecordsTable"
+            >
+              <thead>
+                <tr>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="centered">बीजक / प्रज्ञापनपत्र नम्बर</th>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="centered"></th>
+                  <th class="right"></th>
+                  <th class="right" style="text-align: center"></th>
+                  <th class="right"></th>
+                  <th class="centered"></th>
+                  <th class="right">करयोग्य खरिद (पूंजीगत बाहेक)</th>
+                  <th class="centered"></th>
+                  <th class="right">करयोग्य पैठारी (पूंजीगत बाहेक)</th>
+                  <th class="centered"></th>
+                  <th class="centered">पूंजीगत करयोग्य खरिद / पैठारी</th>
+                </tr>
+              </thead>
+              <thead>
+                <tr>
+                  <th>मिति</th>
+                  <th>बिजक नम्बर</th>
+                  <th>प्रज्ञापनपत्र नं.</th>
+                  <th>आपूर्तिकर्ताको नाम</th>
+                  <th>आपूर्तिकर्ताको स्थायी लेखा नम्बर</th>
+                  <th>खरिद/पैठारी गरिएका वस्तु वा सेवाको विवरण</th>
+                  <th>खरिद/पैठारी गरिएका वस्तु वा सेवाको परिमाण</th>
+                  <th>वस्तु वा सेवाको एकाई</th>
+                  <th>जम्मा खरिद मूल्य (रु)</th>
+                  <th>कर छुट हुने वस्तु वा सेवाको खरिद / पैठारी मूल्य (रु)</th>
+                  <th>मूल्य (रु)</th>
+                  <th>कर (रु)</th>
+                  <th>मूल्य (रु)</th>
+                  <th>कर (रु)</th>
+                  <th>मूल्य (रु)</th>
+                  <th>कर (रु)</th>
+                </tr>
+              </thead>
+              <tbody id="prodTable">
+                <tr
+                  *ngFor="
+                    let data of purchaseReport.purchaseBillDetailWithProdInfos
+                  "
+                >
+                  <td>
+                    {{ purchaseReport.purchaseBill.billDate | date }}
+                  </td>
+                  <td>
+                    {{ purchaseReport.purchaseBill.purchaseBillNo }}
+                  </td>
+                  <td></td>
+                  <td>{{ purchaseReport.purchaseBill.sellerName }}</td>
+                  <td>{{ purchaseReport.purchaseBill.sellerPan }}</td>
+                  <td>{{ data.productName }}</td>
+                  <td>{{ data.qty }}</td>
+                  <td></td>
+                  <td>{{ data.qty * data.rate }}</td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <span *ngFor="let vt of vatRateTypes"
+                      ><p *ngIf="vt.id === data.taxTypeId">
+                        {{ vt.vatRate }}
+                      </p></span
+                    >
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="container" style="margin: 20px; padding-top: 20px">
+            <div class="row">
+              <div class="col-md-12">
+                <button
+                  class="submit_btn border-rad"
+                  routerLink="/home/purchasebills/report"
+                >
+                  Cancel
+                </button>
+                <button
+                  (click)="exportToExcel()"
+                  type="button"
+                  class="submit_btn border-rad"
+                >
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                  Export to Excel
+                </button>
+
+                <button
+                  (click)="exportToPdf()"
+                  type="button"
+                  class="submit_btn border-rad"
+                >
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                  Export to pdf
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

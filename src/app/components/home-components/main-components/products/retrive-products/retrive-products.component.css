@@ -1,0 +1,7 @@
+.table tbody tr:nth-child(even) {
+  background-color: #f5f5f5 !important; /* Smoke white color */
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #ffffff !important; /* White color */
+}

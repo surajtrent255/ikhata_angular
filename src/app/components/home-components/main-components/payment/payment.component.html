@@ -1,0 +1,391 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Payment</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Payment</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Payment Table</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <a
+                        style="cursor: pointer; margin-left: 6px"
+                        class="pe-auto mt-1 ml-2 text-decoration-underline"
+                      >
+                        clear Search</a
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-4 mt-2">
+                    <div>
+                      <a
+                        *ngIf="isAccountant || isMaster"
+                        style="cursor: pointer"
+                        (click)="onCreate()"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create Payment</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <div class="col-12">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Payment Id</th>
+                        <th>Company Id</th>
+                        <th>Branch Id</th>
+                        <th>Party Id</th>
+                        <th>Amount</th>
+                        <th>Payment Mode Id</th>
+                        <th>Tds Deducted</th>
+                        <th>Post Check Date</th>
+                        <th>Cheque No</th>
+                        <th>Bank Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let Payment of payment">
+                        <td>{{ Payment.sn }}</td>
+                        <td>{{ Payment.companyId }}</td>
+                        <td>{{ Payment.branchId }}</td>
+                        <td>{{ Payment.partyId }}</td>
+                        <td>{{ Payment.amount }}</td>
+                        <td>{{ Payment.paymentModeId }}</td>
+                        <td>{{ Payment.tdsDeducted }}</td>
+                        <td>{{ Payment.postCheckDate | date }}</td>
+                        <td>{{ Payment.checkNo }}</td>
+                        <td>{{ Payment.bankName }}</td>
+                        <td>{{ Payment.date | date }}</td>
+                        <td>{{ Payment.paymentStatus }}</td>
+                        <td *ngIf="isAccountant || isMaster" class="last-child">
+                          <a
+                            id="editPayment"
+                            (click)="editPayment(Payment.sn)"
+                            class="createNewTableRecord"
+                          >
+                            <img src="../../../../../assets/img/editRow.png" title="Edit" />
+                          </a>
+                          <a (click)="deletePayment(Payment.sn)" class="">
+                            <img
+                              src="../../../../../assets/img/deleteRow.png" title="Delete"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<ngx-smart-modal
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [dismissable]="false"
+  [closable]="true"
+  id="createNewPaymentPopup"
+  identifier="createNewPayment"
+>
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">Create Payment</h5>
+  </div>
+
+  <div class="card" style="margin-bottom: 0px">
+    <div class="card-body">
+      <form [formGroup]="PaymentForm" class="chooseColoumnsWrapper">
+        <div class="fieldDiv popUpFormSectionWrapper">
+          <div class="form-group row">
+            <label for="partyId" class="col-md-3 col-form-label"
+              >Party Id</label
+            >
+            <div class="col-md-6">
+              <input
+                type="number"
+                id="partyId"
+                formControlName="partyId"
+                class="form-control mandatory"
+                placeholder="pan or phone (10 digits)"
+                (keydown.enter)="fetchPurchaserInfo()"
+              />
+              <span>{{ sellerName }}</span>
+            </div>
+
+            <div class="col-md-1">
+              <span class="input-group-text border-0" id="search-addon">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+
+            <div class="col-md-2">
+              <button
+                data-toggle="tooltip"
+                data-placement="bottom"
+                title="Create New Seller"
+                (click)="displayAddCustomerPopup()"
+              >
+                <i class="fas fa-user-plus" style="color: rebeccapurple"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="amount" class="col-md-3 col-form-label">Amount</label>
+            <div class="col-md-6">
+              <input
+                type="number"
+                id="amount"
+                class="form-control"
+                formControlName="amount"
+              />
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div class="form-group row">
+            <label for="Tds" class="col-md-3 col-form-label">TDS</label>
+            <div class="col-md-6">
+              <input
+                type="checkbox"
+                id="Tds"
+                class="form-check-input"
+                formControlName="Tds"
+              />
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div class="form-group row">
+            <label for="paymentModeId" class="col-md-3 col-form-label"
+              >Payment Mode</label
+            >
+            <div class="col-md-6">
+              <select
+                id="paymentModeId"
+                style="background-color: white; width: 270px"
+                formControlName="paymentModeId"
+                class="form-control"
+                (change)="paymentModeChange(selected.value)"
+                #selected
+              >
+                <option selected disabled>Select the state</option>
+                <option *ngFor="let mode of paymentMode" [value]="mode.id">
+                  {{ mode.modeName }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div *ngIf="cheque" class="form-group row">
+            <label for="postDateCheck" class="col-md-3 col-form-label"
+              >Bank Name</label
+            >
+            <div class="col-md-6">
+              <!-- ng autoCompete -->
+              <div class="ng-autocomplete">
+                <ng-autocomplete
+                  [data]="data"
+                  [searchKeyword]="keyword"
+                  placeholder="Select Bank"
+                  (selected)="selectEvent($event)"
+                  [itemTemplate]="itemTemplate"
+                  [notFoundTemplate]="notFoundTemplate"
+                >
+                </ng-autocomplete>
+
+                <ng-template #itemTemplate let-item>
+                  <a [innerHTML]="item.name"></a>
+                </ng-template>
+
+                <ng-template #notFoundTemplate let-notFound>
+                  <div [innerHTML]="notFound"></div>
+                </ng-template>
+              </div>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div *ngIf="cheque" class="form-group row">
+            <label for="checkNo" class="col-md-3 col-form-label"
+              >Cheque Number</label
+            >
+            <div class="col-md-6">
+              <input
+                type="number"
+                id="checkNo"
+                class="form-control"
+                formControlName="checkNo"
+              />
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div *ngIf="cheque" class="form-group row">
+            <label for="postDateCheck" class="col-md-3 col-form-label"
+              >Post Check Date</label
+            >
+            <div class="col-md-6">
+              <select
+                id="postDateCheck"
+                style="background-color: white; width: 270px"
+                formControlName="postDateCheck"
+                class="form-control"
+                #selected
+                (change)="postCheckDate($event)"
+              >
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+
+          <div *ngIf="postDateCheckEnable && cheque" class="form-group row">
+            <label class="col-md-3 col-form-label">Post Check Date</label>
+            <div class="col-md-6">
+              <div style="margin: auto">
+                <span style="margin: auto">BS </span>
+                <input
+                  type="text"
+                  id="nepali-datepicker"
+                  placeholder="Select  Date"
+                  class="form-control"
+                />
+                <span style="margin: auto">AD</span>
+                <input disabled type="text" id="AdDate" class="form-control" />
+              </div>
+            </div>
+            <div class="col-md-3"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="custom-modal-footer">
+      <input
+        type="submit"
+        value="Create Payment"
+        (click)="createPaymentDetails()"
+        [disabled]="PaymentForm.invalid"
+        class="btn btn-success border-rad"
+        id=""
+      />
+      <input
+        type="button"
+        *ngIf="!isFromPurchase"
+        value="Cancel"
+        (click)="cancel()"
+        class="btn btn-secondary"
+      />
+      <input
+        *ngIf="isFromPurchase"
+        type="button"
+        value="Go Back To Creditors"
+        routerLink="/home/purchasebills/creditors/list"
+        class="btn btn-secondary"
+      />
+    </div>
+  </div>
+</ngx-smart-modal>
+
+<div
+  class="popupWrapper PopupCloser"
+  id="editPaymentPopup"
+  cdkDrag
+  style="display: none"
+>
+  <app-edit-payment
+    [PaymentId]="paymentIdForEdit"
+    (updatedSuccessful)="getDetails()"
+  ></app-edit-payment>
+</div>
+
+<ngx-smart-modal
+  identifier="selectCustomerPopup"
+  [dismissable]="false"
+  [closable]="false"
+>
+  <app-select-customer
+    *ngIf="selectCustomerEnable"
+    [customerMetaData]="customerMetaData"
+    (compIdEvent)="setSellerInfo($event)"
+    (destroySelectCompEmitter)="destroySelectSenderComponent($event)"
+    (fetchCustomerEventEmitter)="fetchSellerInfoOnlyForNameDisplay($event)"
+    (initCreateCustomer)="
+      createCustomerEnable = true; createCustomerToggle = true
+    "
+    [title]="'Party'"
+  >
+  </app-select-customer>
+</ngx-smart-modal>
+
+<app-create-customer
+  *ngIf="createCustomerEnable"
+  (emitToReset)="createCustomerToggle = !createCustomerToggle"
+  (customerAddedSuccessMsg)="getCompanyList()"
+  (customerAddedSuccessMsg)="customerAddedSuccessfully($event)"
+  (destroyCreateCustComp)="destroyCreateCustomerComp($event)"
+  [title]="'Party'"
+></app-create-customer>

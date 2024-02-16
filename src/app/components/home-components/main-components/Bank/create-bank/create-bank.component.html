@@ -1,0 +1,338 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Bank</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Bank</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Bank Details Table</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="col-4 mt-2">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Search"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                  />
+                  <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer; margin-left: 6px"
+                    class="pe-auto mt-1 ml-2 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+
+              <div class="col-4 mt-2">
+                <div>
+                  <a
+                    *ngIf="isAccountant || isMaster"
+                    style="cursor: pointer"
+                    (click)="onCreate()"
+                  >
+                    <img src="../../../../../../assets/img/createProduct.png" />
+                    <span> Create Bank</span>
+                  </a>
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Bank Name</th>
+                  <th>Account Number</th>
+                  <th>Initial Amount</th>
+                  <th>Account Type</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let bankData of Bank; let i = index">
+                  <td>
+                    <span *ngFor="let b of bankList"
+                      ><span *ngIf="b.id === bankData.bankTypeId"
+                        >{{ b.name }}</span
+                      ></span
+                    >
+                  </td>
+                  <td>{{ bankData.accountNumber }}</td>
+                  <td>{{ bankData.initialAmount }}</td>
+                  <td>
+                    <span *ngFor="let ac of accountTypes"
+                      ><span *ngIf="ac.id === bankData.accountType">{{
+                        ac.name
+                      }}</span></span
+                    >
+                  </td>
+
+                  <td class="last-child">
+                    <div *ngIf="isAccountant || isMaster">
+                      <a class="" (click)="displayEditBankPopUp(bankData)">
+                        <img
+                          src="../../../assets/resources/images/editRow.png" title="Edit"
+                        />
+                      </a>
+                      <a
+                        (click)="deleteBank(bankData.bankId)"
+                        class="deleteRowLink deleteGroupCombo"
+                      >
+                        <img
+                          src="../../../assets/resources/images/deleteRow.png" title="Delete"
+                        />
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  id="bankPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#bank"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" id="bank">
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Bank</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <form
+            #createBankForm="ngForm"
+            name="createBank"
+            id="createBank"
+            (ngSubmit)="createBank(createBankForm)"
+          >
+            <div>
+              <div>
+                <table class="table">
+                  <tr>
+                    <td class="col-md-3">
+                      Bank Name:<span class="mandatorySign">*</span>
+                    </td>
+                    <td class="col-md-6">
+                      <!-- <i class=" fas fa-thin fa-circle-chevron-down"></i> -->
+
+                      <select
+                        class="form-control form-select"
+                        name="bankName"
+                        id="bankName"
+                        name="bankName"
+                        #bankN="ngModel"
+                        style="width: 100%; max-height: fit-content"
+                        [(ngModel)]="bankObj.bankTypeId"
+                        required
+                        placeholder="Select bank"
+                      >
+                        <option *ngFor="let ap of bankList" [value]="ap.id">
+                          {{ ap.name }}
+                        </option>
+                      </select>
+                    </td>
+                    <td class="col-md-3">
+                      <small
+                        class="text-danger"
+                        [class.d-none]="bankN.valid || bankN.untouched"
+                        >invalid bankName</small
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col-md-3">
+                      Account Number:<span class="mandatorySign">*</span>
+                    </td>
+                    <td class="col-md-6">
+                      <input
+                        type="number"
+                        name="accountNumber"
+                        [(ngModel)]="bankObj.accountNumber"
+                        required
+                        #accountNumber="ngModel"
+                        [class.is-invalid]="
+                          accountNumber.invalid && accountNumber.touched
+                        "
+                        class="form-control"
+                        id="accountNumber"
+                        max="99999999999999999999"
+                      />
+                    </td>
+                    <td class="col-md-3">
+                      <small
+                        class="text-danger"
+                        [class.d-none]="
+                          accountNumber.valid || accountNumber.untouched
+                        "
+                        >invalid Account Number:</small
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col-md-3">
+                      InitialAmount:<span class="mandatorySign">*</span>
+                    </td>
+                    <td class="col-md-6">
+                      <input
+                        type="number"
+                        name="initialAmount"
+                        [(ngModel)]="bankObj.initialAmount"
+                        required
+                        #initialAmount="ngModel"
+                        [class.is-invalid]="
+                          initialAmount.invalid && initialAmount.touched
+                        "
+                        class="form-control"
+                        id="initialAmount"
+                        required
+                      />
+                    </td>
+                    <td class="col-md-3">
+                      <small
+                        class="text-danger"
+                        [class.d-none]="
+                          initialAmount.valid || initialAmount.untouched
+                        "
+                        >invalid initialAmount</small
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col-md-3">
+                      Account Type:<span class="mandatorySign">*</span>
+                    </td>
+                    <td class="col-md-6">
+                      <select
+                        class="form-control form-select"
+                        name="accountType"
+                        id="accountType"
+                        #accountType="ngModel"
+                        [(ngModel)]="bankObj.accountType"
+                      >
+                        <option *ngFor="let ap of accountTypes" [value]="ap.id">
+                          {{ ap.name }}
+                        </option>
+                      </select>
+                    </td>
+                    <td class="col-md-3">
+                      <small
+                        class="text-danger"
+                        [class.d-none]="
+                          accountType.valid || accountType.untouched
+                        "
+                        >invalid accountType</small
+                      >
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="custom-modal-footer">
+              <input
+                type="submit"
+                class="btn btn-success"
+                id="submitCategoryPrd"
+                value="Create Bank"
+                [disabled]="createBankForm.form.invalid"
+              />
+
+              <input
+                type="button"
+                value="Cancel"
+                (click)="cancel()"
+                class="btn btn-secondary"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-smart-modal
+  identifier="editBankPopup"
+  id="editBankpopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="true"
+  [dismissable]="false"
+>
+  <app-edit-bank
+    *ngIf="showableEditBank"
+    [editBankObj]="editBank"
+    [bankList]="bankList"
+    [accountTypes]="accountTypes"
+    (destroyEditBankCompEvent)="destroyEditBankPopup($event)"
+  >
+  </app-edit-bank>
+</ngx-smart-modal>
+
+<ngx-smart-modal identifier="confirmAlertPopup" [closable]="false">
+  <app-confirm-alert
+    *ngIf="confirmAlertDisplay"
+    [msg]="'Are you sure to delete this product ? '"
+    (destroyConfirmAlertSectionEmitter)="
+      destroyConfirmAlertSectionEmitter($event)
+    "
+  >
+  </app-confirm-alert>
+</ngx-smart-modal>

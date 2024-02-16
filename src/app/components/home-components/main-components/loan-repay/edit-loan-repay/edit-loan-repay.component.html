@@ -1,0 +1,140 @@
+<a
+  type="button"
+  #editLoanRepayPopup
+  id="editLoanRepayPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#editLoanRepay"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="editLoanRepay"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Fixed Assets</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <form>
+            <div class="container">
+              <div class="chooseColoumnsWrapper">
+                <div class="fieldDiv popUpFormSectionWrapper">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="loanNo" class="col1">Loan No</label>
+                        <input
+                          [(ngModel)]="repayFormData.loanNo"
+                          (keydown.enter)="findLoanId(repayFormData.loanNo)"
+                          name="loanNo"
+                          type="number"
+                          class="form-control inputText mandatory"
+                          id="loanNo"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="loanName" class="col1">Loan Name</label>
+                        <input
+                          [(ngModel)]="repayFormData.loanName"
+                          name="loanName"
+                          type="text"
+                          class="form-control inputText mandatory"
+                          id="loanName"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row" style="margin-top: 15px">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            value="interest"
+                            (change)="selectedOption = 'interest'"
+                            name="radioButton"
+                          />
+                          <label class="form-check-label">Interest</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            value="principle"
+                            (change)="selectedOption = 'principle'"
+                            name="radioButton"
+                          />
+                          <label class="form-check-label">Principle</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            value="service"
+                            (change)="selectedOption = 'service'"
+                            name="radioButton"
+                          />
+                          <label class="form-check-label">Service</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            value="penalty"
+                            (change)="selectedOption = 'penalty'"
+                            name="radioButton"
+                          />
+                          <label class="form-check-label">Penalty</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row tCenter">
+                <div class="col-md-12">
+                  <button
+                    type="button"
+                    style="margin-left: 5px"
+                    class="btn btn-primary border-rad"
+                    (click)="updateLoanRepay()"
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    data-bs-dismiss="modal"
+                    class="btn btn-secondary border-rad ml-2"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

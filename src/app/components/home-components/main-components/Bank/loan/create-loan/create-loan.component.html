@@ -1,0 +1,406 @@
+<ngx-smart-modal
+  identifier="createLoanPopup"
+  id="createLoanpopup"
+  #createLoanPopup
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="true"
+>
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">
+      Create Loan 
+    </h5>
+    <button
+      id="closeCreateLoan"
+      type="button"
+      (click)="destroyComp()"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="row" style="width: 100%">
+    <div class="col-md-12">
+      <form
+        #createLoanForm="ngForm"
+        name="createLoan"
+        (ngSubmit)="createLoan(createLoanForm)"
+      >
+        <div>
+          <div>
+            <table class="table table-striped">
+              <tr>
+                <td class="col-md-3">BankName:</td>
+                <td class="col-md-6">
+                  <!-- <i class=" fas fa-thin fa-circle-chevron-down"></i> -->
+
+                  <select
+                    class="form-control form-select"
+                    name="bankId"
+                    id="bankId"
+                    name="bankId"
+                    #bankId="ngModel"
+                    [(ngModel)]="loan.bankId"
+                    placeholder="Select bank"
+                    [class.is-invalid]="bankId.invalid && bankId.touched"
+                  >
+                    <option
+                      *ngFor="let option of banks"
+                      [value]="option.bankId"
+                    >
+                      <span *ngFor="let bl of bankList">
+                        <span *ngIf="bl.id === option.bankTypeId">
+                          {{ bl.name }}
+                        </span></span
+                      >
+                    </option>
+                  </select>
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        bankId.invalid && bankId.touched ? 'block' : 'none'
+                    }"
+                    >invalid bank</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Lender:</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    name="accountNumber"
+                    [(ngModel)]="lenderPanOrPhone"
+                    placeholder="pan(9 digits) or phone(10 digits)"
+                    (keydown.enter)="fetchLenderInfo()"
+                    name="seller"
+                    ngNoForm
+                    class="form-control"
+                  />
+                </td>
+                <td class="col-md-3">
+                  <i class="lni lni-search" (click)="fetchLenderInfo()"></i>
+                  <!-- <i
+                    class="submit_btn border-rad fas far fa-search"
+                    style="margin: 0 5px"
+                  
+                  ></i> -->
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Lender Id :</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="lenderId.invalid && lenderId.touched"
+                    class="form-control"
+                    id="lenderId"
+                    #lenderId="ngModel"
+                    name="lenderId"
+                    [(ngModel)]="loan.lenderId"
+                    readonly
+                  />
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        lenderId.invalid && lenderId.touched ? 'block' : 'none'
+                    }"
+                    >invalid lender</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-3">
+                  Loan Type :
+                  <b class="mandatorySign">*</b>
+                </td>
+                <td class="col-md-6">
+                  <select
+                    id="loanType"
+                    class="form-control"
+                    style="appearance: auto; background-color: white"
+                    name="loanType"
+                    #loanType="ngModel"
+                    [(ngModel)]="loan.loanType"
+                    [class.is-invalid]="loanType.invalid && loanType.touched"
+                    required
+                  >
+                    <option value="" disabled selected>Select an option</option>
+                    <option
+                      *ngFor="let option of loanTypes"
+                      [value]="option.loanTypeIndex"
+                    >
+                      {{ option.loanType }}
+                    </option>
+                  </select>
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        loanType.invalid && loanType.touched ? 'block' : 'none'
+                    }"
+                    >invalid loan type</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col-md-3">
+                  Loan Name :
+                  <b class="mandatorySign">*</b>
+                </td>
+                <td class="col-md-6">
+                  <select
+                    id="loanName"
+                    class="form-control"
+                    style="appearance: auto; background-color: white"
+                    name="loanName"
+                    #loanName="ngModel"
+                    [(ngModel)]="loan.loanName"
+                    [class.is-invalid]="loanName.invalid && loanName.touched"
+                    required
+                  >
+                    <option value="" disabled selected>Select an option</option>
+                    <option
+                      *ngFor="let option of loanNames"
+                      [value]="option.loanNameIndex"
+                    >
+                      {{ option.loanName }}
+                    </option>
+                  </select>
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        loanName.invalid && loanName.touched ? 'block' : 'none'
+                    }"
+                    >invalid loan
+                  </small>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">
+                  Loan Number :<b class="mandatorySign">*</b>
+                </td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      loanNumber.invalid && loanNumber.touched
+                    "
+                    class="form-control"
+                    id="loanNumber"
+                    #loanNumber="ngModel"
+                    name="loanNumber"
+                    required
+                    [(ngModel)]="loan.loanNumber"
+                    required="required"
+                  />
+                </td>
+                <!-- <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        loanNumber.invalid && loanNumber.touched
+                          ? 'block'
+                          : 'none'
+                    }"
+                    >invalid loanNumber</small
+                  >
+                </td> -->
+              </tr>
+
+              <tr>
+                <td class="col-md-3">Amount :<b class="mandatorySign">*</b></td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="amount.invalid && amount.touched"
+                    class="form-control"
+                    id="amount"
+                    #amount="ngModel"
+                    name="amount"
+                    required
+                    [(ngModel)]="loan.loanAmount"
+                    required="required"
+                  />
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        amount.invalid && amount.touched ? 'block' : 'none'
+                    }"
+                    >invalid amount</small
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">
+                  Received Amount :<b class="mandatorySign">*</b>
+                </td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      receivedAmount.invalid && receivedAmount.touched
+                    "
+                    class="form-control"
+                    id="receivedAmount"
+                    #receivedAmount="ngModel"
+                    required
+                    name="receivedAmount"
+                    [(ngModel)]="loan.receivedAmount"
+                    required="required"
+                  />
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        receivedAmount.invalid && receivedAmount.touched
+                          ? 'block'
+                          : 'none'
+                    }"
+                    >invalid receivedAmount</small
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">Service Charge :</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      serviceCharge.invalid && serviceCharge.touched
+                    "
+                    class="form-control"
+                    id="serviceCharge"
+                    #serviceCharge="ngModel"
+                    name="serviceCharge"
+                    [(ngModel)]="loan.serviceCharge"
+                  />
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [ngStyle]="{
+                      display:
+                        serviceCharge.invalid && serviceCharge.touched
+                          ? 'block'
+                          : 'none'
+                    }"
+                    >invalid serviceCharge</small
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col-md-3">Other Expenses :</td>
+                <td class="col-md-6">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      otherExpenses.invalid && otherExpenses.touched
+                    "
+                    class="form-control"
+                    id="otherExpenses"
+                    #otherExpenses="ngModel"
+                    name="otherExpenses"
+                    [(ngModel)]="loan.otherExpenses"
+                  />
+                </td>
+                <td class="col-md-3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="
+                      otherExpenses.invalid && otherExpenses.touched
+                    "
+                    [ngStyle]="{
+                      display:
+                        otherExpenses.invalid && otherExpenses.touched
+                          ? 'block'
+                          : 'none'
+                    }"
+                    >invalid otherExpenses</small
+                  >
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- <div> 
+              <input
+                type="submit"
+                class="submit_btn border-rad"
+                id="submitCreateProduct"
+                value="Add Loan"
+                [disabled]="createLoanForm.form.invalid"
+            />
+              <input
+                type="button"
+                value="Cancel"
+                (click)="canCellForm()"
+                class="submit_btn cancel_btn border-rad ml-2"
+              />
+            </div> -->
+        <div class="custom-modal-footer">
+          <input
+            type="submit"
+            class="btn btn-success border-rad"
+            id="submitCreateLoan"
+            value="Add Loan"
+            [disabled]="createLoanForm.form.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="destroyComp()"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>
+
+<!-- <app-select-customer
+  [toggleSelectCustomer]="selectLender"
+  (emitToReset)="(selectLender != selectLender)"
+  [customerMetaData]="customerMetaData"
+  (compIdEvent)="setLenderId($event)"
+  [title]="'customer'"
+  (destroySelectCompEmitter)="destroySelectLenderComponent($event)"
+  (fetchCustomerEventEmitter)="setLenderId($event)"
+>
+</app-select-customer> -->
+
+<ngx-smart-modal identifier="selectCustomerPopup">
+  <app-select-customer
+    *ngIf="selectLender"
+    identifier="customer"
+    [customerMetaData]="customerMetaData"
+    (compIdEvent)="setLenderId($event)"
+    [title]="' lender'"
+    (destroySelectCompEmitter)="destroySelectLenderComponent($event)"
+    (fetchCustomerEventEmitter)="fetchLenderInfo()"
+  ></app-select-customer>
+</ngx-smart-modal>

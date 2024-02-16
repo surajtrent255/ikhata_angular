@@ -1,0 +1,90 @@
+<main>
+  <div class="container">
+    <section
+      class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
+    >
+      <div class="container">
+        <div class="row justify-content-center">
+          <div
+            class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
+          >
+            <div class="d-flex justify-content-center py-4">
+              <a class="logo d-flex align-items-center w-auto">
+                <img src="assets/img/logo.png" alt="" />
+                <span class="d-none d-lg-block">Ikhata</span>
+              </a>
+            </div>
+            <!-- End Logo -->
+
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4">
+                    Forgot Password
+                  </h5>
+                  <p class="text-center small">
+                    Enter your Email . We will provide you reset link.
+                  </p>
+                </div>
+
+                <form
+                  [formGroup]="enterEmailForm"
+                  (ngSubmit)="enterEmail()"
+                  class="row g-3 needs-validation"
+                >
+                  <div class="col-12">
+                    <label for="yourUsername" class="form-label">Email</label>
+                    <div class="input-group">
+                      <span class="input-group-text" id="inputGroupPrepend"
+                        >@</span
+                      >
+                      <input
+                        type="email"
+                        formControlName="email"
+                        [class.error]="isFieldInvalid('email')"
+                        class="form-control"
+                        id="email"
+                        required
+                      />
+                      <div *ngIf="isFieldInvalid('email')" class="">
+                        required *
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12"></div>
+
+                  <div class="col-12"></div>
+                  <div class="col-12">
+                    <button
+                      class="btn btn-primary w-100"
+                      type="submit"
+                      [disabled]="enterEmailForm.invalid || processing"
+                    >
+                      <mat-spinner
+                        style="width: 25px; height: 25px; margin-left: 45%"
+                        *ngIf="processing"
+                      ></mat-spinner>
+                      <span *ngIf="!processing"> Submit </span>
+                    </button>
+                  </div>
+                  <div class="col-12">
+                    <p class="small mb-0">
+                      Already have account?
+                      <a routerLink="/login">Login</a>
+                    </p>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="credits">
+              Developed by
+              <a>Ishani Technology</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

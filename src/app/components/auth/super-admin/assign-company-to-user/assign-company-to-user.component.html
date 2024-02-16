@@ -1,0 +1,266 @@
+<main id="main" style="margin: 0px" class="main overflow-auto">
+  <div class="d-flex justify-content-between">
+    <div class="pagetitle">
+      <h1>Super Admin</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/superAdmin">Auth</a>
+          </li>
+          <li class="breadcrumb-item active">super-admin</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="fright">
+      <a routerLink="/superAdmin"
+        ><i class="bi bi-arrow-left-square-fill"></i>
+        <span> back</span>
+      </a>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-center mt-2 mb-2">
+              <h3>Company List</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <div class="col-4">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Search"
+                    [(ngModel)]="searchWildCard"
+                    (keydown.enter)="getCompaniesWithNoUsers()"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                  />
+                  <span
+                    (click)="getCompaniesWithNoUsers()"
+                    class="input-group-text border-0"
+                    id="search-addon"
+                  >
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer"
+                    (click)="getCompaniesWithNoUsers()"
+                    class="pe-auto mt-1 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('prev')"
+                      class="page-link pe-auto"
+                      aria-label="Previous"
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">{{ currentPageNumber }}</a>
+                  </li>
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('next')"
+                      class="page-link pe-auto"
+                      aria-label="Next"
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <div class="col-12 overflow-auto">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>PAN/VAT</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let company of companiesWithNoUsers">
+                    <td>{{ company.name }}</td>
+                    <td>{{ company.email }}</td>
+                    <td>{{ company.panNo }}</td>
+                    <td>{{ company.phone }}</td>
+                    <td>
+                      <a
+                        (click)="assignUserPopup(company)"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="Assign User"
+                        style="cursor: pointer"
+                        class="link-primary"
+                        ><i class="bi bi-box-arrow-right"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  #assignUser
+  type="button"
+  id="assignUserPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#assignUser"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" data-bs-backdrop="false" id="assignUser" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Assign To <strong>{{ selectedCompanyName }}</strong>
+        </h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="col-6">
+              <div class="input-group rounded">
+                <input
+                  type="search"
+                  class="form-control rounded"
+                  placeholder="Search"
+                  [(ngModel)]="searchUserWildCard"
+                  (keydown.enter)="getAllUser()"
+                  name="searchInput"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <span
+                  (click)="getAllUser()"
+                  class="input-group-text border-0"
+                  id="search-addon"
+                >
+                  <i class="fas fa-search"></i>
+                </span>
+                <a
+                  style="cursor: pointer"
+                  (click)="getAllUser()"
+                  class="pe-auto mt-1 text-decoration-underline"
+                >
+                  clear Search</a
+                >
+              </div>
+            </div>
+
+            <nav style="margin-top: 2px" aria-label="Page navigation ">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a
+                    (click)="changeUserPage('prev')"
+                    class="page-link pe-auto"
+                    aria-label="Previous"
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link">{{ currentUserPageNumber }}</a>
+                </li>
+                <li class="page-item">
+                  <a
+                    (click)="changeUserPage('next')"
+                    class="page-link pe-auto"
+                    aria-label="Next"
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <form class="row g-3">
+              <table
+                class="table table-bordered"
+                style="overflow-wrap: anyWhere"
+              >
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Assign</th>
+                  </tr>
+                </thead>
+
+                <tbody *ngFor="let allUser of AllUsers">
+                  <tr>
+                    <td>
+                      <a>{{ allUser.firstName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.lastName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.phone }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.email }}</a>
+                    </td>
+                    <td>
+                      <input
+                        class="form-check-input"
+                        (change)="SelectedUser(allUser)"
+                        type="radio"
+                        name="users"
+                      />
+                      <label for="input"></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button (click)="submit()" type="button" class="btn btn-success border-rad">Save</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

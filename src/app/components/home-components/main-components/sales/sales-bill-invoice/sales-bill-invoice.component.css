@@ -1,0 +1,97 @@
+@media print {
+  /* Custom print styles */
+  #printable-content {
+    font-size: 12pt;
+  }
+  .no-print {
+    display: none;
+  }
+}
+
+/* img {
+  width: 50px;
+  height: auto;
+} */
+
+
+/* @page { size:  landscape; margin: 0px; } */
+
+
+  /* Add styles to the elements */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+
+  .popupSubHeadingDiv {
+    background-color: #0c0b0b;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .popupContentWrapper {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .heading {
+    font-size: 24px;
+    margin: 0;
+  }
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+
+  .text-bg {
+    background-color: #f2f2f2;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .submit_btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* Add more styles as needed */
+  .recordCategory {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 2px;
+  }
+
+  .recordCategory h2 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .recordCategory p {
+    margin: 5px 0;
+  }
+
+  h5 {
+    font-size: 14px;;
+  }

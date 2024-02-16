@@ -1,0 +1,123 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Branch Details Table</h5>
+
+    <div class="d-flex justify-content-between">
+      <div class="col-4">
+        <div class="input-group rounded">
+          <input
+            type="search"
+            class="form-control rounded"
+            placeholder="Search"
+            name="searchInput"
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <span class="input-group-text border-0" id="search-addon">
+            <i class="fas fa-search"></i>
+          </span>
+          <a
+            style="cursor: pointer"
+            class="pe-auto mt-1 text-decoration-underline"
+          >
+            clear Search</a
+          >
+        </div>
+      </div>
+      <div class="col-4">
+        <button (click)="createNewBranch()" class="submit_btn border-rad m-0">
+          Create New Branch
+        </button>
+      </div>
+
+      <nav style="margin-top: 2px" aria-label="Page navigation ">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link pe-auto" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link pe-auto" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Primary Color Bordered Table -->
+    <div class="row">
+      <div class="col-lg-12">
+        <table
+          class="table table-bordered border-primary"
+          style="overflow-wrap: anywhere"
+        >
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Abbrv</th>
+              <th scope="col">Address</th>
+              <th scope="col">phone</th>
+              <th scope="col">Action</th>
+              <th scope="col">Counter</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let branch of branch">
+            <tr>
+              <td>
+                {{ branch.name }}
+              </td>
+              <td>{{ branch.abbrv }}</td>
+              <td>{{ branch.district }}</td>
+              <td>{{ branch.phone }}</td>
+
+              <td>
+                <a
+                  class="p-2"
+                  value="change"
+                  style="cursor: pointer"
+                  (click)="onAssinBranchButtonClick(branch.id)"
+                  id="assignNewBranch"
+                  >Assign Branch</a
+                >
+              </td>
+              <td>
+                <a
+                  class="p-2"
+                  value="change"
+                  style="cursor: pointer"
+                  id="createNewCounter"
+                  (click)="getBranchIdForCounter(branch.id)"
+                  >Create Counter</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-create-branch
+  [displaycreateNewBranchPopUp]="initiateCreateNewBranchPopUp"
+  (emitToReset)="resetCreateBranchPopup()"
+  (successfullyAdded)="getAllBranchDetails()"
+></app-create-branch>
+
+<app-assign-branch
+  [displayAssignBranchPopUp]="initiateAssignPopUp"
+  [branchId]="branchId"
+  (emitToReset)="resetAssignBranchPopup()"
+  (successfullyAdded)="resetBranchUserTable()"
+></app-assign-branch>
+
+<app-create-counter
+  [displayCreateNewCounterPopUp]="initiateCreateCounterPopUp"
+  [branchId]="BranchIdForCounter"
+  (emitToReset)="resetCreateCounterPopup()"
+  (successfullyAdded)="resetCounterTable()"
+></app-create-counter>

@@ -1,0 +1,28 @@
+/* input[type="text"],
+input[type="number"],
+input[type="date"] {
+  width: 250px;
+  height: 30px;
+  margin-top: 2px;
+  margin-left: 2px;
+  padding: 3px;
+}
+
+select{
+  width: 250px;
+  height: 30px;
+  margin-top: 2px;
+  margin-left:2px;
+  appearance: auto;
+  background-color: white;
+} */
+
+.error {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

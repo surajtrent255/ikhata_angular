@@ -1,0 +1,142 @@
+<a
+  type="button"
+  id="assignCompanyPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#assignCompany"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="assignCompany"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Assign Company</h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="col-4">
+              <div class="input-group rounded">
+                <input
+                  type="search"
+                  class="form-control rounded"
+                  placeholder="Search"
+                  [(ngModel)]="searchInput"
+                  (keydown.enter)="getAllUser()"
+                  name="searchInput"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <span
+                  (click)="getAllUser()"
+                  class="input-group-text border-0"
+                  id="search-addon"
+                >
+                  <i class="fas fa-search"></i>
+                </span>
+                <a
+                  style="cursor: pointer"
+                  (click)="getAllUser(true)"
+                  class="pe-auto mt-1 text-decoration-underline"
+                >
+                  clear Search</a
+                >
+              </div>
+            </div>
+
+            <nav style="margin-top: 2px" aria-label="Page navigation ">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a
+                    (click)="changePage('prev')"
+                    class="page-link pe-auto"
+                    aria-label="Previous"
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link">{{ currentPageNumber }}</a>
+                </li>
+                <li class="page-item">
+                  <a
+                    (click)="changePage('next')"
+                    class="page-link pe-auto"
+                    aria-label="Next"
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Assign</th>
+                  </tr>
+                </thead>
+
+                <tbody *ngFor="let allUser of allUsers">
+                  <tr *ngIf="allUser.userId != loggedInUserId">
+                    <td>
+                      <a>{{ allUser.firstName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.lastName }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.phone }}</a>
+                    </td>
+                    <td>
+                      <a>{{ allUser.email }}</a>
+                    </td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        (change)="onAssignCompanyChange($event, allUser.userId)"
+                      />
+                      <label for="input"></label>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button
+          (click)="onAssignCompanySaveClicked()"
+          type="button"
+          class="btn btn-success border-rad"
+        >
+          Save
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

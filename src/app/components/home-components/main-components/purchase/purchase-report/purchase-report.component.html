@@ -1,0 +1,123 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Purchase Report</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">purchase-report</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Purchase Bill Report</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <app-search
+                        (searchInput)="handleData($event)"
+                      ></app-search>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <div class="container">
+                  <table
+                    class="table table-bordered table-striped"
+                    id="purchaseBillsRecordsTable"
+                  >
+                    <thead>
+                      <tr>
+                        <th id="costprice">Bill No</th>
+                        <th id="name">Fiscal Year</th>
+                        <th id="sellingprice">Seller Name</th>
+                        <th id="barcode">Total Amount</th>
+                        <th>Sale Type</th>
+                        <th>Transportation Charge (rs)</th>
+                        <th>Insurance Charge (rs)</th>
+                        <th>Loading Charge (rs)</th>
+                        <th>Other Charge (rs)</th>
+                        <th id="actions">Actions</th>
+                        <th>Report</th>
+                      </tr>
+                    </thead>
+                    <tbody id="prodTable">
+                      <tr
+                        *ngFor="let purchaseBill of purchaseBills"
+                        id="saleBill_{{ purchaseBill.purchaseBillNo }}"
+                      >
+                        <td>{{ purchaseBill.purchaseBillNo }}</td>
+                        <td>{{ purchaseBill.fiscalYear }}</td>
+                        <td>{{ purchaseBill.sellerName }}</td>
+                        <td>{{ purchaseBill.taxAmount }}</td>
+                        <td>
+                          <span *ngIf="purchaseBill.saleType === 1">Cash</span>
+                          <span *ngIf="purchaseBill.saleType === 2"
+                            >Credit</span
+                          >
+                        </td>
+                        <td>{{ purchaseBill.transportation }}</td>
+                        <td>{{ purchaseBill.insurance }}</td>
+                        <td>{{ purchaseBill.loading }}</td>
+                        <td>{{ purchaseBill.other }}</td>
+                        <td>
+                          <a
+                            *ngIf="IsAuditor"
+                            (click)="
+                              goToPurchBillDetail(purchaseBill.purchaseBillNo)
+                            "
+                            ><i class="fa fa-info-circle" aria-hidden="true"></i
+                          ></a>
+                        </td>
+                        <td>
+                          <a>
+                            <i
+                              class="fa-solid fa-bug ml-2"
+                              routerLink="/home/purchasebills/purchase-bill/invoice/report/{{
+                                purchaseBill.purchaseBillNo
+                              }}"
+                            ></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

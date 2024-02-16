@@ -1,0 +1,573 @@
+<ngx-smart-modal
+  id="productPopup"
+  identifier="createProduct"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">Create Product</h5>
+    <button
+      #closeButton
+      type="button"
+      (click)="destroyComp()"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <h5 class="text-center">Select Category</h5>
+
+      <app-select-category
+        class="mt-2"
+        [showDisableButton]="false"
+        [nodes]="availableCategories"
+      ></app-select-category>
+    </div>
+    <div class="col-md-6">
+      <span
+        *ngIf="selectedCategory"
+        id="showSelectCat"
+        [style.display]="catSelected ? 'none' : 'block'"
+        >Category under <input value="{{ selectedCategory.name }}" readonly
+      /></span>
+      <!-- <button
+        class="mt-3"
+        *ngIf="!catSelected"
+        (click)="displayMainForm()"
+        [disabled]="!selectedCategory.id ? true : null"
+      >
+        Next
+      </button> -->
+    </div>
+  </div>
+  <hr />
+  <!-- <div class="row" *ngIf="catSelected"> -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <form
+        #createProductForm="ngForm"
+        name="createProduct"
+        (ngSubmit)="createProduct(createProductForm)"
+        id="createProductForm"
+      >
+        <div class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <table class="" cellpadding="0" cellspacing="1">
+              <tr>
+                <td class="col1 pt-2">
+                  Product Name:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    [class.is-invalid]="name.invalid && name.touched"
+                    class="form-control"
+                    id="name"
+                    #name="ngModel"
+                    required
+                    name="name"
+                    [(ngModel)]="product.name"
+                    required="required"
+                  />
+                </td>
+                <td class="col3">
+                  <div class="ml-1">
+                    <small
+                      class="text-danger"
+                      [class.d-none]="name.valid || name.untouched"
+                      >invalid name</small
+                    >
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Description :<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <textarea
+                    name="description"
+                    [(ngModel)]="product.description"
+                    required
+                    #description="ngModel"
+                    [class.is-invalid]="
+                      description.invalid && description.touched
+                    "
+                    class="form-control"
+                    id="description"
+                    cols="30"
+                    rows="2"
+                  ></textarea>
+                </td>
+                <td class="col3">
+                  <div class="ml-1">
+                    <small
+                      class="text-danger"
+                      [class.d-none]="
+                        description.valid || description.untouched
+                      "
+                      >invalid description</small
+                    >
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1">Category:</td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    readOnly
+                    value="{{ selectedCategory.name }}"
+                    class="form-control"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  <label>
+                    NON INVENTORY ITEMS
+                    <span class="mandatorySign">*</span>
+                  </label>
+                </td>
+                <td class="col2">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="product.productType"
+                    name="productType"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  <label>
+                    Average Price<span class="mandatorySign">*</span>
+                  </label>
+                </td>
+                <td class="col2">
+                  <input
+                    id="isAveragePrice"
+                    type="checkbox"
+                    #AveragePrice="ngModel"
+                    [(ngModel)]="product.averagePriceStatus"
+                    name="isAveragePrice"
+                  />
+                </td>
+              </tr>
+
+              <tr *ngIf="product.averagePriceStatus">
+                <td class="col1 pt-2">
+                  <label>
+                    Rate Percentage:<span class="mandatorySign">*</span>
+                  </label>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      ratePercentage.invalid && ratePercentage.touched
+                    "
+                    class="form-control"
+                    id="ratePercentage"
+                    #ratePercentage="ngModel"
+                    name="ratePercentage"
+                    [(ngModel)]="product.ratePercentage"
+                    min="0"
+                    max="100"
+                    required
+                    title="input in percentage"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="
+                      ratePercentage.valid ||
+                      ratePercentage.untouched ||
+                      ratePercentage.errors
+                    "
+                  >
+                    invalid Rate Percentage range from 0 to 100
+                  </small>
+                </td>
+              </tr>
+
+              <tr *ngIf="!product.averagePriceStatus">
+                <td class="col1 pt-2">
+                  <label>
+                    Selling Price:<span class="mandatorySign">*</span>
+                  </label>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      sellingPrice.invalid && sellingPrice.touched
+                    "
+                    class="form-control"
+                    id="sellingPrice"
+                    #sellingPrice="ngModel"
+                    name="sellingPrice"
+                    required
+                    sellingPrice="sellingPrice"
+                    [(ngModel)]="product.sellingPrice"
+                    required="required"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="
+                      sellingPrice.valid || sellingPrice.untouched
+                    "
+                  >
+                    invalid selling price
+                  </small>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Quatityperunit:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="
+                      qtyPerUnit.invalid && qtyPerUnit.touched
+                    "
+                    class="form-control"
+                    id="qtyPerUnit"
+                    #qtyPerUnit="ngModel"
+                    name="qtyPerUnit"
+                    [(ngModel)]="product.qtyPerUnit"
+                  />
+                </td>
+                <!-- <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="qtyPerUnit.valid || qtyPerUnit.untouched"
+                    >invalid qtyPerUnit</small
+                  >
+                </td> -->
+              </tr>
+              <!-- <tr>
+                <td class="col1 pt-2">
+                  Cost Price:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="costPrice.invalid && costPrice.touched"
+                    class="form-control"
+                    id="costPrice"
+                    #costPrice="ngModel"
+                    required
+                    name="costPrice"
+                    costPrice="costPrice"
+                    [(ngModel)]="product.costPrice"
+                    required="required"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="costPrice.valid || costPrice.untouched"
+                    >invalid costPrice</small
+                  >
+                </td>
+              </tr> -->
+              <tr>
+                <td class="col1 pt-2">Bar Code:</td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="barcode"
+                    #barcode="ngModel"
+                    name="barcode"
+                    barcode="barcode"
+                    [(ngModel)]="product.barcode"
+                  />
+                </td>
+                <!-- <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="barcode.valid || barcode.untouched"
+                    >invalid barcode</small
+                  >
+                </td> -->
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Discount :<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="discount.invalid && discount.touched"
+                    class="form-control"
+                    id="discount"
+                    #discount="ngModel"
+                    name="discount"
+                    required
+                    discount="discount"
+                    [(ngModel)]="product.discount"
+                    required="required"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="discount.valid || discount.untouched"
+                    >invalid discount</small
+                  >
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Tax :<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <select
+                    name="tax"
+                    id="tax"
+                    #tax="ngModel"
+                    style="width: 100%"
+                    class="form-control form-select"
+                    [(ngModel)]="product.tax"
+                  >
+                    <option [value]="ap.id" *ngFor="let ap of typerate">
+                      {{ ap.vatRate }}
+                    </option>
+                  </select>
+                </td>
+                <!-- <div
+                  *ngIf="tax.errors && (tax.dirty || tax.touched)"
+                  class="alert alert-danger"
+                >
+                  <div [hidden]="!tax.errors">Please select tax.</div>
+                </div> -->
+
+                <!-- <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="tax.invalid && tax.touched"
+                    class="form-control"
+                    id="tax"
+                    name="tax"
+                    #tax="ngModel"
+                    tax="tax"
+                    [(ngModel)]="product.tax"
+
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="tax.valid || tax.untouched"
+                    >invalid tax</small
+                  >
+                </td> -->
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  unit :<span class="mandatorySign">*</span>
+                </td>
+
+                <td class="col2">
+                  <select
+                    class="form-control form-select"
+                    name="unit"
+                    id="unit"
+                    #unit="ngModel"
+                    [(ngModel)]="product.unit"
+                    style="width: 100%"
+                  >
+                    <option [value]="ap.name" *ngFor="let ap of Unit">
+                      {{ ap.name }}
+                    </option>
+                  </select>
+                </td>
+                <!-- <input
+                          type="submit"
+                          class="btn btn-primary"
+                          id="submitCreateProduct"
+                          value="Add product"
+                          [disabled]="createProductForm.form.invalid"
+                        /> -->
+                <!-- <div
+                  *ngIf="unit.errors && (unit.dirty || unit.touched)"
+                  class="alert alert-danger"
+                >
+                  <div [hidden]="!unit.errors">Please select a unit.</div>
+                </div> -->
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="custom-modal-footer">
+          <input
+            type="submit"
+            class="btn btn-success border-rad"
+            id="submitCreateProduct"
+            value="Add product"
+            [disabled]="createProductForm.form.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="destroyComp()"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div
+    class="popupWrapper createCustomerPopUpWrapper"
+    id="createNewCustomerPopup"
+    cdkDrag
+    style="display: none"
+  >
+    <div class="mb-2"></div>
+    <app-create-customer
+      (customerAddedSuccessMsg)="customerAdded($event)"
+    ></app-create-customer>
+  </div>
+  <div
+    class="popupWrapper CustomerPopupWrapper1"
+    id="selectCustomerPopup"
+    cdkDrag
+    style="display: none; width: auto"
+  >
+    <div class="mb-2"></div>
+    <div class="popupHeading">
+      <h2 class="fleft">Customers</h2>
+      <a class="Customer1CloseButton fright" id="closeCustPop"
+        ><img
+          src="../../../assets/resources/images/removetablink.png"
+          alt="close"
+      /></a>
+      <div class="cboth"></div>
+    </div>
+    <div class="popupSubHeadingDiv selectCustomer">
+      <h1 class="heading">Your can select your customer here</h1>
+    </div>
+    <div class="popupContentWrapper">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="recordsTableDiv">
+            <table
+              cellspacing="0"
+              cellpadding="0"
+              class="recordsTable"
+              id="ProductsRecordsTable"
+            >
+              <thead>
+                <tr>
+                  <th>S.N</th>
+                  <th
+                    class="first-child sortable"
+                    sortDir="asc"
+                    sortCol="organization_id"
+                    id="id"
+                  >
+                    Name
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="organization_name"
+                    id="name"
+                  >
+                    PAN NO
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="customer_name"
+                    id="costprice"
+                  >
+                    Phone
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="master_name"
+                    id="sellingprice"
+                  >
+                    State
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="product_group_name"
+                    id="barcode"
+                  >
+                    District
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="product_group_name"
+                    id="discount"
+                  >
+                    Mun/Vdc
+                  </th>
+                  <th
+                    class="sortable"
+                    sortDir="asc"
+                    sortCol="product_group_name"
+                    id="tax"
+                  >
+                    Ward
+                  </th>
+
+                  <th class="last-child">Actions</th>
+                </tr>
+              </thead>
+              <!-- <tbody id="prodTable">
+              <tr class="text-center" *ngIf="selectMenusForCompaniesSize === 0">
+                <td colspan="9">
+                  <span style="color: red">No records found !</span>
+                </td>
+              </tr>
+              <tr
+                *ngFor="let cust of selectMenusForCompanies; let index = index"
+                id="cust_{{ cust.companyId }}"
+              >
+                <td>{{ index + 1 }}</td>
+                <td>{{ cust.name }}</td>
+                <td>{{ cust.panNo }}</td>
+                <td>{{ cust.phone }}</td>
+                <td>{{ cust.state }}</td>
+                <td>{{ cust.district }}</td>
+                <td>{{ cust.munVdc }}</td>
+                <td>---</td>
+                <td>
+                  <button
+                    (click)="setSellerId(cust.companyId)"
+                    class="submit_btn border-rad"
+                  >
+                    Select
+                  </button>
+                </td>
+              </tr>
+            </tbody> -->
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ngx-smart-modal>

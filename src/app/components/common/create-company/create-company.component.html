@@ -1,0 +1,297 @@
+<a
+  type="button"
+  id="createNewCompanyPopUp"
+  data-bs-toggle="modal"
+  data-bs-target="#createNewCompany"
+  [hidden]="true"
+  >click</a
+>
+
+<div class="modal fade" id="createNewCompany" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create New Company</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">Please Enter Required Fields</h5>
+
+        <!-- Multi Columns Form -->
+        <form class="row g-3" [formGroup]="CompanyRegistrationForm">
+          <div class="col-6">
+            <label for="inputAddress2" class="form-label"
+              >Pan Number <span class="mandatorySign">*</span></label
+            >
+            <input
+              type="number"
+              formControlName="panNo"
+              (change)="getCompanyByPanNo($event)"
+              class="form-control"
+              id="panNo"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('panNo')?.invalid &&
+                (CompanyRegistrationForm.get('panNo')?.dirty ||
+                  CompanyRegistrationForm.get('panNo')?.touched)
+              "
+              class="validationMsg"
+              >Please enter Ward no.</span
+            >
+            <span>Pan</span
+            ><input
+              (change)="registrationChange($event)"
+              type="radio"
+              id="pan"
+              value="PAN"
+              name="Pan"
+            />
+            <span style="padding-left: 7px">VAT</span
+            ><input
+              (change)="registrationChange($event)"
+              checked
+              value="VAT"
+              id="vat"
+              name="Pan"
+              type="radio"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Name of the company <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="name"
+              type="text"
+              class="form-control"
+              id="name"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('name')?.invalid &&
+                (CompanyRegistrationForm.get('name')?.dirty ||
+                  CompanyRegistrationForm.get('name')?.touched)
+              "
+              class="validationMsg"
+              >Please Enter Company Name.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Company Owner <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="ownerName"
+              type="text"
+              class="form-control"
+              id="owner"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('ownerName')?.invalid &&
+                (CompanyRegistrationForm.get('ownerName')?.dirty ||
+                  CompanyRegistrationForm.get('ownerName')?.touched)
+              "
+              class="validationMsg"
+              >Please Enter Owner Name.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Mobile No <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="phone"
+              placeholder="Enter 10 Digits"
+              type="number"
+              class="form-control"
+              id="phone"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('phone')?.invalid &&
+                (CompanyRegistrationForm.get('phone')?.dirty ||
+                  CompanyRegistrationForm.get('phone')?.touched)
+              "
+              class="validationMsg"
+              >Please enter valid Phone.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Email <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="email"
+              type="email"
+              class="form-control"
+              id="email"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('email')?.invalid &&
+                (CompanyRegistrationForm.get('email')?.dirty ||
+                  CompanyRegistrationForm.get('email')?.touched)
+              "
+              class="validationMsg"
+              >Please enter valid email.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Tax Pay Type <span class="mandatorySign">*</span></label
+            >
+            <select formControlName="taxPayType" class="form-select">
+              <option selected disabled>Select the Tax Pay Type</option>
+              <option [value]="'monthly'">Monthly</option>
+              <option [value]="'quaterly'">Quaterly</option>
+              <option [value]="'yearly'">Yearly</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <input
+              formControlName="description"
+              type="text"
+              class="form-control"
+              id="description"
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label"
+              >State <span class="mandatorySign">*</span></label
+            >
+            <select
+              formControlName="state"
+              #selected
+              (change)="stateChange(selected.value)"
+              class="form-select"
+            >
+              <option selected disabled>Select the state</option>
+              <option
+                *ngFor="let province of province"
+                value="{{ province.provinceId }}"
+              >
+                {{ province.provinceName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >District
+              <span [hidden]="enableManditorySign" class="mandatorySign"
+                >*</span
+              ></label
+            >
+            <select
+              class="form-select"
+              formControlName="district"
+              #selected
+              (change)="districtChange()"
+            >
+              <option
+                *ngFor="let district of districts"
+                value="{{ district.districtId }}"
+              >
+                {{ district.districtName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Municipality/VDC
+              <span [hidden]="enableManditorySign" class="mandatorySign"
+                >*</span
+              ></label
+            >
+            <select class="form-select" formControlName="munVdc" #selected>
+              <option
+                *ngFor="let municipality of municipality"
+                value="{{ municipality.municipalityName }}"
+              >
+                {{ municipality.municipalityName }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label"
+              >Ward Number
+              <span [hidden]="enableManditorySign" class="mandatorySign"
+                >*</span
+              ></label
+            >
+            <input
+              formControlName="wardNo"
+              type="number"
+              class="form-control"
+              id="wardNo"
+            />
+            <span
+              *ngIf="
+                CompanyRegistrationForm.get('wardNo')?.invalid &&
+                (CompanyRegistrationForm.get('wardNo')?.dirty ||
+                  CompanyRegistrationForm.get('wardNo')?.touched)
+              "
+              class="validationMsg"
+              >Please enter Ward no.</span
+            >
+          </div>
+
+          <div class="col-6">
+            <label class="form-label">Land-Line No</label>
+            <input
+              type="number"
+              formControlName="landline"
+              class="form-control"
+              id="panNo"
+            />
+          </div>
+
+          <div class="col-6">
+            <label class="form-label">Logo</label>
+            <input
+              (change)="onFileSelected($event)"
+              type="file"
+              class="form-control"
+              accept="image/*"
+              id="landLine"
+            />
+          </div>
+
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              (click)="registerCompany()"
+              type="button"
+              class="btn btn-primary"
+              [disabled]="
+                CompanyRegistrationForm.invalid || isAlreadyRegisteredCompany
+              "
+            >
+              Register
+            </button>
+          </div>
+        </form>
+        <!-- End Multi Columns Form -->
+      </div>
+    </div>
+  </div>
+</div>

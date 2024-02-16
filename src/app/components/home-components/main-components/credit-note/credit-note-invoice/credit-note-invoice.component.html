@@ -1,0 +1,124 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Credit Note Invoice</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">credit-note-invoice</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-center mt-2 mb-2">
+          <h3>Credit Note Invoice</h3>
+          <hr class="border-2 mb-2" />
+        </div>
+
+        <div class="row" #httptraceTable id="httptrace-table">
+          <h5 class="text-center">Credit Note Invoice</h5>
+          <div class="col-md-6">
+            <div>
+              <p>
+                S N:
+                <span>
+                  <input
+                    type="number"
+                    value="{{ serialNumber }}"
+                    disabled
+                    class="inputText"
+                  />
+                </span>
+              </p>
+            </div>
+            <span>Bill Number:</span>
+            <span> {{ salesInvoice.salesBillDTO.billNo }}</span
+            ><br />
+
+            <span>Customer Name: </span
+            ><span>{{ salesInvoice.salesBillDTO.customerName }}</span
+            ><br />
+            <span>Customer Address: </span
+            ><span>{{ salesInvoice.customerAddress }}</span
+            ><br />
+            <span>Customer PAN: </span>
+            <span> {{ salesInvoice.salesBillDTO.customerPan }}</span
+            ><br />
+          </div>
+
+          <div class="col-md-6">
+            <p style="text-align: right">
+              Date: <input type="text" disabled [(ngModel)]="date" />
+            </p>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <th>Product Name</th>
+                  <th>Credit Reason</th>
+                  <th>QTY</th>
+                  <th>Discount</th>
+                  <th>Credit Amount</th>
+                  <th>Tax Amount</th>
+                  <th>Total</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of SelectedProduct; let i = index">
+                    <td>{{ product.productName }}</td>
+                    <td>{{ product.creditReason }}</td>
+                    <td>{{ product.qty }}</td>
+                    <td>{{ product.discountPerUnit }}</td>
+                    <td>{{ product.rate }}</td>
+                    <td>{{ (product.rate * product.taxRate) / 100 }}</td>
+                    <td>
+                      {{
+                        ((product.rate * product.taxRate) / 100 +
+                          product.rate) *
+                          product.qty
+                      }}
+                    </td>
+                  </tr>
+                  <tr></tr>
+
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><span class="text text-bg">Total:</span></td>
+                    <td></td>
+
+                    <td>{{ TotalTax }}</td>
+
+                    <td>
+                      {{ totalAmount | number : "1.0-0" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="container" style="margin: 20px; padding-top: 20px">
+          <div class="row">
+            <div class="col-md-12">
+              <button class="submit_btn border-rad" (click)="submit()">
+                OK
+              </button>
+              <button
+                class="submit_btn border-rad"
+                routerLink="/home/creditnote/creditNoteList"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

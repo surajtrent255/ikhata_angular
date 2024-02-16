@@ -1,0 +1,105 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Branch Users Details Table</h5>
+
+    <div class="d-flex justify-content-between">
+      <div class="col-4">
+        <div class="input-group rounded">
+          <input
+            type="search"
+            class="form-control rounded"
+            placeholder="Search"
+            name="searchInput"
+            aria-label="Search"
+            aria-describedby="search-addon"
+          />
+          <span class="input-group-text border-0" id="search-addon">
+            <i class="fas fa-search"></i>
+          </span>
+          <a
+            style="cursor: pointer"
+            class="pe-auto mt-1 text-decoration-underline"
+          >
+            clear Search</a
+          >
+        </div>
+      </div>
+
+      <nav style="margin-top: 2px" aria-label="Page navigation ">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link pe-auto" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link">1</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link pe-auto" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Primary Color Bordered Table -->
+    <div class="row">
+      <div class="col-lg-12">
+        <table
+          class="table table-bordered border-primary"
+          style="overflow-wrap: anywhere"
+        >
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>User Name</th>
+              <th>User Phone</th>
+              <th>Branch Name</th>
+              <th>Address</th>
+              <th>Branch Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let branchuser of branchUsers">
+            <tr>
+              <td>{{ branchuser.firstName }} {{ branchuser.lastName }}</td>
+              <td>{{ branchuser.email }}</td>
+              <td>{{ branchuser.userPhone }}</td>
+              <td>{{ branchuser.branchName }}</td>
+              <td>{{ branchuser.branchDistrict }}</td>
+              <td>{{ branchuser.branchPhone }}</td>
+              <td>
+                <div style="display: flex; padding: 2px">
+                  <div>
+                    <input
+                      type="checkbox"
+                      [checked]="branchuser.branchStatus"
+                      (change)="
+                        onBranchCheckboxChanged(
+                          $event,
+                          branchuser.userId,
+                          branchuser.branchId
+                        )
+                      "
+                    />
+                    <label for="scales">Enable</label>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button (click)="OnSubmit()" class="submit_btn border-rad">Ok</button>
+    </div>
+  </div>
+</div>
+
+<app-assign-branch
+  [hidden]="true"
+  (successfullyAdded)="getBranchUsersByCompanyId()"
+></app-assign-branch>

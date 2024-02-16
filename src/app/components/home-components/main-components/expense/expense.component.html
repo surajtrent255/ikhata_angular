@@ -1,0 +1,269 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Expense</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Expense</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-center mt-2 mb-2">
+              <h3>Expense</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <a
+                        style="cursor: pointer; margin-left: 6px"
+                        class="pe-auto mt-1 ml-2 text-decoration-underline"
+                      >
+                        clear Search</a
+                      >
+                    </div>
+
+                    <nav style="margin-top: 2px" aria-label="Page navigation ">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link pe-auto" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link">1</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link pe-auto" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                  <div class="col-6 mt-2">
+                    <div>
+                      <a
+                        *ngIf="isAccountant || isMaster"
+                        style="cursor: pointer"
+                        (click)="onCreate()"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> CreateExpense</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Expense Id</th>
+                      <th>Company Id</th>
+                      <th>Branch Id</th>
+                      <th>Amount</th>
+                      <th>Topic</th>
+                      <th>Bill No</th>
+                      <th>Pay To</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let expense of expense">
+                      <td>{{ expense.sn }}</td>
+                      <td>{{ expense.companyId }}</td>
+                      <td>{{ expense.branchId }}</td>
+                      <td>{{ expense.amount }}</td>
+                      <td>{{ expense.topic }}</td>
+                      <td>{{ expense.billNo }}</td>
+                      <td>{{ expense.payTo }}</td>
+                      <td>{{ expense.date | date }}</td>
+                      <td>{{ expense.status }}</td>
+                      <td *ngIf="isAccountant || isMaster" class="last-child">
+                        <a
+                          id="editExpense"
+                          class="createNewTableRecord"
+                          (click)="editExpense(expense.sn)"
+                        >
+                          <img
+                            src="../../../../../assets/img/editRow.png"
+                            title="Edit"
+                          />
+                        </a>
+                        <a class="" (click)="deleteExpenseDetails(expense.sn)">
+                          <img
+                            src="../../../../../assets/img/deleteRow.png"
+                            title="Delete"
+                          />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  id="expenseDetailsPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#expenseDetails"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" id="expenseDetails">
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Expense</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <form [formGroup]="ExpenseForm">
+            <div>
+              <div>
+                <table class="table table-bordered">
+                  <tr>
+                    <td class="col-md-3">Amount</td>
+                    <td class="col-md-6">
+                      <input
+                        type="number"
+                        class="form-control"
+                        formControlName="amount"
+                      />
+                    </td>
+                    <td class="col-md-3"></td>
+                  </tr>
+
+                  <tr>
+                    <td class="col-md-3">Topic<span class=""></span></td>
+                    <td class="col-md-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="topic"
+                      />
+                    </td>
+                    <td class="col-md-3"></td>
+                  </tr>
+
+                  <tr>
+                    <td class="col-md-3">BillNo</td>
+                    <td class="col-md-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="billNo"
+                      />
+                    </td>
+                    <td class="col-md-3"></td>
+                  </tr>
+
+                  <tr>
+                    <td class="col-md-3">Pay To</td>
+                    <td class="col-md-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="payTo"
+                      />
+                    </td>
+                    <td class="col-md-3"></td>
+                  </tr>
+
+                  <tr>
+                    <td class="col-md-3">Date</td>
+                    <td class="col-md-6">
+                      <div class="p-0">
+                        <span style="margin: auto">BS </span>
+                        <input
+                          type="text"
+                          id="nepali-datepicker"
+                          placeholder="Select Date"
+                          class="form-control"
+                        />
+
+                        <span style="margin: auto">AD</span>
+                        <input
+                          class="form-control"
+                          disabled
+                          type="text"
+                          id="AdDate"
+                        />
+                      </div>
+                    </td>
+                    <td class="col-md-3"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="submitDiv tCenter">
+              <input
+                type="submit"
+                value="Submit"
+                (click)="SubmitExpenseForm()"
+                [disabled]="ExpenseForm.invalid"
+                class="submit_btn border-rad"
+                id=""
+              />
+
+              <input
+                type="button"
+                value="Cancel"
+                (click)="cancel()"
+                class="submit_btn border-rad"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-edit-expense
+  [ExpenseId]="expenseIdForEdit"
+  [initEditExpense]="initEditExpense"
+  (emitToReset)="initEditExpense = !initEditExpense"
+  (updatedSuccessful)="getExpenseDetails()"
+></app-edit-expense>

@@ -1,0 +1,4 @@
+.ngx-smart-modal {
+    z-index: 1000; /* Set a lower value */
+  }
+  

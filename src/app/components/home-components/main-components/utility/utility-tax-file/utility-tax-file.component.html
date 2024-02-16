@@ -1,0 +1,269 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Dashboard</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </nav>
+  </div>
+  <!-- End Page Title -->
+  <section class="section dashboard">
+    <mat-card style="padding: 10px">
+      <h5>Search Option</h5>
+      <div style="display: flex; justify-content: space-around">
+        <mat-form-field>
+          <mat-label>Choose a period</mat-label>
+          <mat-select
+            [formControl]="selected"
+            [errorStateMatcher]="matcher"
+            (selectionChange)="fetchData()"
+          >
+            <mat-option value="0">Clear</mat-option>
+
+            <mat-option value="1">1st Quarter </mat-option>
+            <mat-option value="2">2nd Quarter</mat-option>
+            <mat-option value="3">3rd Quarter</mat-option>
+          </mat-select>
+          <mat-hint>start from shrawn</mat-hint>
+          <mat-error *ngIf="selected.hasError('required')"
+            >You must make a selection</mat-error
+          >
+          <mat-error
+            *ngIf="
+              selected.hasError('pattern') && !selected.hasError('required')
+            "
+          >
+            Your selection is invalid
+          </mat-error>
+        </mat-form-field>
+        <!-- for month specific -->
+        <mat-form-field>
+          <mat-label>Choose a month</mat-label>
+          <mat-select
+            [formControl]="monthSelected"
+            [errorStateMatcher]="matcher"
+            (selectionChange)="calculateCalender()"
+          >
+            <mat-option value="0">Clear</mat-option>
+            <mat-option
+              *ngFor="let m of monthOptions"
+              value="{{ m.optionValue }}"
+              >{{ m.optionText }}</mat-option
+            >
+            <!-- <mat-option value="4">Shrawan </mat-option>
+            <mat-option value="5">Bhadra</mat-option>
+            <mat-option value="6">Ashoj</mat-option>
+            <mat-option value="7">Kartik </mat-option>
+            <mat-option value="8">Mangsir</mat-option>
+            <mat-option value="9">Poush</mat-option>
+            <mat-option value="10">Magh </mat-option>
+            <mat-option value="11">Falgun</mat-option>
+            <mat-option value="12">Chaitra</mat-option>
+            <mat-option value="1">Baisakh </mat-option>
+            <mat-option value="2">Jestha</mat-option>
+            <mat-option value="3">Ashad</mat-option> -->
+          </mat-select>
+          <mat-hint></mat-hint>
+          <mat-error *ngIf="selected.hasError('required')"
+            >You must make a selection</mat-error
+          >
+          <mat-error
+            *ngIf="
+              selected.hasError('pattern') && !selected.hasError('required')
+            "
+          >
+            Your selection is invalid
+          </mat-error>
+        </mat-form-field>
+        <!-- endmonthspecific -->
+        <mat-form-field class="example-full-width">
+          <mat-label>Fiscal Year</mat-label>
+          <input
+            matInput
+            placeholder="Ex. Pizza"
+            [disabled]="true"
+            [value]="'2080/2081'"
+          />
+        </mat-form-field>
+      </div>
+    </mat-card>
+  </section>
+  <section class="section dashboard mt-4">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-12" *ngIf="showInfoCard">
+        <div class="row">
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Sales Bill</h5>
+
+                <a
+                  routerLink="/home/ird/total-sale-bill"
+                  [queryParams]="{
+                    fiscalYear: fiscalYear,
+                    quarter: selected.value
+                  }"
+                  ><div class="d-flex align-items-center">
+                    <div
+                      class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                    >
+                      <i class="bi bi-cart" style="color: blue"></i>
+                    </div>
+                    <div style="overflow: hidden" class="ps-3">
+                      <h6>{{ taxFileIrd.totalSalesBill }}</h6>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sales Card -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Sales</h5>
+
+                <a
+                  routerLink="/home/ird/total-sale-bill"
+                  [queryParams]="{
+                    fiscalYear: fiscalYear,
+                    quarter: selected.value
+                  }"
+                >
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                    >
+                      <i class="bi bi-cart" style="color: blue"></i>
+                    </div>
+                    <div style="overflow: hidden" class="ps-3">
+                      <h6>
+                        Nrs. {{ taxFileIrd.totalSale | number : "1.2-2" }}
+                      </h6>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Vat On Sales</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-cart" style="color: blue"></i>
+                  </div>
+                  <div style="overflow: hidden" class="ps-3">
+                    <h6>{{ taxFileIrd.totalVatOnSale | number : "1.2-2" }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--  -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Purchase Bill</h5>
+
+                <a
+                  routerLink="/home/ird/total-purchase-bill"
+                  [queryParams]="{
+                    fiscalYear: fiscalYear,
+                    quarter: selected.value
+                  }"
+                >
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                    >
+                      <i class="bi bi-cart" style="color: blue"></i>
+                    </div>
+                    <div style="overflow: hidden" class="ps-3">
+                      <h6>{{ taxFileIrd.totalPurchaseBill }}</h6>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Purchase</h5>
+
+                <a
+                  routerLink="/home/ird/total-purchase-bill"
+                  [queryParams]="{
+                    fiscalYear: fiscalYear,
+                    quarter: selected.value
+                  }"
+                >
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                    >
+                      <i class="bi bi-cart" style="color: blue"></i>
+                    </div>
+                    <div style="overflow: hidden" class="ps-3">
+                      <h6>{{ taxFileIrd.totalPurchase | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Total Vat On Purchase</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  >
+                    <i class="bi bi-cart" style="color: blue"></i>
+                  </div>
+                  <div style="overflow: hidden" class="ps-3">
+                    <h6>
+                      {{ taxFileIrd.totalVatOnPurchase | number : "1.2-2" }}
+                    </h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xxl-4 col-md-6">
+            <div class="card info-card sales-card">
+              <div class="card-body">
+                <h5 class="card-title">Fiscal Year</h5>
+
+                <div class="d-flex align-items-center">
+                  <div
+                    class="card-icon rounded-circle d-flex align-items-center justify-content-center"
+                  ></div>
+                  <div style="overflow: hidden" class="ps-3">
+                    <h6>{{ fiscalYear }}</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

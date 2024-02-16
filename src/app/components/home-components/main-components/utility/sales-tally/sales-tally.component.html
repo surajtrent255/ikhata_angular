@@ -1,0 +1,150 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Sales Tally</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Sales Tally</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h3 class="card-title">Existing Sales Tally</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="row"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div class="col-md-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                        (keydown.enter)="fetchLimitedSalesTallyList()"
+                        [(ngModel)]="searchWildCard"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <select
+                        name="s"
+                        class="searchField"
+                        [(ngModel)]="searchBy"
+                        id=""
+                      >
+                        <option value="customer_pan">Pan</option>
+                        <option value="customer_name">Name</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2 d-flex justify-content-end">
+                    <nav
+                      style="margin-top: 2px; text-align: end"
+                      aria-label="Page navigation "
+                    >
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('prev')"
+                            style="cursor: pointer"
+                            aria-label="Previous"
+                          >
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link">{{ currentPageNumber }}</a>
+                        </li>
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('next')"
+                            style="cursor: pointer"
+                            aria-label="Next"
+                          >
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+                FiscalYear: <input type="text" [value]="currentFiscalYear" readonly disabled>
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>S.N</th>
+                      <th>Name</th>
+                      <th>Vat/Pan</th>
+                      <th>Total Amount</th>
+                      <th>Total Tax Amount</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let st of salesTally; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ st.customerName }}</td>
+                      <td>{{ st.customerPan }}</td>
+                      <td>{{ st.totalAmount }}</td>
+                      <td>{{st.taxAmount}}</td>
+                      <!-- <td>{{ product.unit }}</td> -->
+                      <td class="last-child">
+                        <div>
+                          <a
+                            [routerLink]="
+                              '/home/utility/salestally/bill/' + st.customerPan
+                            "
+                          >
+                            <img src="../../../../../assets/img/editRow.png" />
+                          </a>
+
+                          <a style="margin-left: 5px;" *ngIf=" indexOfSpinner !== i " (click)="sendEmail(st, i)" title="send email">
+                            <i class="fa-regular fa-paper-plane"></i>
+                          </a>
+                          <mat-spinner 
+                            style="width: 15px; height: 15px; margin-left: 5px; display: inline-block;"
+                            *ngIf=" indexOfSpinner === i"
+                          ></mat-spinner>
+                          <!-- <a
+                              id="deleteProd"
+                              routerLink="/home/receipt"
+                              [queryParams]="{
+                                debtorPan: st.customerPan
+                              }"
+                              class="ml-3"
+                            >
+                              <i class="fa-solid fa-route fa-beat"></i>
+                            
+                            </a> -->
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

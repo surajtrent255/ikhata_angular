@@ -1,0 +1,158 @@
+<ngx-smart-modal
+  identifier="createCategory"
+  id="createCategoryPopup"
+  #createCategory
+  [closable]="false"
+  [dismissable]="false"
+  [backdrop]="false"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mousedown)="handleMouseDown($event)"
+  (mouseup)="CommonService.clear()"
+>
+  <div class="custom-modal-header mb-3">
+    <h5 class="custom-modal-title">Create Category</h5>
+    <button
+      #closeButton
+      type="button"
+      (click)="destroyComp(createCategoryProdForm)"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="container parentDivForm">
+    <div class="row">
+      <div class="col-md-6">
+        <h4>Existing Category</h4>
+        <app-select-category
+          *ngIf="!catSelected"
+          [nodes]="categoriesData"
+        ></app-select-category>
+      </div>
+      <div class="col-md-6">
+        <span
+          id="showSelectCat"
+          [style.display]="catSelected ? 'none' : 'block'"
+          >Category under
+          <input
+            type="text"
+            value="{{ selectedCategory.name }}"
+            [readOnly]="true"
+        /></span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- <app-popup class="m-4"></app-popup> -->
+      <form
+        #createCategoryProdForm="ngForm"
+        name="createCategoryProd"
+        (ngSubmit)="createCategoryProd(createCategoryProdForm)"
+        id="createProductForm"
+      >
+        <div class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <table class="formSection" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="col1 pt-3">Parent Category:</td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    readOnly
+                    value="{{
+                      selectedCategory.name ? selectedCategory.name : 'None'
+                    }}"
+                    class="form-control"
+                  />
+                  <!-- <select
+                    id="parentId"
+                    style="width: 100%; height: 30px"
+                    name="parnetId"
+                    #parentId="ngModel"
+                    [(ngModel)]="categoryProd.parentId"
+                    required
+                  >
+                    <option value="0">None</option>
+                    <option
+                      *ngFor="let option of categoriesData"
+                      [value]="option.id"
+                    >
+                      {{ option.name }}
+                    </option>
+                  </select> -->
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-3">
+                  Name:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    [class.is-invalid]="name.invalid && name.touched"
+                    class="form-control"
+                    id="name"
+                    #name="ngModel"
+                    name="name"
+                    [(ngModel)]="categoryProd.name"
+                    required="required"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="name.valid || name.untouched"
+                    >invalid name</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-3">
+                  Description :<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <textarea
+                    type="textField"
+                    [class.is-invalid]="
+                      description.invalid && description.touched
+                    "
+                    class="form-control"
+                    id="description"
+                    #description="ngModel"
+                    name="description"
+                    [(ngModel)]="categoryProd.description"
+                    required="required"
+                  ></textarea>
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="description.valid || description.untouched"
+                    >invalid description</small
+                  >
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="custom-modal-footer">
+          <input
+            type="submit"
+            class="btn btn-success border-rad"
+            id="submitCategoryPrd"
+            value="Add Category"
+            [disabled]="createCategoryProdForm.form.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="destroyComp(createCategoryProdForm)"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>

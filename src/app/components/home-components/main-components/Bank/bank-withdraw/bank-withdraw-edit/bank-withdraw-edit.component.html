@@ -1,0 +1,134 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Edit Bank Withdraw</h5>
+  <button type="button" class="btn-close" (click)="cancel()"></button>
+</div>
+<div class="row mt-4">
+  <div class="col-md-12">
+    <form
+      #createWithdrawForm="ngForm"
+      name="createWithdrawForm"
+      id="createWithdrawForm"
+      (ngSubmit)="submitForm(createWithdrawForm)"
+      class="mt-4"
+    >
+      <table class="table table-stripped">
+        <tr>
+          <td class="col-md-3">
+            Bank Name :<span class="mandatorySign">*</span>
+          </td>
+          <td class="col-md-6">
+            <select
+              class="form-control form-select"
+              name="bankId"
+              id="bankId"
+              name="bankId"
+              #bankId="ngModel"
+              [(ngModel)]="objwidthdraw.bankId"
+              [class.is-invalid]="bankId.invalid && bankId.touched"
+            >
+              <option value="" selected disabled>select Bank Name</option>
+              <option *ngFor="let option of banks" [value]="option.bankId">
+                <span *ngFor="let bl of bankList">
+                  <b *ngIf="bl.id === option.bankTypeId">{{ bl.name }}</b></span
+                >
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            Withdraw Amount:<span class="mandatorySign">*</span>
+          </td>
+          <td class="col-md-6">
+            <input
+              type="number"
+              name="withdrawAmount"
+              [(ngModel)]="objwidthdraw.withdrawAmount"
+              required
+              #withdrawAmount="ngModel"
+              [class.is-invalid]="
+                withdrawAmount.invalid && withdrawAmount.touched
+              "
+              class="form-control"
+              id="withdrawAmount"
+            />
+          </td>
+          <td class="col-md-3">
+            <small
+              class="text-danger"
+              [class.d-none]="withdrawAmount.valid || withdrawAmount.untouched"
+              >invalid withdrawAmount</small
+            >
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            Withdraw Type:<span class="mandatorySign">*</span>
+          </td>
+          <td class="col-md-6">
+            <select
+              name="withdrawType"
+              id="withdrawType"
+              [(ngModel)]="objwidthdraw.withdrawType"
+              class="form-select"
+            >
+              <option value="{{ t.id }}" *ngFor="let t of withDrawTypes">
+                {{ t.name }}
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">Cheque Number:</td>
+          <td class="col-md-6">
+            <input
+              name="chequeNumber"
+              title="check your stock "
+              [(ngModel)]="objwidthdraw.chequeNumber"
+              #chequeNumber="ngModel"
+              class="form-control"
+              id="chequeNumber"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">Date:</td>
+          <td class="col-md-6">
+            <div style="padding: 0px">
+              <input
+                type="text"
+                id="nepali-datepicker"
+                placeholder="Select  Date"
+                class="form-control"
+              />
+
+              <input
+                disabled
+                type="text"
+                id="AdDate"
+                disabled
+                class="form-control"
+              />
+            </div>
+          </td>
+        </tr>
+      </table>
+      <div class="custom-modal-footer mt-4">
+        <input
+          type="submit"
+          class="btn btn-success"
+          id="submitCategoryPrd"
+          value="Add withdraw"
+          [disabled]="createWithdrawForm.form.invalid"
+        />
+
+        <input
+          type="button"
+          value="Cancel"
+          class="btn btn-secondary"
+          (click)="cancel()"
+        />
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+
+<div class="" data-bs-backdrop="false" id="billDetail" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div cdkDrag class="modal-content">
+        <div class="modal-header p-2">
+          <h5 class="modal-title">Bill Detail</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="destoryComp()"
+          ></button>
+        </div>
+  
+        <div class="card" style="margin-bottom: 0px">
+          <div class="card-body">
+            <div class="col-12 overflow-auto">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>S.N</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Per Unit Amount(Rs)</th>
+                    <th>Purchase At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let invoice of  itemListOfBill.salesBillDetailsWithProd
+                      let i = index
+                    "
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ invoice.productName }}</td>
+                    <td>{{ invoice.qty }}</td>
+                    <td>{{ invoice.rate }}</td>
+                    <td>{{ invoice.date | date }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+  
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="destoryComp()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

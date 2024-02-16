@@ -1,0 +1,355 @@
+<form #createSalesBill="ngForm"  *ngIf="activeSalesBillEntry"
+       (ngSubmit)="submitSalesBillForm()"
+       >
+       <div class="chooseColoumnsWrapper">
+        <div class="fieldDiv popUpFormSectionWrapper">
+          <table class="formSection" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="col1 pt-2"  >
+                Product Id:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="productId.invalid && productId.touched"
+                class="form-control"
+                id="productId"
+                #productId="ngModel"
+                required
+                name="productId"
+                [(ngModel)]="salesBillMaster.productId"
+              />
+
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="productId.valid || productId.untouched"
+                >invalid  productId</small>
+              </td>
+            </tr>
+            <tr>
+              <td class="col1 pt-2"  >
+                Quantity:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="qty.invalid && qty.touched"
+                class="form-control"
+                id="qty"
+                #qty="ngModel"
+                required
+                name="qty"
+                [(ngModel)]="salesBillMaster.qty"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="qty.valid || qty.untouched"
+                >invalid  qty</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Discount per unit :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="discountPerUnit.invalid && discountPerUnit.touched"
+                class="form-control"
+                id="discountPerUnit"
+                #discountPerUnit="ngModel"
+                required
+                name="discountPerUnit"
+                [(ngModel)]="salesBillMaster.discountPerUnit"
+              />
+
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="discountPerUnit.valid || discountPerUnit.untouched"
+                >invalid  discountPerUnit</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Rate :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="rate.invalid && rate.touched"
+                class="form-control"
+                id="rate"
+                #rate="ngModel"
+                required
+                name="rate"
+                [(ngModel)]="salesBillMaster.rate"
+              />
+
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="rate.valid || rate.untouched"
+                >invalid  rate</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Company Id :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="companyId.invalid && companyId.touched"
+                class="form-control"
+                id="companyId"
+                #companyId="ngModel"
+                required
+                name="companyId"
+                [(ngModel)]="salesBillMaster.companyId"
+              />
+
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="companyId.valid || companyId.untouched"
+                >invalid  companyId</small>
+              </td>
+            </tr>
+
+
+            <tr>
+              <td class="col1 pt-2"  >
+                User Id :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="userId.invalid && userId.touched"
+                class="form-control"
+                id="userId"
+                #userId="ngModel"
+                required
+                name="userId"
+                [(ngModel)]="salesBillMaster.userId"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="userId.valid || userId.untouched"
+                >invalid  userId</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Customer Id :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="custId.invalid && custId.touched"
+                class="form-control"
+                id="custId"
+                #custId="ngModel"
+                required
+                name="custId"
+                [(ngModel)]="salesBillMaster.custId"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="custId.valid || custId.untouched"
+                >invalid  custId</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Fiscal Year :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="text"
+                [class.is-invalid]="fiscalYear.invalid && fiscalYear.touched"
+                class="form-control"
+                id="fiscalYear"
+                #fiscalYear="ngModel"
+                required
+                name="fiscalYear"
+                [(ngModel)]="salesBillMaster.fiscalYear"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="fiscalYear.valid || fiscalYear.untouched"
+                >invalid  fiscalYear</small>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Bill No :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="billNo.invalid && billNo.touched"
+                class="form-control"
+                id="billNo"
+                #billNo="ngModel"
+                required
+                name="billNo"
+                [(ngModel)]="salesBillMaster.billNo"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="billNo.valid || billNo.untouched"
+                >invalid  billNo</small>
+              </td>
+            </tr>
+
+            <!-- customerName -->
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Customer Name :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="text"
+                [class.is-invalid]="customerName.invalid && customerName.touched"
+                class="form-control"
+                id="customerName"
+                #customerName="ngModel"
+                required
+                name="customerName"
+                [(ngModel)]="salesBillMaster.customerName"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="customerName.valid || customerName.untouched"
+                >invalid  customerName</small>
+              </td>
+            </tr>
+
+            <!-- customerPan -->
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Customer Pan :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="text"
+                [class.is-invalid]="customerPan.invalid && customerPan.touched"
+                class="form-control"
+                id="customerPan"
+                #customerPan="ngModel"
+                required
+                name="customerPan"
+                [(ngModel)]="salesBillMaster.customerPan"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="customerPan.valid || customerPan.untouched"
+                >invalid  customerPan</small>
+              </td>
+            </tr>
+
+            <!-- amount -->
+
+
+            <!-- discount -->
+
+
+            <!-- taxableAmount -->
+
+            <tr>
+              <td class="col1 pt-2"  >
+                Payment Method  :<span class="mandatorySign">*</span>
+              </td>
+              <td class="col2">
+                <input
+                type="text"
+                [class.is-invalid]="paymentMethod.invalid && paymentMethod.touched"
+                class="form-control"
+                id="paymentMethod"
+                #paymentMethod="ngModel"
+                required
+                name="paymentMethod"
+                [(ngModel)]="salesBillMaster.paymentMethod"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="paymentMethod.valid || paymentMethod.untouched"
+                >invalid  paymentMethod</small>
+              </td>
+            </tr>
+
+            <!-- vatRefundAmount -->
+            <tr>
+              <td class="col1 pt-2"  >
+                Vat Refund Amount   :<span class="text-success">(opt)</span>
+              </td>
+              <td class="col2">
+                <input
+                type="number"
+                [class.is-invalid]="vatRefundAmount.invalid && vatRefundAmount.touched"
+                class="form-control"
+                id="vatRefundAmount"
+                #vatRefundAmount="ngModel"
+                name="vatRefundAmount"
+                [(ngModel)]="salesBillMaster.vatRefundAmount"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="vatRefundAmount.valid || vatRefundAmount.untouched"
+                >invalid  vatRefundAmount</small>
+              </td>
+            </tr>
+
+            <!-- transactionId -->
+            <tr>
+              <td class="col1 pt-2"  >
+                Transaction Id   :<span class="text-success">(opt)</span>
+              </td>
+              <td class="col2">
+                <input
+                type="text"
+                [class.is-invalid]="transactionId.invalid && transactionId.touched"
+                class="form-control"
+                id="transactionId"
+                #transactionId="ngModel"
+                name="transactionId"
+                [(ngModel)]="salesBillMaster.transactionId"
+              />
+              </td>
+              <td class="col3">
+                <small class="text-danger" [class.d-none]="transactionId.valid || transactionId.untouched"
+                >invalid  transactionId</small>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="submitDiv tCenter">
+        <input
+            class="btn btn-success btn-sm py-2 px-4"
+            type="submit"
+            id="submitSalesBill "
+            value="Add Sales Bill"
+         />
+        <!-- <input
+          type="button"
+          value="Create"
+          class="submit_btn border-rad"
+          id="addProduct"
+                      [disabled]="createSalesBill.form.invalid"
+
+        /> -->
+        <input
+          style="margin-left: auto"
+          type="button"
+          value="Cancel"
+          class="btn btn-warning btn-sm cancel_btn py-2 px-4"
+        />
+      </div>
+  </form>

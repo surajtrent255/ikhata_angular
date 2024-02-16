@@ -1,0 +1,532 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Purchase</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Create Bill</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="card">
+      <div style="margin-top: 50px" class="card-body">
+        <div class="row">
+          <div class="col-4">
+            <span style="margin-left: 5px" class="inputItems"
+              >Seller Name: {{ sellerName }}</span
+            >
+            <div class="d-flex align-items-center">
+              <input
+                type="text"
+                [(ngModel)]="sellerPanOrPhone"
+                #sellerPanOrPhoneInput
+                data-toggle="tooltip"
+                data-placement="top"
+                title="pan or phone (10 digits)"
+                id="sellerPanOrPhone"
+                class="form-control"
+                style="margin: 0 4px"
+                placeholder="pan or phone (10 digits)"
+                (keydown.enter)="fetchPurchaserInfo()"
+              />
+              <button
+                class="ml-3 submit_btn border-rad"
+                style="margin: 0 5px"
+                (click)="fetchPurchaserInfo()"
+              >
+                Search
+              </button>
+
+              <div class="d-flex">
+                <button
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Create New Seller"
+                  (click)="displayAddCustomerPopup()"
+                >
+                  <i class="fas fa-user-plus" style="color: rebeccapurple"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-2" style="width: 20.66666667%">
+            <span class="inputItems">Bill number:</span>
+            <input class="form-control" type="number" [(ngModel)]="billNo" />
+          </div>
+          <div class="col-2" style="width: 20.66666667%">
+            <span class="inputItems">Bill Date:</span>
+            <input
+              class="form-control"
+              id="date"
+              [(ngModel)]="date"
+              type="text"
+              readonly
+            />
+          </div>
+          <div class="col-2" style="width: 20.66666667%">
+            <span style="margin-bottom: 20px">Trans </span
+            ><span style="padding-left: 3px; margin-bottom: 20px">Date:</span>
+
+            <div style="display: grid; padding-left: 5px">
+              <span></span>
+              <input
+                type="text"
+                id="nepali-datepicker"
+                placeholder="Select  Date"
+                class="form-control"
+              />
+
+              <input
+                class="form-control"
+                style="border: none; background-color: white !important"
+                disabled
+                type="text"
+                id="AdDate"
+              />
+            </div>
+          </div>
+        </div>
+
+        <hr />
+        <div class="row">
+          <div class="col-md-3">
+            <span>{{ currentBranch }}</span>
+          </div>
+
+          <div class="col-md-5">
+            <div style="display: inline-block">
+              <input
+                type="radio"
+                style="display: inline-block; margin-left: 3px"
+                name="saleType"
+                [checked]="saleType === 1"
+                (change)="setSaleType(1)"
+              />
+              <label style="margin-left: 3px; display: inline-block"
+                >Cash Purchase</label
+              >
+            </div>
+            <div style="display: inline-block; margin-left: 10px">
+              <input
+                type="radio"
+                style="display: inline-block"
+                name="saleType"
+                [checked]="saleType === 2"
+                (change)="setSaleType(2)"
+              />
+              <label style="margin-left: 3px; display: inline-block"
+                >Credit Purchase</label
+              >
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div>
+          <div class="offset-md-3">
+            <div style="text-align: left">
+              <div style="display: inline-block; width: 150px">Product Id:</div>
+              <div style="display: inline-block">
+                <input
+                  type="text"
+                  #prodIdInput
+                  id="productBarCodeId"
+                  class="form-control"
+                  [(ngModel)]="productBarCodeId"
+                  (keydown.enter)="addTheProductForPurchase()"
+                />
+              </div>
+            </div>
+
+            <div style="text-align: left" class="mt-3">
+              <div style="display: inline-block; width: 150px">
+                Product Name:
+              </div>
+              <div style="display: inline-block">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="prodWildCard"
+                  (keydown.enter)="getNameWildCard()"
+                />
+              </div>
+
+              <button
+                style="margin-left: 5px"
+                (click)="displayAddProductPopup()"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Create New Product"
+              >
+                <i
+                  style="color: rebeccapurple"
+                  class="fa-brands fa-product-hunt mr-1"
+                ></i>
+                <i style="color: rebeccapurple" class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+
+            <div style="text-align: left" class="mt-3">
+              <div style="display: inline-block; width: 150px">
+                Product Qty:
+              </div>
+              <div style="display: inline-block">
+                <input
+                  type="text"
+                  class="form-control"
+                  #prodQtyInput
+                  [(ngModel)]="productQty"
+                  (keydown.enter)="changeProductQuantity()"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="recordsTableDiv">
+          <table class="table recordsTable">
+            <thead>
+              <tr>
+                <th>S.N</th>
+                <th>Item</th>
+                <th>Unit</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th>TAX</th>
+                <th>Total Amount</th>
+                <th>Remove Item</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let prod of productsUserWantToPurchase; let i = index"
+              >
+                <td>{{ i + 1 }}</td>
+                <td>
+                  {{ prod.name }}
+                </td>
+                <td>{{ prod.unit }}</td>
+                <td>
+                  <input
+                    class="form-control"
+                    type="number"
+                    value="1"
+                    id="qtyProd{{ i }}"
+                    (change)="updateTotalAmount()"
+                  />
+                  <span *ngIf="prod.stock <= 10"
+                    ><span class="badge rounded-pill bg-warning text-dark ml-1">
+                      {{ prod.stock }} remaining !</span
+                    >
+                  </span>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    id="unitPrice{{ i }}"
+                    class="form-control"
+                    name="sellingPrice"
+                    [(ngModel)]="prod.sellingPrice"
+                    (change)="rateChange(prod.sellingPrice)"
+                  />
+                </td>
+                <td>
+                  <select
+                    name="tax"
+                    id="tax"
+                    #tax="ngModel"
+                    style="width: 100%"
+                    class="form-control form-select"
+                    [(ngModel)]="prod.tax"
+                  >
+                    <option [value]="ap.id" *ngFor="let ap of typerate">
+                      {{ ap.vatRate }}
+                    </option>
+                  </select>
+                </td>
+                <td id="totalAmount{{ i }}">
+                  {{ prod.sellingPrice }}
+                </td>
+
+                <td style="text-align: center; vertical-align: middle">
+                  <i
+                    class="fa fa-remove text-danger"
+                    (click)="removeItemFromCart(i)"
+                  ></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h2 class="text-center">Additional Information</h2>
+          <hr style="margin: 12px" />
+        </div>
+        <div class="tableWrapper">
+          <div class="recordsTableDiv">
+            <form [formGroup]="dynamicForm" (ngSubmit)="submitForm()">
+              <table class="table recordsTable" id="dynamicTable">
+                <thead>
+                  <tr>
+                    <th>
+                      Expenses
+                      <span style="padding-left: 5px">
+                        <i
+                          class="fas fa-circle-plus fa-lg createNewTableRecord"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Add Expense"
+                          style="color: #7a8eae; cursor: pointer"
+                          id="createNewExpense"
+                        ></i>
+                      </span>
+                    </th>
+                    <th>Supplier PAN</th>
+                    <th>Supplier Name</th>
+                    <th>Invoice Date</th>
+                    <th>Invoice No.</th>
+                    <th>Amount</th>
+                    <th>VAT Bill</th>
+                    <th>
+                      <div style="display: flex; justify-content: space-evenly">
+                        <span>Remove</span>
+                        <button
+                          style="margin-left: 10px"
+                          value="true"
+                          (click)="addField()"
+                          onclick="countRow()"
+                          class="submit_btn border-rad"
+                        >
+                          add
+                        </button>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="fields">
+                  <tr
+                    *ngFor="let fieldGroup of fieldControls; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <td>
+                      <select
+                        class="form-control form-control-sm"
+                        formControlName="expenses"
+                        #selected
+                        id="expenses{{ i }}"
+                      >
+                        <option
+                          *ngFor="let attribute of purchaseAttribute"
+                          [value]="attribute.attributeId"
+                        >
+                          {{ attribute.attributeName }}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        formControlName="supplierPan"
+                        (change)="checkPan($event, i)"
+                        id="supplierPan{{ i }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="supplierName"
+                        name="supplierName"
+                        id="supplierName{{ i }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        id="nepali-datepicker-input{{ i }}"
+                        placeholder="Select Date"
+                        style="height: 25px"
+                        class="form-control form-control-sm"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        formControlName="invoiceNo"
+                        id="invoiceNo{{ i }}"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        class="form-control form-control-sm"
+                        formControlName="amount"
+                        id="amount{{ i }}"
+                      />
+                    </td>
+                    <td>
+                      <select
+                        class="form-control form-control-sm"
+                        formControlName="vatBill"
+                        id="vatBill{{ i }}"
+                      >
+                        <option selected value="true">Yes</option>
+                        <option value="false">No</option>
+                      </select>
+                    </td>
+                    <td>
+                      <i
+                        (click)="removeField(i)"
+                        class="fa fa-remove text-danger"
+                      ></i>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+        <div style="margin-top: 50px; display: flex; justify-content: flex-end">
+          <button
+            class="btn btn-success border-rad"
+            id="sumbit_btn"
+            style="margin-right: 10px"
+            name="sumbit_btn"
+            (click)="purchaseTheProducts(false)"
+          >
+            Submit
+          </button>
+          <button class="btn btn-secondary" routerLink="/home/purchasebills">
+            Back
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div
+  class="popupWrapper createPurchaserPopUpWrapper"
+  id="createNewPurchaserPopup"
+  cdkDrag
+  style="display: none"
+>
+  <div class="mb-2"></div>
+  <app-create-customer
+    (customerAddedSuccessMsg)="getCompanyList()"
+    [title]="'Seller'"
+  ></app-create-customer>
+</div>
+
+<div
+  class="popupWrapper createPurchaserPopUpWrapper"
+  id="createNewExpensePopup"
+  cdkDrag
+  style="
+    display: none;
+    position: absolute;
+    top: 53%;
+    width: fit-content;
+    left: 30%;
+  "
+>
+  <div class="custom-modal-dialog">
+    <div class="custom-modal-content">
+      <div class="custom-modal-header">
+        <h5 class="custom-modal-title">Edit Payment Details</h5>
+        <button
+          #closeButton
+          type="button"
+          style="background-size: 50% !important"
+          class="btn-close closeButton"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <form>
+            <div style="margin: 10px">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                (change)="addnewAttributePopupValue($event)"
+                required
+              />
+            </div>
+            <button
+              type="button"
+              id="closeButton"
+              class="btn btn-secondary closeButton border-rad"
+            >
+              Cancel
+            </button>
+            <button
+              style="margin-left: 7.5px"
+              type="button"
+              class="btn btn-primary registerButton border-rad"
+              (click)="OnSubmit()"
+            >
+              OK
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-smart-modal
+  identifier="selectSellerPopup"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-select-customer
+    *ngIf="selectSellerEnable"
+    [customerMetaData]="customerMetaData"
+    (compIdEvent)="setSellerInfo($event)"
+    (destroySelectCompEmitter)="destroySelectSenderComponent($event)"
+    (fetchCustomerEventEmitter)="fetchSellerInfoOnlyForNameDisplay($event)"
+    (initCreateCustomer)="
+      createCustomerEnable = true; createCustomerToggle = true
+    "
+    [title]="'Seller'"
+  >
+  </app-select-customer>
+</ngx-smart-modal>
+
+<app-select-product
+  [toggleSelectProduct]="toggleSelectProduct"
+  (emitToReset)="toggleSelectProduct = !toggleSelectProduct"
+  [selectMenusForProduct]="selectMenusForProduct"
+  (prodSelectEmitter)="setProductSelectedByName($event)"
+  (destroySelectProdEmitter)="destroySelectProductComponent($event)"
+>
+</app-select-product>
+
+<ngx-smart-modal
+  identifier="createNewCustomerPurchase"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-create-customer
+    *ngIf="createCustomerEnable"
+    (emitToReset)="createCustomerToggle = !createCustomerToggle"
+    (customerAddedSuccessMsg)="getCompanyList()"
+    (customerAddedSuccessMsg)="customerAddedSuccessfully($event)"
+    (destroyCreateCustComp)="destroyCreateCustomerComp($event)"
+    [title]="'Seller'"
+  ></app-create-customer>
+</ngx-smart-modal>
+
+<app-create-product
+  [createProductEnable]="createProductEnable"
+  (emitToReset)="createProductEnable = !createProductEnable"
+  (productInfoEvent)="productAdded($event)"
+  (destroyCreateProd)="disableCreateProduct($event)"
+></app-create-product>

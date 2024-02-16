@@ -1,0 +1,384 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Expenses</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Expenses</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Expenses</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="col-4 mt-2">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Search"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                  />
+                  <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer; margin-left: 6px"
+                    class="pe-auto mt-1 ml-2 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+
+              <div class="col-4 mt-2">
+                <div>
+                  <a
+                    style="cursor: pointer"
+                    (click)="openCreateExpenseForm()"
+                    *ngIf="isAccountant || isMaster"
+                  >
+                    <img src="../../../../../../assets/img/createProduct.png" />
+                    <span> Create Expense </span>
+                  </a>
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('prev')"
+                      class="page-link pe-auto"
+                      aria-label="Previous"
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">{{ currentPageNumber }}</a>
+                  </li>
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('next')"
+                      class="page-link pe-auto"
+                      aria-label="Next"
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <div class="container">
+              <table
+                cellspacing="0"
+                cellpadding="0"
+                class="table table-bordered table-striped"
+                id="ProductsRecordsTable"
+              >
+                <thead>
+                  <tr>
+                    <th class="first-child sortable" sortDir="asc">
+                      Expense Id
+                    </th>
+                    <th class="sortable" sortDir="asc">Company Id</th>
+                    <th class="sortable" sortDir="asc">Branch Id</th>
+                    <th class="sortable" sortDir="asc">Amount</th>
+                    <th class="sortable" sortDir="asc">Topic</th>
+                    <th class="sortable" sortDir="asc">Bill No</th>
+                    <th class="sortable" sortDir="asc">Pay To</th>
+                    <th class="sortable" sortDir="asc">Date</th>
+                    <th class="sortable" sortDir="asc">Status</th>
+                    <th class="last-child">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="prodTable">
+                  <tr *ngIf="expenses.length < 1">
+                    <td colspan="10" class="text-center">
+                      <span class="noProdRecord">No records found</span>
+                    </td>
+                  </tr>
+
+                  <tr *ngFor="let expense of expenses">
+                    <td>{{ expense.sn }}</td>
+                    <td>{{ expense.companyId }}</td>
+                    <td>{{ expense.branchId }}</td>
+                    <td>{{ expense.amount }}</td>
+                    <td>{{ expense.topic }}</td>
+                    <td>{{ expense.billNo }}</td>
+                    <td>
+                      <span *ngFor="let c of customers"
+                        ><b *ngIf="c.companyId === expense.payTo">{{
+                          c.name
+                        }}</b></span
+                      >
+                    </td>
+                    <td>{{ expense.date | date }}</td>
+                    <td>{{ expense.status }}</td>
+                    <td *ngIf="isAccountant || isMaster" class="last-child">
+                      <a
+                        id="editExpense"
+                        class="createNewTableRecord"
+                        (click)="editExpense(expense.sn)"
+                      >
+                        <img
+                          src="../../../assets/resources/images/editRow.png"
+                        />
+                      </a>
+                      <a class="" (click)="deleteExpenseDetails(expense.sn)">
+                        <img
+                          src="../../../assets/resources/images/deleteRow.png"
+                        />
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- create expenses -->
+
+<!-- <div
+  class="popupWrapper PopupCloser"
+  id="createExpensePopup"
+  cdkDrag
+  style="display: none"
+> -->
+<ngx-smart-modal
+  identifier="createExpense"
+  id="createexpense"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+>
+  <!-- <div class="popupHeading" id="createExpen">
+    <h2 class="fleft">Expense Flow</h2>
+    <a href="" class="closeButton fright"
+      ><img
+        src="../../../assets/resources/images/removetablink.png"
+        alt="close"
+    /></a>
+    <div class="cboth"></div>
+  </div>
+  <div class="popupSubHeadingDiv createProduct">
+    <h1 class="heading">Create Expense Details</h1>
+    <div>Expense Details</div>
+  </div> -->
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">Create expense</h5>
+    <button
+      #closeButton
+      type="button"
+      (click)="destroyCreateExpense()"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="ExpenseForm">
+        <div class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <div class="form-group row">
+              <label for="amount" class="col-md-1 col-form-label">Amount</label>
+              <div class="col-md-3">
+                <input
+                  type="number"
+                  id="amount"
+                  class="form-control inputText mandatory"
+                  formControlName="amount"
+                />
+              </div>
+              <div class="col-md-8"></div>
+            </div>
+
+            <div class="form-group row">
+              <label for="topic" class="col-md-1 col-form-label">Topic</label>
+              <div class="col-md-3">
+                <select
+                  id="topic"
+                  class="form-control inputText"
+                  formControlName="topic"
+                >
+                  <option
+                    value="{{ topic.id }}"
+                    *ngFor="let topic of expenseTopics"
+                  >
+                    {{ topic.id }} {{ topic.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <span
+                  class="btn btn-success btn-sm bg-success text-white btn-circle"
+                  (click)="displayCreateExpenseTopicComp()"
+                  style="width: 40px"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="billNo" class="col-md-1 col-form-label">BillNo</label>
+              <div class="col-md-3">
+                <input
+                  type="text"
+                  id="billNo"
+                  class="form-control inputText"
+                  formControlName="billNo"
+                />
+              </div>
+              <div class="col-md-8"></div>
+            </div>
+
+            <div class="form-group row">
+              <label for="payTo" class="col-md-1 col-form-label">Pay To</label>
+              <div class="col-md-3">
+                <input
+                  id="payTo"
+                  #payTo
+                  type="text"
+                  class="form-control inputText"
+                  (keydown.enter)="handlePayTO(payTo.value)"
+                />
+              </div>
+              <div class="col-md-8">
+                <span>{{ this.sellerName }}</span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="nepaliDate" class="col-md-1 col-form-label"
+                >Date</label
+              >
+              <div class="col-md-2 date">
+                <div style="width: 280px">
+                  <div style="display: flex">
+                    <input
+                      type="text"
+                      id="nepali-datepicker"
+                      placeholder="Select  Date"
+                      style="height: 25px"
+                      class="form-control inputText"
+                    />
+                    <span style="margin: auto">BS </span>
+                  </div>
+                  <div style="display: flex; margin-top: 3px">
+                    <input
+                      style="height: 25px"
+                      disabled
+                      type="text"
+                      id="AdDate"
+                      class="form-control inputText"
+                    />
+                    <span style="margin: auto">AD</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="custom-modal-footer">
+          <input
+            type="submit"
+            value="Create Expense"
+            (click)="SubmitExpenseForm()"
+            [disabled]="ExpenseForm.invalid"
+            class="btn btn-success border-rad"
+            id=""
+          />
+          <input
+            type="button"
+            value="Cancel"
+            (click)="destroyCreateExpense()"
+            class="btn btn-secondary"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>
+<!-- </div> -->
+
+<!-- <div
+  class="popupWrapper PopupCloser"
+  id="editExpensePopup"
+  cdkDrag
+  style="display: none"
+> -->
+
+<ngx-smart-modal
+  identifier="editExpense"
+  id="editexpense"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+>
+  <app-edit-expense
+    *ngIf="enableEditExpense"
+    [ExpenseId]="expenseIdForEdit"
+    (destroyExpenseEditEvent)="destroyExpenseEditComponent($event)"
+    (updatedSuccessful)="updatedSuccessfull($event)"
+  ></app-edit-expense>
+</ngx-smart-modal>
+<!-- </div> -->
+<!-- *ngIf="enableEditExpense" -->
+
+<ngx-smart-modal
+  identifier="newExpenseTopicPopup"
+  id="newExpenseTopicpopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-create-expense-topic
+    *ngIf="enableCreateExpenseTopic"
+    (destroyExpenseTopicAdditionComponent)="destroyCreateExpenseTopic($event)"
+    (expenseTopicAdditionCompleted)="expenseTopicAdded($event)"
+  >
+  </app-create-expense-topic>
+</ngx-smart-modal>
+
+<ngx-smart-modal
+  identifier="selectSellerPopup"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-select-customer
+    *ngIf="selectSellerEnable"
+    [customerMetaData]="sellerMetaData"
+    (compIdEvent)="setCustomerInfo($event)"
+    (destroySelectCompEmitter)="destroySelectSellerComponent($event)"
+    (fetchCustomerEventEmitter)="fetchCustomerInfoOnlyForNameDisplay($event)"
+    [title]="'Seller'"
+  >
+  </app-select-customer>
+</ngx-smart-modal>

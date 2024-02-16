@@ -1,0 +1,245 @@
+<ngx-smart-modal
+  id="mergeProductPopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  identifier="mergeProduct"
+  #mergeProduct
+  [closable]="false"
+  [dismissable]="true"
+>
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">Merge Product</h5>
+    <button
+      #closeButton
+      type="button"
+      (click)="destroyComp()"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- <app-popup class="m-4"></app-popup> -->
+      <form
+        #splitproductForm="ngForm"
+        name="splitproductForm"
+        id="splitproductForm"
+        (submit)="Merge(splitproductForm)"
+        (cancel)="cancle()"
+      >
+        <div class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <table class="" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="col1 pt-2">
+                  Product Name:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    readonly
+                    placeholder="{{ SplitProductObj.productName }}"
+                    class="form-control"
+                    name="productName"
+                    id="productName"
+                    #productName="ngModel"
+                    [(ngModel)]="SplitProductObj.productName"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Product ID:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    readonly
+                    type="text"
+                    placeholder="{{ SplitProductObj.productId }}"
+                    class="form-control"
+                    name="productId"
+                    id="productId"
+                    #productId="ngModel"
+                    [(ngModel)]="SplitProductObj.productId"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Merge Ratio:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    readonly
+                    placeholder="{{ SplitProductObj.qty }}"
+                    type="text"
+                    class="form-control"
+                    name="qty"
+                    id="qty"
+                    #qty="ngModel"
+                    [(ngModel)]="SplitProductObj.qty"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Updated Product Name:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    readonly
+                    placeholder="{{ SplitProductObj.updatedProductName }}"
+                    type="text"
+                    class="form-control"
+                    name="updatedProductName"
+                    id="updatedProductName"
+                    #updatedProductName="ngModel"
+                    [(ngModel)]="SplitProductObj.updatedProductName"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Updated Product ID:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    readonly
+                    type="text"
+                    placeholder="{{ SplitProductObj.updatedProductId }}"
+                    class="form-control"
+                    name="updatedProductId"
+                    id="updatedProductId"
+                    #updatedProductId="ngModel"
+                    [(ngModel)]="SplitProductObj.updatedProductId"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">Merge:</td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    [class.is-invalid]="splitQty.invalid && splitQty.touched"
+                    class="form-control"
+                    name="splitQty"
+                    id="splitQty"
+                    #splitQty="ngModel"
+                    [max]="fetchstock.qty / SplitProductObj.qty"
+                    [min]="0"
+                    required
+                    [(ngModel)]="SplitProductObj.splitQty"
+                    required="required"
+                  />
+                </td>
+
+                <td class="col3">
+                  <span class="mandatorySign" style="font-size: 14px">
+                    {{
+                      (
+                        fetchstock.qty / SplitProductObj.qty -
+                        SplitProductObj.splitQty
+                      ).toFixed(0)
+                    }}*</span
+                  >
+                  <div
+                    *ngIf="
+                      splitQty.errors && (splitQty.dirty || splitQty.touched)
+                    "
+                    class="alert alert-danger"
+                  >
+                    <div [hidden]="!splitQty.errors">
+                      Please input a splitQty.
+                    </div>
+                    <div [hidden]="!splitQty.errors['max']">
+                      Please input
+                      {{ fetchstock.qty / SplitProductObj.qty }}
+                      limited qty.
+                    </div>
+                    <div [hidden]="!splitQty.errors['min']">
+                      Please input in range 0 to
+                      {{ fetchstock.qty / SplitProductObj.qty }}
+                      qty.
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Price:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    class="form-control"
+                    readonly
+                    type="text"
+                    name="price"
+                    placeholder="{{ SplitProductObj.price }}"
+                    id="price"
+                    #price="ngModel"
+                    [(ngModel)]="SplitProductObj.price"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Product unit:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <select
+                    class="form-control"
+                    name="unit"
+                    id="unit"
+                    #unit="ngModel"
+                    [(ngModel)]="SplitProductObj.unit"
+                    disabled="true"
+                  >
+                    <option *ngFor="let ap of Unit" [value]="ap.name">
+                      {{ ap.name }}
+                    </option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- <div class="submitDiv tCenter">
+            <button
+              [disabled]="splitproductForm.form.invalid"
+              type="submit"
+              class="submit_btn border-rad ml-2 tCenter"
+            >
+              Merge
+            </button>
+  
+            <input
+              type="button"
+              value="Cancel"
+              (click)="destroyCancelComp()"
+              class="submit_btn cancel_btn border-rad ml-2 tCenter"
+            />
+          </div> -->
+        <div class="custom-modal-footer">
+          <button
+            [disabled]="splitproductForm.form.invalid"
+            type="submit"
+            class="btn btn-success border-rad"
+          >
+            Merge
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="destroyComp()"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>

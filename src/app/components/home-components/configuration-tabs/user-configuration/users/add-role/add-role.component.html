@@ -1,0 +1,94 @@
+<a
+  type="button"
+  #addRolePopup
+  id="addRolePopup"
+  data-bs-toggle="modal"
+  data-bs-target="#addRole"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" data-bs-backdrop="false" id="addRole" tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Role</h5>
+        <button
+          #closeButton
+          (click)="resetForm()"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Company</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>
+                      {{ usersName }}
+                    </td>
+                    <td>{{ userscompanyName }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+          <div class="container mt-3">
+            <h4>Roles</h4>
+            <hr class="mb-3" />
+            <div class="mb-4" *ngFor="let role of role">
+              <div
+                *ngIf="role.role !== 'ADMIN' && role.role !== 'SUPER_ADMIN'"
+                class="my-1"
+              >
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    name="role"
+                    [checked]="hasRole(role.role)"
+                    (change)="onRoleChecked($event, role.id)"
+                    value="admin"
+                  />
+                  <label class="form-check-label border px-2">{{
+                    role.role
+                  }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button
+          (click)="onAssignRolePopupSaveClicked()"
+          type="button"
+          class="btn btn-success border-rad"
+        >
+          Save
+        </button>
+        <button
+          (click)="resetForm()"
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

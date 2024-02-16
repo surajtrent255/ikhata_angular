@@ -1,0 +1,9 @@
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  width: 250px;
+  height: 30px;
+  margin-top: 2px;
+  margin-left: px;
+  padding: 3px;
+}

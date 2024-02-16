@@ -1,0 +1,271 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Loan Repay</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">loan</li>
+        <li class="breadcrumb-item active"></li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Loan Repay Table</h5>
+            <hr class="border-2" />
+
+            <div class="d-flex justify-content-between">
+              <div class="col-4 mt-2">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Search"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                  />
+                  <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer; margin-left: 6px"
+                    class="pe-auto mt-1 ml-2 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+              <div class="col-4 mt-2">
+                <div>
+                  <a
+                    *ngIf="isAccountant || isMaster"
+                    style="cursor: pointer"
+                    (click)="onCreate()"
+                  >
+                    <img src="../../../../../../assets/img/createProduct.png" />
+                    <span> Create Loan Repay</span>
+                  </a>
+                </div>
+              </div>
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">1</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Loan No</th>
+                  <th>Loan Name</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Service</th>
+                  <th>Penalty</th>
+                  <th>Principle</th>
+                  <th>Interest</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let loanRepay of loanRepayData">
+                  <td>{{ loanRepay.loanNo }}</td>
+                  <td>{{ loanRepay.loanName }}</td>
+                  <td>{{ loanRepay.amount }}</td>
+                  <td>{{ loanRepay.nepaliDate }}</td>
+                  <td>{{ loanRepay.service }}</td>
+                  <td>{{ loanRepay.penalty }}</td>
+                  <td>{{ loanRepay.principle }}</td>
+                  <td>{{ loanRepay.interest }}</td>
+
+                  <td *ngIf="isAccountant || isMaster" class="last-child">
+                    <a (click)="editLoanRepay(loanRepay.id)">
+                      <img src="../../../assets/resources/images/editRow.png" />
+                    </a>
+                    <a (click)="deleteLoanRepay(loanRepay.id)">
+                      <img
+                        src="../../../assets/resources/images/deleteRow.png"
+                      />
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  id="loanrepayPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#loanrepay"
+  [hidden]="true"
+></a>
+
+<div class="modal fade" data-bs-backdrop="false" id="loanrepay" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Loan Repay</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form>
+              <div class="container">
+                <div class="row chooseColoumnsWrapper">
+                  <div class="col-md-12 fieldDiv popUpFormSectionWrapper">
+                    <div class="formSection">
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Loan No</label>
+                        <div class="col-md-6">
+                          <input
+                            [(ngModel)]="repayFormData.loanNo"
+                            (keydown.enter)="findLoanId(repayFormData.loanNo)"
+                            name="loanNo"
+                            type="number"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Loan Name</label>
+                        <div class="col-md-6">
+                          <input
+                            [(ngModel)]="repayFormData.loanName"
+                            name="loanName"
+                            type="text"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label"></label>
+                        <div class="col-md-6">
+                          <input
+                            readonly
+                            disabled="true"
+                           [value]="showLoanAmount?showLoanAmount:''"
+                            name="amount"
+                            type="text"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Amount</label>
+                        <div class="col-md-6">
+                          <input
+                            [(ngModel)]="repayFormData.amount"
+                            name="amount"
+                            type="number"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label"
+                          >Repay Type</label
+                        >
+                        <div class="col-md-6">
+                          <select
+                            [(ngModel)]="selectedOption"
+                            name="selectOption"
+                            class="form-control"
+                          >
+                            <option value="interest">Interest</option>
+                            <option value="principle">Principle</option>
+                            <option value="service">Service</option>
+                            <option value="penalty">Penalty</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Date</label>
+                        <div class="col-md-6">
+                          <span style="margin: auto">BS </span>
+                          <input
+                            type="text"
+                            id="nepali-datepicker"
+                            placeholder="Select  Date"
+                            class="form-control"
+                          />
+
+                          <span style="margin: auto">AD</span>
+                          <input
+                            disabled
+                            type="text"
+                            id="AdDate"
+                            class="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-end">
+                  <input
+                    type="button"
+                    value="Submit"
+                    (click)="createLoanRepay()"
+                    class="btn btn-success border-rad"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-edit-loan-repay
+  [loanRepayId]="loadRepayIdForEdit"
+  [toggleEditLoanrepay]="toggleEditLoanRepay"
+  (emitToReset)="toggleEditLoanRepay = !toggleEditLoanRepay"
+  (triggerPage)="getLoanRepay()"
+></app-edit-loan-repay>

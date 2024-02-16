@@ -1,0 +1,5 @@
+.constant-size-image {
+  width: 60px; /* Set the desired width */
+  height: 60px; /* Set the desired height */
+  object-fit: cover; /* You can use 'cover', 'contain', 'fill', 'none', etc. depending on how you want the image to fit */
+}

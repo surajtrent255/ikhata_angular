@@ -1,0 +1,183 @@
+<a
+  type="button"
+  id="createNewBranchPopUp"
+  data-bs-toggle="modal"
+  data-bs-target="#createNewBranch"
+  [hidden]="true"
+  >click</a
+>
+
+<div class="modal fade" id="createNewBranch" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create New Branch</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">Please Enter Required Fields</h5>
+
+        <!-- Multi Columns Form -->
+        <form class="row g-3" [formGroup]="BranchRegistrationForm">
+          <div class="col-md-6">
+            <label class="form-label"
+              >Name: <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="BranchName"
+              type="text"
+              class="form-control"
+            />
+            <span
+              *ngIf="
+                BranchRegistrationForm.get('BranchName')?.invalid &&
+                (BranchRegistrationForm.get('BranchName')?.dirty ||
+                  BranchRegistrationForm.get('BranchName')?.touched)
+              "
+              class="validationMsg"
+              >Please Enter Company Name.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Abbvr: <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="BranchAbbvr"
+              type="text"
+              class="form-control"
+            />
+            <span
+              *ngIf="
+                BranchRegistrationForm.get('BranchAbbvr')?.invalid &&
+                (BranchRegistrationForm.get('BranchAbbvr')?.dirty ||
+                  BranchRegistrationForm.get('BranchAbbvr')?.touched)
+              "
+              class="validationMsg"
+              >Please Enter Owner Name.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >Description: <span class="mandatorySign">*</span></label
+            >
+            <input
+              formControlName="BranchDescription"
+              type="text"
+              class="form-control"
+            />
+            <span
+              *ngIf="
+                BranchRegistrationForm.get('BranchDescription')?.invalid &&
+                (BranchRegistrationForm.get('BranchDescription')?.dirty ||
+                  BranchRegistrationForm.get('BranchDescription')?.touched)
+              "
+              class="validationMsg"
+              >Please enter valid Phone.</span
+            >
+          </div>
+          <div class="col-md-6">
+            <label class="form-label"
+              >State: <span class="mandatorySign">*</span></label
+            >
+
+            <select
+              formControlName="BranchState"
+              class="form-select"
+              #selected
+              (change)="stateChange(selected.value)"
+            >
+              <option selected disabled>Select the state</option>
+              <option
+                *ngFor="let state of province"
+                value="{{ state.provinceId }}"
+              >
+                {{ state.provinceName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label">District:</label>
+            <select
+              formControlName="BranchDistrict"
+              class="form-select"
+              #selected
+              (change)="districtChange()"
+            >
+              <option
+                *ngFor="let district of districts"
+                value="{{ district.districtId }}"
+              >
+                {{ district.districtName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label for="inputAddress2" class="form-label">
+              Muncipality/VDC: <span class="mandatorySign">*</span></label
+            >
+            <select
+              formControlName="BranchMunVdc"
+              class="form-select"
+              #selected
+            >
+              <option
+                *ngFor="let municipality of municipality"
+                value="{{ municipality.municipalityName }}"
+              >
+                {{ municipality.municipalityName }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label"
+              >Ward no: <span class="mandatorySign">*</span></label
+            >
+            <input
+              type="number"
+              class="form-control"
+              formControlName="BranchWardNo"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Phone:</label>
+
+            <input
+              type="number"
+              class="form-control"
+              formControlName="BranchPhone"
+            />
+          </div>
+
+          <div class="modal-footer justify-content-center">
+            <button
+              (click)="registerBranch()"
+              type="button"
+              class="btn btn-success border-rad"
+              [disabled]="BranchRegistrationForm.invalid"
+            >
+              Register
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </form>
+        <!-- End Multi Columns Form -->
+      </div>
+    </div>
+  </div>
+</div>

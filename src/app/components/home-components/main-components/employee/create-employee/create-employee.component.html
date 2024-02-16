@@ -1,0 +1,266 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Create Employee</h5>
+  <button
+    #closeButton
+    type="button"
+    (click)="destroyComp()"
+    style="background-size: 50% !important"
+    class="btn-close closeButton"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- <app-popup class="m-4"></app-popup> -->
+    <form [formGroup]="employeeForm" (ngSubmit)="submitForm()">
+      <table class="table table-striped">
+        <tr>
+          <td class="col-md-3">
+            <label for="name">Name:</label>
+          </td>
+          <td class="col-md-6">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="name"
+              [class.error]="isFieldInvalid('name')"
+            />
+          </td>
+          <td class="col-md-3">
+            <div *ngIf="isFieldInvalid('name')" class="error-message ml-2">
+              required *
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="designation">Designation:</label>
+          </td>
+          <td class="col-md-6">
+            <!-- <input
+                    type="number"
+                    formControlName="designation"
+                    [class.error]="isFieldInvalid('designation')"
+                  /> -->
+            <select
+              name="designations"
+              id="designation"
+              class="form-control"
+              formControlName="designation"
+            >
+              <option
+                *ngFor="let designation of designations"
+                value="{{ designation.id }}"
+              >
+                {{ designation.title }}
+              </option>
+            </select>
+          </td>
+          <td class="col-md-3">
+            <a (click)="showDesignationComponent()" style="cursor: pointer">
+              <i class="fa-solid fa-plus"></i> Add
+            </a>
+            <button
+              id="createDesignation"
+              style="display: none"
+              class="createNewTableRecord"
+            >
+              Create New Designation
+            </button>
+            <span
+              *ngIf="isFieldInvalid('designation')"
+              class="error-message ml-2"
+            >
+              required *
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="panNo">PAN Number:</label>
+          </td>
+          <td class="col-md-6">
+            <input
+              type="number"
+              class="form-control"
+              formControlName="panNo"
+              [class.error]="isFieldInvalid('panNo')"
+            />
+          </td>
+          <td class="col-md-3">
+            <div *ngIf="isFieldInvalid('panNo')" class="error-message ml-2">
+              required *
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="salary">Salary:</label>
+          </td>
+          <td class="col-md-6">
+            <input
+              type="number"
+              class="form-control"
+              formControlName="salary"
+              [class.error]="isFieldInvalid('salary')"
+            />
+          </td>
+          <td class="col-md-3">
+            <div *ngIf="isFieldInvalid('salary')" class="error-message ml-2">
+              required *
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="employeeType">Employee Type:</label>
+          </td>
+          <td class="col-md-6">
+            <select
+              name="employeeType"
+              formControlName="employeeType"
+              id="employeeType"
+              class="form-control"
+            >
+              <option
+                value="{{ empType.id }}"
+                *ngFor="let empType of employeeTypes"
+              >
+                {{ empType.name }}
+              </option>
+            </select>
+            <!-- <input
+                    type="number"
+                    formControlName="employeeType"
+                    [class.error]="isFieldInvalid('employeeType')"
+                  /> -->
+          </td>
+          <td class="col-md-3">
+            <div
+              *ngIf="isFieldInvalid('employeeType')"
+              class="error-message ml-2"
+            >
+              required *
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="panNo">Married:</label>
+          </td>
+          <td class="col-md-6">
+            <div
+              class="radio-button"
+              style="display: inline; margin-left: 20px; margin-top: 2px"
+            >
+              <input
+                type="radio"
+                value="true"
+                id="marriedYes"
+                formControlName="married"
+              />
+              Yes
+            </div>
+            <div
+              class="radio-button"
+              style="display: inline; margin-left: 20px; margin-top: 2px"
+            >
+              <input
+                type="radio"
+                value="false"
+                id="marriedNo"
+                formControlName="married"
+              />
+              No
+            </div>
+          </td>
+          <td class="col-md-3"></td>
+        </tr>
+        <tr>
+          <td class="col-md-3">
+            <label for="dateJoin">Join Date (BS) </label>
+          </td>
+          <td>
+            <div>
+              <input
+                type="text"
+                id="nepali-datepicker"
+                class="form-control"
+                placeholder="Select Date"
+              />
+
+              <br />
+              <span style="margin-top: 2px"></span>
+              <input
+                formControlName="joinDate"
+                class="form-control"
+                hidden
+                type="text"
+                id="AdDate"
+                style="
+                  height: 25px;
+                  width: 150px;
+                  background-color: white;
+                  font-size: small;
+                "
+              />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-md-3"></td>
+          <td class="col-md-6 text-center">
+            <!-- <button
+                        type="submit"
+                        class="submit_btn border-rad"
+                        [disabled]="employeeForm.invalid"
+                      >
+                        Submit
+                      </button> -->
+          </td>
+          <td class="col-md-3 pt-2"></td>
+        </tr>
+      </table>
+      <div class="custom-modal-footer">
+        <input
+          type="submit"
+          class="btn btn-success"
+          id="submitCreateEmployee"
+          value="Add Employee"
+          [disabled]="employeeForm.invalid"
+        />
+        <button
+          type="button"
+          class="btn btn-secondary closeButton mr-3"
+          (click)="destroyComp()"
+        >
+          Close
+        </button>
+      </div>
+      <ngx-smart-modal
+        identifier="createDesignationPopup"
+        [closable]="false"
+        [dismissable]="false"
+      >
+        <app-create-designation
+          *ngIf="showableDesignationComponent"
+          (designationAdditionCompleted)="designationCreated($event)"
+          (destroyDesignationAdditionComponent)="
+            destoryDesignationCreateComponent()
+          "
+        ></app-create-designation>
+      </ngx-smart-modal>
+    </form>
+  </div>
+</div>
+<!-- <div
+  class="popupWrapper createCustomerPopUpWrapper popupCloser"
+  *ngIf="showableDesignationComponent"
+  id="createDesignationPopup"
+  style="display: none"
+>
+  <app-create-designation
+    (designationAdditionCompleted)="designationCreated($event)"
+    (destroyDesignationAdditionComponent)="destoryDesignationCreateComponent()"
+  ></app-create-designation>
+</div> -->

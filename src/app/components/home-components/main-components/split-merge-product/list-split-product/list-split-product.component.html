@@ -1,0 +1,551 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Split/Merge Product</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Split/Merge Products</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h3 class="card-title">Split/Merge Product</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="row"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                        [(ngModel)]="searchWildCard"
+                        (keydown.enter)="fetchLimitedSplitProducts()"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <select
+                        name="s"
+                        [(ngModel)]="searchBy"
+                        (keydown.enter)="fetchLimitedSplitProducts()"
+                        class="ml-1"
+                        style="height: 20px"
+                      >
+                        <option value="id">ID</option>
+                        <option value="name">NAME</option>
+                        <option value="barcode">Barcode</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mt-2">
+                    <div *ngIf="isAccountant || isMaster">
+                      <a
+                        id=""
+                        class="ml-5 mt-4"
+                        style="cursor: pointer"
+                        (click)="openForm()"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create Split</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md-4"
+                    style="display: flex; justify-content: flex-end"
+                  >
+                    <nav style="margin-top: 2px" aria-label="Page navigation ">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('prev')"
+                            aria-label="Previous"
+                          >
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link">{{ currentPageNumber }}</a>
+                        </li>
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('next')"
+                            aria-label="Next"
+                          >
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th
+                        class="first-child sortable"
+                        sortDir="asc"
+                        sortCol="organization_id"
+                        id="productName"
+                      >
+                        Product Name
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="organization_name"
+                        id="updatedProductName"
+                      >
+                        Updated Product Name
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="customer_name"
+                        id="qty"
+                      >
+                        Qty
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="splitQty"
+                      >
+                        Split Qty
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="price"
+                      >
+                        Price
+                      </th>
+                      <th
+                        class="sortable"
+                        sortDir="asc"
+                        sortCol="master_name"
+                        id="unit"
+                      >
+                        Unit
+                      </th>
+
+                      <th class="last-child">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="prodTable">
+                    <tr *ngIf="splitProducts.length <= 0">
+                      <td colspan="10" class="text-center">
+                        <span class="noProdRecord"> No records found </span>
+                      </td>
+                    </tr>
+                    <tr
+                      *ngFor="let splitProduct of splitProducts; let i = index"
+                    >
+                      <td>{{ splitProduct.productName }}</td>
+                      <td>{{ splitProduct.updatedProductName }}</td>
+                      <td>{{ splitProduct.qty }}</td>
+                      <td>{{ splitProduct.splitQty }}</td>
+                      <td>{{ splitProduct.price }}</td>
+                      <td>{{ splitProduct.unit }}</td>
+                      <!-- <td>                   <a
+                            id="createSplitDummy"
+                            (click)="getTheProductForSplit(splitProduct.id)"
+                            class="createNewTableRecord"
+                          > Dummy</a></td> -->
+                      <td *ngIf="isAccountant || isMaster" class="last-child">
+                        <a
+                          id="createSplitDummy"
+                          (click)="getTheProductForSplit(splitProduct.id)"
+                        >
+                          <i
+                            id="createSplitic"
+                            title=" split product"
+                            class="fas fa-sharp fa-light fa-arrows-split-up-and-left fa-xl"
+                            style="color: #34e00d; padding: auto"
+                          ></i>
+                        </a>
+                        <a
+                          id="createMerge"
+                          title="Merge product"
+                          (click)="getTheProductForMerge(splitProduct.id)"
+                          class="createNewTableRecord"
+                        >
+                          <i
+                            class="fas fa-regular fa-code-merge fa-xl"
+                            style="color: #165eda; padding-left: 15%"
+                          ></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- test -->
+<!-- select product  -->
+
+<!-- <div
+  class="popupWrapper"
+  id="selectProductPopup"
+  cdkDrag
+  style="display: none; width: auto"
+>
+
+</div> -->
+<!-- split product -->
+
+<ngx-smart-modal
+  id="createNewSplitPopupPopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  identifier="createNewSplitPopup"
+  #createNewSplitPopup
+  [closable]="false"
+  [dismissable]="true"
+>
+  <!-- <div class="popupContentWrapper"> -->
+  <div class="custom-modal-header">
+    <h5 class="custom-modal-title">Create Split</h5>
+    <button
+      #closeButton
+      type="button"
+      style="background-size: 50% !important"
+      class="btn-close closeButton"
+      aria-label="Close"
+      (click)="destroyCreateNewSplitPopUp($event)"
+    ></button>
+  </div>
+  <!-- *ngIf="showForm" -->
+  <div class="row">
+    <div class="col-md-12">
+      <form
+        #splitproductForm="ngForm"
+        name="splitproductForm"
+        id="splitproductForm"
+        (ngSubmit)="addSplitProduct(splitproductForm)"
+      >
+        <div class="chooseColoumnsWrapper">
+          <div class="fieldDiv popUpFormSectionWrapper">
+            <table class="" cellpadding="0" cellspacing="0">
+              <tr></tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Search Product Name :<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="text"
+                    name="productName"
+                    required
+                    #productName
+                    class="form-control"
+                    id="productName"
+                    (keydown.enter)="getNameWildCard(productName.value)"
+                  />
+                </td>
+                <button
+                  id="selectProduct"
+                  style="display: none"
+                  class="createNewTableRecord"
+                >
+                  test
+                </button>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Product Name<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    name="productName"
+                    readonly
+                    [(ngModel)]="SplitProductObj.productName"
+                    required
+                    #productName="ngModel"
+                    class="form-control"
+                    id="productName"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Product ID:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    name="productId"
+                    readonly
+                    [(ngModel)]="SplitProductObj.productId"
+                    required
+                    #productId="ngModel"
+                    [class.is-invalid]="productId.invalid && productId.touched"
+                    class="form-control"
+                    id="productId"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="productId.valid || productId.untouched"
+                    >invalid description</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Spliting Ratio:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    name="qty"
+                    readonly
+                    [(ngModel)]="SplitProductObj.qty"
+                    required
+                    #qty="ngModel"
+                    [class.is-invalid]="qty.invalid && qty.touched"
+                    class="form-control"
+                    id="qty"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="productId.valid || productId.untouched"
+                    >invalid Spliting Ratio</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Splitting QUANTITY:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    type="number"
+                    name="splitQty"
+                    title="check your stock "
+                    [(ngModel)]="SplitProductObj.splitQty"
+                    required
+                    #splitQty="ngModel"
+                    [class.is-invalid]="splitQty.invalid && splitQty.touched"
+                    min="0"
+                    class="form-control"
+                    id="splitQty"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="splitQty.valid || splitQty.untouched"
+                    >invalid Spliting QUANTUITY</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Selling price:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    title="updated price pre {{ SplitProductObj.unit }}"
+                    name="price"
+                    type="number"
+                    [(ngModel)]="SplitProductObj.price"
+                    required
+                    #price="ngModel"
+                    [class.is-invalid]="price.invalid && price.touched"
+                    class="form-control"
+                    id="price"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="price.valid || price.untouched"
+                    >invalid price</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Splitted Product Name:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <input
+                    title="{{
+                      SplitProductObj.productName + SplitProductObj.unit
+                    }}"
+                    name="updatedProductName"
+                    [(ngModel)]="SplitProductObj.updatedProductName"
+                    required
+                    #updatedProductName="ngModel"
+                    [class.is-invalid]="
+                      updatedProductName.invalid && updatedProductName.touched
+                    "
+                    class="form-control"
+                    id="updatedProductName"
+                  />
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="
+                      updatedProductName.valid || updatedProductName.untouched
+                    "
+                    >invalid updatedProductName
+                  </small>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="col1 pt-2">
+                  Product unit:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <select
+                    class="form-control form-select"
+                    name="unit"
+                    id="unit"
+                    #unit="ngModel"
+                    [(ngModel)]="SplitProductObj.unit"
+                  >
+                    <option *ngFor="let ap of Unit" [value]="ap.name">
+                      {{ ap.name }}
+                    </option>
+                  </select>
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="unit.valid || unit.untouched"
+                    >invalid productName</small
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td class="col1 pt-2">
+                  Product Vat:<span class="mandatorySign">*</span>
+                </td>
+                <td class="col2">
+                  <select
+                    class="form-control form-select"
+                    name="tax"
+                    id="tax"
+                    #tax="ngModel"
+                    [(ngModel)]="SplitProductObj.tax"
+                  >
+                    <option *ngFor="let ap of typerate" [value]="ap.id">
+                      {{ ap.vatRate }}
+                    </option>
+                  </select>
+                </td>
+                <td class="col3">
+                  <small
+                    class="text-danger"
+                    [class.d-none]="tax.valid || tax.untouched"
+                    >invalid VAT</small
+                  >
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- <div class="submitDiv tCenter">
+                <input
+                  type="submit"
+                  class="submit_btn border-rad"
+                  id="submitCategoryPrd"
+                  value="Split Product"
+                  [disabled]="splitproductForm.form.invalid"
+                />
+
+                <input
+                  type="button"
+                  value="Cancel"
+                  class="submit_btn cancel_btn border-rad ml-2"
+                />
+              </div> -->
+        <div class="custom-modal-footer">
+          <input
+            type="submit"
+            class="btn btn-success border-rad"
+            id="submitCategoryPrd"
+            value="Split Product"
+            [disabled]="splitproductForm.form.invalid"
+          />
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="destroyCreateNewSplitPopUp($event)"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ngx-smart-modal>
+<!-- end -->
+
+<!-- createSplit -->
+
+<!-- split product end -->
+<app-merge-product
+  [toggleMergeProduct]="toggleMergeProduct"
+  (emitToReset)="toggleMergeProduct = !toggleMergeProduct"
+  [id]="idForMergeComp"
+  (enableMergeComp)="destroyCreateMergeProductComponent($event)"
+></app-merge-product>
+<!-- merge product  -->
+
+<!-- end merge product -->
+
+<app-create-split-product
+  [toggleSplitAgain]="toggleSplitAgain"
+  (emitToReset)="(toggleSplitAgain != toggleSplitAgain)"
+  [id]="idForSplitComp"
+  (destroyCreatSpiltComponent)="destroyCreateSplitProductComponent($event)"
+></app-create-split-product>
+
+<app-select-product
+  [toggleSelectProduct]="toggleSelectProduct"
+  (emitToReset)="toggleSelectProduct = !toggleSelectProduct"
+  [selectMenusForProduct]="selectMenusForProduct"
+  (prodSelectEmitter)="setProductSelectedByName($event)"
+  (destroySelectProdEmitter)="destroySelectProductComponent($event)"
+>
+</app-select-product>

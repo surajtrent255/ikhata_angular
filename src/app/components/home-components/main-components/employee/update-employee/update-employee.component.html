@@ -1,0 +1,280 @@
+<div class="custom-modal-dialog">
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">Update Employee </h5>
+      <button
+        #closeButton
+        type="button"
+        (click)="destroyComp()"
+        style="background-size: 50% !important"
+        class="btn-close closeButton"
+        aria-label="Close"
+      ></button>
+    </div>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- <app-popup class="m-4"></app-popup> -->
+          <form [formGroup]="employeeForm" (ngSubmit)="submitForm()">
+            <div class="chooseColoumnsWrapper">
+              <div class="fieldDiv popUpFormSectionWrapper">
+                <table class="" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="name">Name:</label>
+                    </td>
+                    <td class="col2">
+                      <input
+                        type="text"
+                        formControlName="name"
+                        [class.error]="isFieldInvalid('name')"
+                      />
+                    </td>
+                    <td class="col3">
+                      <div
+                        *ngIf="isFieldInvalid('name')"
+                        class="error-message ml-2"
+                      >
+                        required *
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="designation">Designation:</label>
+                    </td>
+                    <td class="col2">
+                      <!-- <input
+                    type="number"
+                    formControlName="designation"
+                    [class.error]="isFieldInvalid('designation')"
+                  /> -->
+                      <select
+                        name="designations"
+                        id="designation"
+                        formControlName="designation"
+                      >
+                        <option
+                          *ngFor="let designation of designations"
+                          value="{{ designation.id }}"
+                        >
+                          {{ designation.title }}
+                        </option>
+                      </select>
+                    </td>
+                    <td class="col3">
+                      <a
+                        (click)="showDesignationComponent()"
+                        style="cursor: pointer"
+                      >
+                        <i class="fa-solid fa-plus"></i> Add
+                      </a>
+                      <button
+                        id="createDesignation"
+                        style="display: none"
+                        class="createNewTableRecord"
+                      >
+                        Create New Designation
+                      </button>
+                      <div
+                        *ngIf="isFieldInvalid('designation')"
+                        class="error-message ml-2"
+                      >
+                        required *
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="panNo">PAN Number:</label>
+                    </td>
+                    <td class="col2">
+                      <input
+                        type="number"
+                        formControlName="panNo"
+                        [class.error]="isFieldInvalid('panNo')"
+                      />
+                    </td>
+                    <td class="col3">
+                      <div
+                        *ngIf="isFieldInvalid('panNo')"
+                        class="error-message ml-2"
+                      >
+                        required *
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="salary">Salary:</label>
+                    </td>
+                    <td class="col2">
+                      <input
+                        type="number"
+                        formControlName="salary"
+                        [class.error]="isFieldInvalid('salary')"
+                      />
+                    </td>
+                    <td class="col3">
+                      <div
+                        *ngIf="isFieldInvalid('salary')"
+                        class="error-message ml-2"
+                      >
+                        required *
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="employeeType">Employee Type:</label>
+                    </td>
+                    <td class="col2">
+                      <select
+                        name="employeeType"
+                        formControlName="employeeType"
+                        id="employeeType"
+                      >
+                        <option
+                          value="{{ empType.id }}"
+                          *ngFor="let empType of employeeTypes"
+                        >
+                          {{ empType.name }}
+                        </option>
+                      </select>
+                      <!-- <input
+                    type="number"
+                    formControlName="employeeType"
+                    [class.error]="isFieldInvalid('employeeType')"
+                  /> -->
+                    </td>
+                    <td class="col3">
+                      <div
+                        *ngIf="isFieldInvalid('employeeType')"
+                        class="error-message ml-2"
+                      >
+                        required *
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="panNo">Married:</label>
+                    </td>
+                    <td class="col2">
+                      <div
+                        class="radio-button"
+                        style="
+                          display: inline;
+                          margin-left: 20px;
+                          margin-top: 2px;
+                        "
+                      >
+                        <input
+                          type="radio"
+                          value="true"
+                          [checked]="
+                            employeeForm.get('married')!.value === true
+                          "
+                          id="marriedYes"
+                          formControlName="married"
+                        />
+                        Yes
+                      </div>
+                      <div
+                        class="radio-button"
+                        style="
+                          display: inline;
+                          margin-left: 20px;
+                          margin-top: 2px;
+                        "
+                      >
+                        <input
+                          type="radio"
+                          value="false"
+                          id="marriedNo"
+                          formControlName="married"
+                          [checked]="
+                            employeeForm.get('married')!.value === false
+                          "
+                        />
+                        No
+                      </div>
+                    </td>
+                    <td class="col3"></td>
+                  </tr>
+                  <tr>
+                    <td class="col1 pt-2">
+                      <label for="dateJoin">Join Date (BS) </label>
+                    </td>
+                    <td>
+                      <div>
+                        <input
+                          type="text"
+                          id="nepali-datepicker"
+                          formControlName="joinDateNepali"
+                          placeholder="Select Date"
+                        />
+
+                        <br />
+                        <span style="margin-top: 2px"></span>
+                        <input
+                          formControlName="joinDate"
+                          type="text"
+                          hidden
+                          id="AdDate"
+                          style="
+                            height: 25px;
+                            width: 150px;
+                            background-color: white;
+                            font-size: small;
+                          "
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                  <!-- <tr>
+                    <td class="col1 pt-2"></td>
+                    <td class="col2 pt-2 text-center">
+                      <button
+                        type="submit"
+                        class="submit_btn border-rad"
+                        [disabled]="employeeForm.invalid"
+                      >
+                        Submit
+                      </button>
+                    </td>
+                    <td class="col3 pt-2"></td>
+                  </tr> -->
+                </table>
+                <div class="custom-modal-footer" style="padding-bottom: 0px;">
+
+                    <input
+                      type="submit"
+                      class="btn btn-success"
+                      id="submitUpdateEmployee"
+                      value="Update"
+                      [disabled]="employeeForm.invalid"
+                    />
+                    <button type="button" class="btn btn-danger  mr-3" (click)="destroyComp()" >Close</button>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    <div
+      class="popupWrapper createCustomerPopUpWrapper popupCloser"
+      cdkDrag
+      *ngIf="showableDesignationComponent"
+      id="createDesignationPopup"
+      style="display: none"
+    >
+      <app-create-designation
+        (designationAdditionCompleted)="designationCreated($event)"
+        (destroyDesignationAdditionComponent)="
+          destoryDesignationCreateComponent()
+        "
+      ></app-create-designation>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,316 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Product</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Products</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h3 class="card-title">Existing Products</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div
+                  class="row"
+                  style="display: flex; justify-content: space-between"
+                >
+                  <div class="col-md-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        [(ngModel)]="searchWildCard"
+                        (keydown.enter)="fetchLimitedProducts()"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <select
+                        name="s"
+                        class="searchField"
+                        [(ngModel)]="searchBy"
+                        id=""
+                      >
+                        <option value="id">Id</option>
+                        <option value="name">Name</option>
+                        <option value="barcode">Barcode</option>
+                        <option value="category_id">Category</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mt-2" style="width: fit-content">
+                    <a
+                      *ngIf="isAccountant || isMaster"
+                      (click)="onCreate()"
+                      id="createNewProduct"
+                      class="createNewTableRecord"
+                      style="cursor: pointer"
+                    >
+                      <img
+                        src="../../../../../../assets/img/createProduct.png"
+                      />
+                      <span> Create Product</span>
+                    </a>
+                  </div>
+                  <div class="col-md-2 d-flex justify-content-end">
+                    <nav
+                      style="margin-top: 2px; text-align: end"
+                      aria-label="Page navigation "
+                    >
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('prev')"
+                            aria-label="Previous"
+                          >
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link">{{ currentPageNumber }}</a>
+                        </li>
+                        <li class="page-item">
+                          <a
+                            class="page-link pe-auto"
+                            (click)="changePage('next')"
+                            aria-label="Next"
+                          >
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+                <div class="col-lg-12 overflow-auto">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Selling Price</th>
+                        <th>Qty</th>
+                        <th>Barcode</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>user id</th>
+                        <th>company id</th>
+                        <th>branch id</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let product of availableProducts">
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>
+                          <span *ngFor="let cat of categoriesData">
+                            <span *ngIf="cat.id === product.categoryId">{{
+                              cat.name
+                            }}</span>
+                          </span>
+                        </td>
+                        <td>{{ product.sellingPrice }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>{{ product.barcode }}</td>
+                        <td>{{ product.discount }}</td>
+                        <td>
+                          <ng-container *ngFor="let vat of typerate">
+                            <span *ngIf="vat.id === product.tax">{{
+                              vat.vatRate
+                            }}</span>
+                          </ng-container>
+                        </td>
+                        <td>{{ product.userId }}</td>
+                        <td>{{ product.companyId }}</td>
+                        <td>{{ product.branchId }}</td>
+                        <!-- <td>{{ product.unit }}</td> -->
+                        <td *ngIf="isAccountant || isMaster" class="last-child" title="Edit">
+                          <a (click)="editProduct(product.id)">
+                            <img src="../../../../../assets/img/editRow.png" />
+                          </a>
+                          <a
+                            id="deleteProd"
+                            (click)="deleteProduct(product.id)"
+                            class=""
+                            title="Delete"
+                          >
+                            <img
+                              src="../../../../../assets/img/deleteRow.png"
+                            />
+                          </a>
+                        </td>
+                      </tr>
+                      <button
+                        id="editProduct"
+                        style="display: none"
+                        class="createNewTableRecord"
+                      ></button>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <div
+  class="popupWrapper"
+  cdkDrag
+  id="createNewProductPopup"
+  style="display: none"
+>
+  <app-create-product
+    *ngIf="enableCreateProduct"
+    (productInfoEvent)="createNewProduct($event)"
+  ></app-create-product>
+</div> -->
+
+<app-create-product
+  [createProductEnable]="enableCreateProduct"
+  (emitToReset)="enableCreateProduct = !enableCreateProduct"
+  (productInfoEvent)="createNewProduct($event)"
+  (destroyCreateProd)="destroyCreateProductComponent()"
+></app-create-product>
+<!-- <a
+  type="button"
+  id="createProductPopUp"
+  data-bs-toggle="modal"
+  data-bs-target="#createProduct"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="createProduct"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Product</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="destroyCreateProductComponent()"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <app-create-product
+            *ngIf="createProductShow"
+            (productInfoEvent)="createNewProduct($event)"
+          ></app-create-product>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- for edit product -->
+
+<div
+  class="popupWrapper PopupCloser"
+  id="editProductPopup"
+  cdkDrag
+  style="display: none"
+>
+  <app-edit-product
+    *ngIf="showableEditProdDiv"
+    [productId]="productInfoForUpdateId"
+    (updatedSuccessful)="fetchLimitedProducts(); destroyEditProductComp()"
+    (destroyEditProduct)="destroyEditProductComp()"
+  ></app-edit-product>
+</div>
+
+<!-- for alert box -->
+<!-- <a
+  type="button"
+  id="confirmAlertPopUp"
+  data-bs-toggle="modal"
+  data-bs-target="#confirmAlert"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="confirmAlert"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <h5 class="modal-title ml-2">Confirm Alert Box.</h5>
+        <button
+          #confirmAlertCloseBtn
+          id="confirmAlertCloseBtn"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <app-confirm-alert
+            *ngIf="confirmAlertDisplay"
+            [msg]="'Are you sure to delete this product ? '"
+            (destroyConfirmAlertSectionEmitter)="
+              destroyConfirmAlertSectionEmitter($event)
+            "
+          >
+          </app-confirm-alert>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<ngx-smart-modal
+  identifier="confirmAlertPopup"
+  id="confirmAlertpopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+>
+  <app-confirm-alert
+    *ngIf="confirmAlertDisplay"
+    [msg]="'Are you sure to delete this product ? '"
+    (destroyConfirmAlertSectionEmitter)="
+      destroyConfirmAlertSectionEmitter($event)
+    "
+  >
+  </app-confirm-alert>
+</ngx-smart-modal>

@@ -1,0 +1,192 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Debit Note</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">debit-note</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Debit Note List</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <a
+                        style="cursor: pointer; margin-left: 6px"
+                        class="pe-auto mt-1 ml-2 text-decoration-underline"
+                      >
+                        clear Search</a
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-4 mt-2">
+                    <div>
+                      <a
+                        *ngIf="isAccountant || isMaster"
+                        routerLink="/home/debitnote"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create Debit Note</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">Receiver Name</th>
+                      <th scope="col">Receiver Address</th>
+                      <th scope="col">Pan Number</th>
+                      <th scope="col">Fiscal Year</th>
+                      <th scope="col">Bill Number</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Total Amount</th>
+                      <th scope="col">Total Tax</th>
+
+                      <th class="last-child">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of debitNote">
+                      <td>{{ data.id }}</td>
+                      <td>{{ data.receiverName }}</td>
+                      <td>{{ data.receiverAddress }}</td>
+                      <td>{{ data.panNumber }}</td>
+                      <td>{{ data.fiscalYear }}</td>
+                      <td>{{ data.billNumber }}</td>
+                      <td>{{ data.nepaliDate }}</td>
+                      <td>{{ data.totalAmount }}</td>
+                      <td>{{ data.totalTax }}</td>
+
+                      <td class="last-child">
+                        <a (click)="details(data.billNumber)">
+                          <img src="../../../../../assets/img/reports-bg.png" />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  id="debitNoteDetailsPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#debitNoteDetails"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="debitNoteDetails"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Debit Note Details</h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>SN</th>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Debit Reason</th>
+                    <th>Debit Amount</th>
+                    <th>Debit Tax Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of debitNoteDetails">
+                    <td>{{ data.serialNumber }}</td>
+                    <td>{{ data.productId }}</td>
+                    <td>{{ data.productName }}</td>
+                    <td>{{ data.debitReason }}</td>
+                    <td>{{ data.debitAmount }}</td>
+                    <td>{{ data.debitTaxAmount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

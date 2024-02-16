@@ -1,0 +1,239 @@
+<main id="main" style="margin: 0px" class="main overflow-auto">
+  <div class="d-flex justify-content-between">
+    <div class="pagetitle">
+      <h1>Super</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/home/dashboard">Auth</a>
+          </li>
+          <li class="breadcrumb-item active">super-admin</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="fright">
+      <a (click)="logout()" href="/login">
+        <img src="../../../../assets/img/logout-bg.png" class="logoutImage" />
+        <span> logout</span>
+      </a>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-center mt-2 mb-2">
+              <h3>Super Admin</h3>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <div class="col-4">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Search"
+                    [(ngModel)]="searchInput"
+                    (keydown.enter)="getAllUsersForSuperAdminListing()"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                  />
+                  <span
+                    (click)="getAllUsersForSuperAdminListing()"
+                    class="input-group-text border-0"
+                    id="search-addon"
+                  >
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer"
+                    (click)="getAllUsersForSuperAdminListing(true)"
+                    class="pe-auto mt-1 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+              <div class="col-4 mt-2">
+                <div>
+                  <a
+                    routerLink="/superAdmin/assignCompany"
+                    class="link-primary"
+                    style="cursor: pointer"
+                  >
+                    <i class="bi bi-buildings"></i>
+                    <span> General Company</span>
+                  </a>
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('prev')"
+                      class="page-link pe-auto"
+                      aria-label="Previous"
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">{{ currentPageNumber }}</a>
+                  </li>
+                  <li class="page-item">
+                    <a
+                      (click)="changePage('next')"
+                      class="page-link pe-auto"
+                      aria-label="Next"
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+            <div class="col-12 overflow-auto">
+              <table
+                class="table table-bordered recordsTable"
+                id="ProductsRecordsTable"
+              >
+                <thead>
+                  <tr>
+                    <th
+                      class="first-child sortable"
+                      sortDir="asc"
+                      sortCol="organization_id"
+                      id="id"
+                    >
+                      Id
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="organization_name"
+                      id="name"
+                    >
+                      First Name
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="organization_name"
+                      id="name"
+                    >
+                      Last Name
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="customer_name"
+                      id="email"
+                    >
+                      Email
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="master_name"
+                      id="phone"
+                    >
+                      Phone
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="product_group_name"
+                      id="role"
+                    >
+                      Role
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="product_group_name"
+                      id="status"
+                    >
+                      Status
+                    </th>
+                    <th
+                      class="sortable"
+                      sortDir="asc"
+                      sortCol="product_group_name"
+                      id="status"
+                    >
+                      Assign
+                    </th>
+                    <th class="last-child">Enable/Disable</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of users" id="prodTable">
+                    <td>{{ data.userId }}</td>
+                    <td>{{ data.firstName }}</td>
+                    <td>{{ data.lastName }}</td>
+                    <td>{{ data.email }}</td>
+                    <td>{{ data.phone }}</td>
+                    <td>{{ data.role }}</td>
+                    <td>{{ data.roleStatus }}</td>
+                    <td>
+                      <div class="form-check">
+                        <input
+                          *ngIf="data.role !== 'ADMIN'"
+                          (change)="assignAdminRole(data.userId)"
+                          type="checkbox"
+                          class="form-check-input"
+                        />
+                        <label class="form-check-label">Assign</label>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-check">
+                        <input
+                          *ngIf="data.role !== 'USER'"
+                          [checked]="data.roleStatus"
+                          (change)="enableDisable(data.userId, $event)"
+                          type="checkbox"
+                          class="form-check-input"
+                        />
+                        <label class="form-check-label">Enabled</label>
+                      </div>
+                    </td>
+                    <td>
+                      <a
+                        id="userDeatils"
+                        (click)="getUserId(data.userId)"
+                        class="createNewTableRecord"
+                      >
+                        <img src="../../../../assets/img/reports-bg.png" />
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+              <button type="submit" (click)="submit()" class="btn btn-primary">
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-user-company-details
+  [toggleModel]="togglePopup"
+  [userId]="userIdForListing"
+  (sucsessful)="triggerList()"
+  (emitToReset)="resetDetailPopup()"
+></app-user-company-details>

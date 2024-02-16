@@ -1,0 +1,124 @@
+<div class="row d-flex justify-content-between">
+    <div class="col-md-3 mt-4">
+      <span class="inputItems"
+        >To:
+        <p id="to">{{ customerName }}</p></span
+      >
+      <div style="display: flex; align-items: center">
+        <input
+          type="text"
+          id="custPanOrPhoneInput"
+          [(ngModel)]="custPhoneOrPan"
+          class="input-field"
+          style="margin: 0 4px"
+          placeholder="PAN or Phone "
+          [readOnly]="unknownCustomer"
+          (keydown.enter)="fetchCustomerInfo()"
+        />
+        <button
+          class="ml-3"
+          class="submit_btn border-rad"
+          style="margin: 0 5px"
+          [disabled]="unknownCustomer"
+          (click)="fetchCustomerInfo()"
+        >
+          Search
+        </button>
+        <button
+          (click)="displayAddCustomerPopup()"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="Create New Customer"
+          style="width: 35px"
+        >
+          <i
+            style="color: rebeccapurple"
+            class="fa-solid fa-user-plus"
+          ></i>
+        </button>
+      </div>
+      <div style="display: inline-block; margin-left: 5px">
+        <input
+          type="checkbox"
+          style="margin-top: 8px; display: inline-block"
+          name="unknownCustomer"
+          id="unknownCustomer"
+          [checked]="unknownCustomer"
+          (click)="getUnknownCustomer()"
+        />
+        <label
+          style="
+            margin-top: 8px;
+            margin-left: 4px;
+            display: inline-block;
+          "
+        >
+          Unknown Customer
+        </label>
+      </div>
+    </div>
+    <div class="col-md-3" style="margin-top: 50px">
+      <div style="display: flex">
+        <div style="display: grid">
+          <span style="padding-right: 5px">Date:</span>
+        </div>
+
+        <div>
+          <input
+            type="text"
+            id="nepali-datepicker"
+            placeholder="Select  Date"
+            disabled
+            style="height: 25px; width: 150px"
+            class="inputText"
+          />
+
+          <br />
+          <span style="margin-top: 2px"></span>
+
+          <span style="font-size: small">
+            ({{ AdDateForDisplayOnly }})</span
+          >
+          <input
+            disabled
+            type="text"
+            id="AdDate"
+            hidden
+            style="
+              height: 25px;
+              width: 150px;
+              background-color: white;
+              font-size: small;
+            "
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div style="display: inline-block; margin-top: 55px">
+        <input
+          type="radio"
+          style="display: inline-block; margin-left: 3px"
+          name="saleType"
+          [checked]="saleType === 1"
+          (change)="setSaleType(1)"
+        />
+        <label style="margin-left: 3px; display: inline-block"
+          >Cash sale
+        </label>
+      </div>
+      <div style="display: inline-block; margin-left: 10px">
+        <input
+          type="radio"
+          style="display: inline-block"
+          name="saleType"
+          [disabled]="customerName.length === 0"
+          [checked]="saleType === 2"
+          (change)="setSaleType(2)"
+        />
+        <label style="margin-left: 3px; display: inline-block"
+          >Credit sale</label
+        >
+      </div>
+    </div>
+  </div>

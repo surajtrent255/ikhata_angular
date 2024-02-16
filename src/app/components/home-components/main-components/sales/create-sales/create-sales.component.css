@@ -1,0 +1,132 @@
+.popperAlert {
+    position: absolute;
+    top: 50px;
+    width: 500px;
+    left: 30%;
+    z-index: 11;
+    border: 1px solid #828282;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    -moz-border-top-left-radius: 4px;
+    -moz-border-top-right-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.5);
+    display: none;
+    font-size: 12px;
+  }
+  
+  .input-field {
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid grey;
+    border-radius: 5px;
+  }
+  
+  .input-field input {
+    position: absolute;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: center;
+  }
+  
+  .headingContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .headingcontent {
+    flex: 1;
+  }
+  
+  .createNewProdbtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  
+  
+  .inputItems{
+    display: block;
+    margin-top: 8px;
+  }
+  
+  
+  
+  
+  .ng-dropdown-panel .ng-option[value='option1'] {
+    background-color: #b9e1dc; /* Set the background color of the option field */
+    color: #333; /* Set the text color of the option field */
+  }
+  
+  #my-select-btn:focus {
+    background-color: yellow;
+    color: black;
+  }
+  
+  
+  #select-cust-yes-btn {
+    background-color: yellow;
+    color: black;
+  }
+  
+  .select-option {
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .select-option option {
+    background-color: #fff;
+    color: #333;
+  }
+  
+  .table2 {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table2 td {
+    padding: 10px;
+  }
+  
+  .table2 h3 {
+    margin: 0;
+  }
+  
+  .table2 .align-right {
+    text-align: right;
+  }
+
+
+
+/* table {
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 10px 5px 5px rgb(194, 190, 190);
+}
+
+th, td {
+    border: 1px solid rgb(75, 72, 72);
+    padding: 8px;
+    text-align: left;
+} */
+
+.saleDraftBtn {
+  width: 20%; 
+  display: flex; 
+  flex-direction: row; 
+  flex-wrap: wrap-reverse !important; 
+  justify-content:space-between;
+  /* align-content: space-around; */
+}

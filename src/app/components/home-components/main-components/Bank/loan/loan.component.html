@@ -1,0 +1,187 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Loan</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Loan</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Loan Table</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                        [(ngModel)]="searchWildCard"
+                        (keydown.enter)="fetchLimitedLoans()"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i
+                          class="fas fa-search"
+                          (click)="fetchLimitedLoans()"
+                        ></i>
+                      </span>
+                      <a
+                        style="cursor: pointer; margin-left: 6px"
+                        class="pe-auto mt-1 ml-2 text-decoration-underline"
+                      >
+                        clear Search</a
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-4 mt-2">
+                    <div *ngIf="isAccountant || isMaster">
+                      <a
+                        (click)="enableLoanComponent()"
+                        id="createNewLoan"
+                        class="createNewTableRecord"
+                        style="cursor: pointer"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create Loan</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a
+                          class="page-link pe-auto"
+                          (click)="changePage('prev')"
+                          style="cursor: pointer"
+                          aria-label="Previous"
+                        >
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">{{ currentPageNumber }}</a>
+                      </li>
+                      <li class="page-item">
+                        <a
+                          class="page-link pe-auto"
+                          aria-label="Next"
+                          (click)="changePage('next')"
+                          style="cursor: pointer"
+                        >
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Loan Id</th>
+                      <th>BankId</th>
+                      <th>lenderId</th>
+                      <th>LoanType</th>
+                      <th>LoanNumber</th>
+                      <th>LoanName</th>
+                      <th>LoanAmount</th>
+                      <th>Received Amount</th>
+                      <th>Service Charge</th>
+                      <th>Other Expenses</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let loan of loans" id="loan_{{ loan.id }}">
+                      <td>{{ loan.id }}</td>
+                      <td>{{ loan.bankId }}</td>
+                      <td>{{ loan.lenderId }}</td>
+                      <td>{{ loan.loanType }}</td>
+                      <td>{{ loan.loanNumber }}</td>
+                      <td>{{ loan.loanName }}</td>
+                      <td>{{ loan.loanAmount }}</td>
+                      <td>{{ loan.receivedAmount }}</td>
+                      <td>{{ loan.serviceCharge }}</td>
+                      <td>{{ loan.otherExpenses }}</td>
+                      <td class="last-child">
+                        <div *ngIf="isAccountant || isMaster">
+                          <a
+                            id="editLoan"
+                            (click)="loanForUpdate(loan.id)"
+                            class="createNewTableRecord"
+                          >
+                            <img src="../../../../../assets/img/editRow.png" title="Edit"/>
+                          </a>
+                          <a (click)="deleteLoan(loan.id)" class="">
+                            <img
+                              src="../../../../../assets/img/deleteRow.png" title="Delete"
+                            />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<ngx-smart-modal
+  identifier="confirmAlertDisplayPopup"
+  id="confirmAlertDisplaypopup"
+  (mousedown)="CommonService.handleMouseDown($event)"
+  (mousemove)="CommonService.elementDrag($event)"
+  (mouseup)="CommonService.clear()"
+  [closable]="false"
+  [dismissable]="false"
+>
+  <app-confirm-alert
+    *ngIf="confirmAlertDisplay"
+    [msg]="'Are you sure to cancel this bill ? '"
+    (destroyConfirmAlertSectionEmitter)="
+      destroyConfirmAlertSectionEmitter($event)
+    "
+  >
+  </app-confirm-alert>
+</ngx-smart-modal>
+
+<app-create-loan
+  [toggleCreateLoan]="createLoanEnable"
+  (emitToReset)="createLoanEnable = !createLoanEnable"
+  (destroyCreateLoanComp)="disableLoanComponent($event)"
+></app-create-loan>
+
+<app-edit-loan
+  [toggleEditLoan]="updateLoanEnable"
+  (emitToReset)="updateLoanEnable = !updateLoanEnable"
+  [loanId]="loanForUpdateId"
+  (destroyEditLoanComp)="disableEditComponent($event)"
+  (editSuccessfullFlag)="disableEditComponent(true); fetchLimitedLoans()"
+>
+</app-edit-loan>

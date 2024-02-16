@@ -1,0 +1,191 @@
+<div *ngIf="background">
+  <div
+    class="row"
+    *ngIf="customerMetaData?.customers?.length! > 0 && showableALertPopup"
+  >
+    <h5 class="custom-modal-title" style="font-weight: bold; font-size: 13px">
+      Your can select your {{ title }} here
+    </h5>
+    <button
+      id="closeSelectCustYN"
+      type="button"
+      (click)="destroySelectCustomer()"
+      style="background-size: 50% !important; display: inline"
+      class="btn-close"
+      aria-label="Close"
+    ></button>
+  </div>
+  <tr
+    class="text-center"
+    *ngIf="customerMetaData?.customers?.length === 0 && showableALertPopup"
+  >
+    <td colspan="9">
+      <div class="">
+        <h1 class="heading">
+          <i class="fa-solid fa-circle-exclamation"></i> No record found. Would
+          you like to create customer?
+        </h1>
+      </div>
+      <div class="row">
+        <div class="col-md-4 offset-md-1">
+          <span #yesPopup>
+            <input
+              #createCustomerBtn
+              id="createCustomerBtn"
+              type="radio"
+              name="createCustDecs"
+              value="1"
+              checked
+              (keyup)="onButtonKeyUpForDispalyAddCustomerPopup($event)"
+            />
+            <button class="ml-1 btn btn-secondary" (click)="alertYes()">
+              Yes
+            </button>
+          </span>
+        </div>
+        <div class="col-md-4">
+          <span #noPopup>
+            <input
+              #donotCreateCustomerBtn
+              i="donotCreateCustomerBtn"
+              class="btn"
+              type="radio"
+              name="createCustDecs"
+              value="0"
+              (keyup)="onButtonKeyUpForDispalyAddCustomerPopup($event)"
+            />
+            <button class="ml-1 btn btn-success" (click)="alertNo()">No</button>
+          </span>
+        </div>
+      </div>
+    </td>
+  </tr>
+
+  <div class="" *ngIf="customerMetaData?.customers?.length! > 0">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="recordsTableDiv">
+          <table
+            cellspacing="0"
+            cellpadding="0"
+            class="table table-stripped"
+            id="ProductsRecordsTable"
+          >
+            <thead>
+              <tr>
+                <th class="last-child">Select</th>
+                <th>S.N</th>
+                <th
+                  class="first-child sortable"
+                  sortDir="asc"
+                  sortCol="organization_id"
+                  id="id"
+                >
+                  Name
+                </th>
+                <th
+                  class="sortable"
+                  sortDir="asc"
+                  sortCol="organization_name"
+                  id="name"
+                >
+                  PAN NO
+                </th>
+                <th
+                  class="sortable"
+                  sortDir="asc"
+                  sortCol="companyomer_name"
+                  id="costprice"
+                >
+                  Phone
+                </th>
+                <th
+                  class="sortable"
+                  sortDir="asc"
+                  sortCol="master_name"
+                  id="sellingprice"
+                >
+                  State
+                </th>
+                <th
+                  class="sortable"
+                  sortDir="asc"
+                  sortCol="product_group_name"
+                  id="barcode"
+                >
+                  District
+                </th>
+                <th
+                  class="sortable"
+                  sortDir="asc"
+                  sortCol="product_group_name"
+                  id="discount"
+                >
+                  Mun/Vdc
+                </th>
+              </tr>
+            </thead>
+            <tbody id="prodTable">
+              <tr
+                *ngFor="
+                  let company of customerMetaData.customers;
+                  let index = index
+                "
+                id="company_{{ company.companyId }}"
+              >
+                <td>
+                  <span *ngIf="index === 0">
+                    <input
+                      type="radio"
+                      name="selectUniqueCust"
+                      *ngIf="index === 0"
+                      #selectedCustomerBtn
+                      checked
+                      (keyup)="onButtonKeyUp($event, company.companyId)"
+                      class="submit_btn border-rad"
+                    />
+                  </span>
+
+                  <span *ngIf="index !== 0">
+                    <input
+                      type="radio"
+                      (keyup)="onButtonKeyUp($event, company.companyId)"
+                      name="selectUniqueCust"
+                      class="submit_btn border-rad"
+                    />
+                  </span>
+                </td>
+                <td>{{ index + 1 }}</td>
+                <td>{{ company.name }}</td>
+                <td>{{ company.panNo }}</td>
+                <td>{{ company.phone }}</td>
+                <td>{{ company.state }}</td>
+                <td>{{ company.district }}</td>
+                <td>{{ company.munVdc }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- </ngx-smart-modal> -->
+
+
+<ngx-smart-modal
+(mousedown)="commonService.handleMouseDown($event)"
+(mousemove)="commonService.elementDrag($event)"
+(mouseup)="commonService.clear()"
+id="createcustomerPopUpId"
+identifier="createCustomerPopupNew" 
+[dismissable]="true"
+[closable]="false">
+  <app-create-customer
+    (customerAddedSuccessMsg)="customerAdded($event)"
+    (destroyCreateCustComp)="destroyCreateCustomerComp($event)"
+    [title]="'customer'"
+  ></app-create-customer>
+</ngx-smart-modal>
+<!-- *ngIf="displayCreateCustomerPopup" -->

@@ -1,0 +1,159 @@
+<div class="modal-header">
+  <h5 class="modal-title">Update Bank</h5>
+  <button
+    #closeButton
+    id="closeButton"
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+  ></button>
+</div>
+
+<div class="card" style="margin-bottom: 0px">
+  <div class="card-body">
+    <form
+      #updateBank="ngForm"
+      name="createBank"
+      id="createBank"
+      (ngSubmit)="updateBankForm(updateBank)"
+    >
+      <div>
+        <div>
+          <table class="table table-bordered">
+            <tr>
+              <td class="col-md-3">
+                BankName:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col-md-6">
+                <!-- <i class=" fas fa-thin fa-circle-chevron-down"></i> -->
+
+                <select
+                  class="form-control form-select"
+                  name="bankName"
+                  id="bankName"
+                  name="bankName"
+                  #bankName="ngModel"
+                  style="width: 100%; max-height: fit-content"
+                  [(ngModel)]="editBankObj.bankTypeId"
+                  required
+                  placeholder="Select bank"
+                >
+                  <option *ngFor="let ap of bankList" [value]="ap.id" >
+                    {{ ap.name }}
+                  </option>
+                </select>
+              </td>
+              <td class="col-md-3">
+                <small
+                  class="text-danger"
+                  [class.d-none]="bankName.valid || bankName.untouched"
+                  >invalid bankName</small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="col-md-3">
+                Account Number:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col-md-6">
+                <input
+                  type="number"
+                  name="accountNumber"
+                  [(ngModel)]="editBankObj.accountNumber"
+                  required
+                  #accountNumber="ngModel"
+                  [class.is-invalid]="
+                    accountNumber.invalid && accountNumber.touched
+                  "
+                  class="form-control"
+                  id="accountNumber"
+                  max="99999999999999999999"
+                />
+              </td>
+              <td class="col-md-3">
+                <small
+                  class="text-danger"
+                  [class.d-none]="
+                    accountNumber.valid || accountNumber.untouched
+                  "
+                  >invalid Account Number:</small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="col-md-3">
+                InitialAmount:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col-md-6">
+                <input
+                  type="number"
+                  name="initialAmount"
+                  [(ngModel)]="editBankObj.initialAmount"
+                  required
+                  #initialAmount="ngModel"
+                  [class.is-invalid]="
+                    initialAmount.invalid && initialAmount.touched
+                  "
+                  class="form-control"
+                  id="initialAmount"
+                  required
+                />
+              </td>
+              <td class="col-md-3">
+                <small
+                  class="text-danger"
+                  [class.d-none]="
+                    initialAmount.valid || initialAmount.untouched
+                  "
+                  >invalid initialAmount</small
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="col-md-3">
+                Account Type:<span class="mandatorySign">*</span>
+              </td>
+              <td class="col-md-6">
+                <select
+                  class="form-control form-select"
+                  name="accountType"
+                  id="accountType"
+                  #accountType="ngModel"
+                  [(ngModel)]="editBankObj.accountType"
+                >
+                  <option *ngFor="let ap of accountTypes" value={{ap.id}} >
+                    {{ ap.name }}
+                  </option>
+                </select>
+              </td>
+              <td class="col-md-3">
+                <small
+                  class="text-danger"
+                  [class.d-none]="accountType.valid || accountType.untouched"
+                  >invalid accountType</small
+                >
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="custom-modal-footer">
+        <input
+          type="submit"
+          class="btn btn-success"
+          id="submitCategoryPrd"
+          value="Update Bank"
+          [disabled]="updateBank.form.invalid"
+        />
+
+        <input
+          type="button"
+          value="Cancel"
+          (click)="cancel()"
+          class="btn btn-danger"
+        />
+      </div>
+    </form>
+  </div>
+</div>

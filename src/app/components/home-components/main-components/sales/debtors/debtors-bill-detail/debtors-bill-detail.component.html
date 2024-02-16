@@ -1,0 +1,116 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Debtors</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a routerLink="/home/sales/debtors">Debtors</a> / <b>BillDetail</b>
+        </li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div class="col-4 mt-2">
+                <div class="input-group rounded">
+                  <input
+                    type="search"
+                    class="form-control rounded"
+                    placeholder="Bill Number"
+                    name="searchInput"
+                    aria-label="Search"
+                    aria-describedby="search-addon"
+                    (keydown.enter)="fetchLimitedbillsOfDebtors()"
+                    [(ngModel)]="searchInput"
+                  />
+              
+                  <select name="" id="" [(ngModel)]="searchBy" style="height:40px">
+                    <option value=""></option>
+                    <option value="bill_no">Bill No</option>
+                    <option value="bill_date_nepali">Date</option>
+                  </select>
+                  <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                  <a
+                    style="cursor: pointer; margin-left: 6px"
+                    class="pe-auto mt-1 ml-2 text-decoration-underline"
+                  >
+                    clear Search</a
+                  >
+                </div>
+              </div>
+
+              <nav style="margin-top: 2px" aria-label="Page navigation ">
+                <ul class="pagination">
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Previous"   (click)="changePage('prev')">
+                    
+
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link">   {{ currentPageNumber }} </a>
+                  
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link pe-auto" aria-label="Next"  (click)="changePage('next')">
+                     
+
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="container">
+              <table class="table recordsTable" id="purchaseBillRecordsTable">
+                <thead>
+                  <tr>
+                    <th>S.N</th>
+                    <th>Bill Number</th>
+                    <th>Name</th>
+                    <th>Pan</th>
+                    <th>Bill Amount</th>
+                    <th>Bill Date (Nep)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of debtorBills; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <a class="link-info" style="cursor: pointer;"  (click)="openListOfItems(data.id)">{{
+                        data.billNo
+                      }}</a>
+                    </td>
+                    <td>{{ data.customerName }}</td>
+                    <td>{{ data.customerPan }}</td>
+                    <td>{{ data.totalAmount }}</td>
+                    <td>{{ data.billDateNepali }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button class="submit_btn border-rad" routerLink="/home/sales/debtors" >Go Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<ngx-smart-modal identifier="itemsListOfBill" [dismissable]="false" [closable]="false">
+  <app-debtors-bill-list *ngIf="showItemsListOfBill" [itemListOfBill]="itemListOfBill"
+  (destroyItemListEventEmitter)="destroyItemsOfBill($event)"> </app-debtors-bill-list>
+</ngx-smart-modal>

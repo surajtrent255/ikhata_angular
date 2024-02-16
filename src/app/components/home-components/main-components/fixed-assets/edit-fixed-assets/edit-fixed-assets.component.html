@@ -1,0 +1,164 @@
+<a
+  type="button"
+  #editFixedassetPopup
+  id="editFixedassetPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#editFixedasset"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="editFixedasset"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Fixed Assets</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <form>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="AssetName">Asset Name</label>
+                    <input
+                      type="text"
+                      name="AssetName"
+                      [(ngModel)]="asset.name"
+                      class="form-control"
+                      id="AssetName"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      [(ngModel)]="asset.amount"
+                      class="form-control"
+                      id="amount"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="billNo">Bill No</label>
+                    <input
+                      type="text"
+                      name="billNo"
+                      [(ngModel)]="asset.billNo"
+                      class="form-control"
+                      id="billNo"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="cash">Cash</label>
+                    <input
+                      type="number"
+                      name="cash"
+                      [(ngModel)]="asset.cash"
+                      class="form-control"
+                      id="cash"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="loan">Loan</label>
+                    <input
+                      type="text"
+                      name="loan"
+                      [(ngModel)]="asset.loan"
+                      class="form-control"
+                      id="loan"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="loanId">Loan Id</label>
+                    <input
+                      type="number"
+                      name="loanId"
+                      [(ngModel)]="asset.loanId"
+                      class="form-control"
+                      id="loanId"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="date">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      [(ngModel)]="asset.date"
+                      class="form-control"
+                      id="date"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="fixedAssetEdit()"
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    data-bs-dismiss="modal"
+                    class="btn btn-secondary closeButton"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

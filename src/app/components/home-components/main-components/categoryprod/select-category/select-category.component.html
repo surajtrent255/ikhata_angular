@@ -1,0 +1,37 @@
+<ul>
+  <li *ngFor="let node of nodes">
+    <i
+      class="fa-sharp fa-solid fa-plus handPointer"
+      (click)="toggleNode(node)"
+    ></i>
+    <span
+      (click)="selectCategory(node)"
+      style="font-weight: 600"
+      class="handPointer"
+      [ngStyle]="{ 'text-decoration': node.deleted ? 'line-through' : 'none' }"
+    >
+      {{ node.name }}
+    </span>
+    <i
+      *ngIf="node.childCategories.length > 0"
+      class="fa-solid fa-caret-down"
+      style="cursor: pointer"
+      (click)="toggleNode(node)"
+    ></i>
+    <i
+    *ngIf="showDisableButton"
+      class="fa-solid fa-ban"
+      style="font-size: 10px; color: red; cursor: pointer; margin-left: 14px;"
+      (click)="disableCategory(node.id)"
+      [ngStyle]="{ display: node.deleted ? 'none' : 'inline' }"
+      [title]="node.deleted ? 'Enable Category' : 'Disable Category'"
+    ></i>
+    <div style="margin-left: 20px; margin-top: 3px">
+      <app-select-category
+        *ngIf="node.showChildren && node.childCategories"
+        [nodes]="node.childCategories"
+        [showDisableButton]="showDisableButton === false?false:true"
+      ></app-select-category>
+    </div>
+  </li>
+</ul>

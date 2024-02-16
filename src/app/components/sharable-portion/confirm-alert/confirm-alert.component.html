@@ -1,0 +1,34 @@
+  <div class="">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">{{ msg }}</h5>
+    </div>
+    <!-- <div class="row mt-4 mb-4">
+      <div class="col-md-4 offset-md-2">
+        <button class="btn btn-danger" (click)="emitStatus(true)">
+          Yes
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-primary" (click)="emitStatus(false)">
+          No
+        </button>
+      </div>
+    </div> -->
+    <div class="yesNoContainer">
+      <button
+        type="button"
+        class="btn btn-danger mr-3"
+        (click)="emitStatus(true)">
+      
+        Yes
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        id="submitCreateProduct"
+        value="Cancel "
+        (click)="emitStatus(false)"
+      >No</button>
+    </div>
+  </div>
+

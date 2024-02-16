@@ -1,0 +1,68 @@
+<div class="custom-modal-header">
+  <h5 class="custom-modal-title">Create Expense Topic</h5>
+  <button
+    #closeButton
+    type="button"
+    (click)="destroyComp()"
+    style="background-size: 50% !important"
+    class="btn-close swaraz"
+    aria-label="Close"
+  ></button>
+  <!-- <a class="closeButton fright" id="closeEditButton"
+        ><img
+          src="../../../assets/resources/images/removetablink.png"
+          alt="close"
+          (click)="destroyComp()"
+      /></a> -->
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- <app-popup class="m-4"></app-popup> -->
+    <div class="chooseColoumnsWrapper" style="padding-bottom: 0px">
+      <div class="fieldDiv popUpFormSectionWrapper" style="padding-bottom: 0px">
+        <table class="offset-md-2" cellpadding="0" cellspacing="0">
+          <tr>
+            <td class="col1 pt-2">
+              <label for="name">Topic:</label>
+            </td>
+            <td>
+              <input
+                type="text"
+                placeholder="topic"
+                #des
+                (keydown.enter)="addTopic(des.value)"
+              />
+            </td>
+          </tr>
+          <!-- <tr>
+                    <td class="col1 pt-2"></td>
+                    <td>
+                      <button
+                        type="submit"
+                        class="offset-md-4 submit_btn border-rad mt-4"
+                      >
+                        Submit
+                      </button>
+                    </td>
+                  </tr> -->
+        </table>
+        <div class="custom-modal-footer">
+          <button
+            type="button"
+            class="btn btn-danger mr-3"
+            (click)="destroyComp()"
+          >
+            Close
+          </button>
+          <input
+            type="submit"
+            class="btn btn-success"
+            id="submitAddTopic"
+            value="Add Expense Topic"
+            (click)="addTopic(des.value)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

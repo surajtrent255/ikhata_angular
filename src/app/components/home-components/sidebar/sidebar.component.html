@@ -1,0 +1,295 @@
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+  <ul class="sidebar-nav" id="sidebar-nav">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home/dashboard">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <!-- End Dashboard Nav -->
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#components-nav"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-menu-button-wide"></i><span>Inventory</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        *ngIf="isStaff"
+        id="components-nav"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/categoryprod/list">
+            <i class="bi bi-circle"></i><span>Category</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/product/list">
+            <i class="bi bi-circle"></i><span>Product</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/split/merge/list">
+            <i class="bi bi-circle"></i><span> Split / Merge Product</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- End Components Nav -->
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#forms-nav"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-journal-text"></i><span>Sales</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        id="forms-nav"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/sales/invoice">
+            <i class="bi bi-circle"></i><span>Invoice</span>
+          </a>
+        </li>
+
+        <li *ngIf="isStaff">
+          <a routerLink="/home/creditnote/creditNoteList">
+            <i class="bi bi-circle"></i><span>Credit Note</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/sales/otherIncome">
+            <i class="bi bi-circle"></i><span> Other Income</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/receipt">
+            <i class="bi bi-circle"></i><span>Receipts</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/sales/customer">
+            <i class="bi bi-circle"></i><span> Customers</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/sales/debtors">
+            <i class="bi bi-circle"></i><span> Debtors</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- End Forms Nav -->
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#tables-nav"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-layout-text-window-reverse"></i><span>Purchase</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        id="tables-nav"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/purchasebills">
+            <i class="bi bi-circle"></i><span>Bills</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/payment">
+            <i class="bi bi-circle"></i><span>Payment</span>
+          </a>
+        </li>
+
+        <li *ngIf="isStaff">
+          <a routerLink="/home/sales/expense">
+            <i class="bi bi-circle"></i><span>Expense</span>
+          </a>
+        </li>
+
+        <li *ngIf="isStaff">
+          <a routerLink="/home/debitnote/debitNoteList">
+            <i class="bi bi-circle"></i><span>Debit Note</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/purchasebills/creditors/list">
+            <i class="bi bi-circle"></i><span>Creditors</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- End Tables Nav -->
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#Bank"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-layout-text-window-reverse"></i><span>Bank</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        *ngIf="isStaff"
+        id="Bank"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/bank/create">
+            <i class="bi bi-circle"></i><span>Create Bank</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/bank/deposit">
+            <i class="bi bi-circle"></i><span>Deposit</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/bank/withdraw">
+            <i class="bi bi-circle"></i><span>Withdraw</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/bank/loan">
+            <i class="bi bi-circle"></i><span>Loan</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/loanRepay">
+            <i class="bi bi-circle"></i><span>Loan Repay</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/fixedAsset">
+            <i class="bi bi-circle"></i><span>Assets</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#humanResource"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-person"></i><span>Human resource</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        *ngIf="isStaff"
+        id="humanResource"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/employee">
+            <i class="bi bi-circle"></i><span>Employee</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#charts-nav"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-bar-chart"></i><span>Report</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        id="charts-nav"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/debitnote/debit-note-report">
+            <i class="bi bi-circle"></i><span>Debit Note Report</span>
+          </a>
+        </li>
+        <li *ngIf="isStaff">
+          <a routerLink="/home/creditnote/credit-note-report">
+            <i class="bi bi-circle"></i><span>Credit Note Report</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/sales/salesbill/report">
+            <i class="bi bi-circle"></i><span> Sales Report</span>
+          </a>
+        </li>
+
+        <li *ngIf="isStaff">
+          <a routerLink="/home/purchasebills/purchse-bill/report">
+            <i class="bi bi-circle"></i><span> Purchase Report</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        data-bs-target="#IRD"
+        data-bs-toggle="collapse"
+        href="#"
+      >
+        <i class="bi bi-tools"></i><span>Utilities</span
+        ><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul
+        *ngIf="isStaff"
+        id="IRD"
+        class="nav-content collapse"
+        data-bs-parent="#sidebar-nav"
+      >
+        <li>
+          <a routerLink="/home/utility">
+            <i class="bi bi-circle"></i><span> Tax File (IRD)</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/utility/salestally">
+            <i class="bi bi-circle"></i><span> Sales (Tally)</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/utility/purchasetally">
+            <i class="bi bi-circle"></i><span> Purchase (Tally)</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/home/tax-pay">
+            <i class="bi bi-circle"></i><span> Tax Pay </span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <!-- End Charts Nav -->
+  </ul>
+</aside>

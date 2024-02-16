@@ -1,0 +1,175 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Credit Note</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">credit-note</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Credit Note Report</h5>
+              <hr class="border-2 mb-2" />
+            </div>
+
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <app-search
+                        (searchInput)="handleData($event)"
+                      ></app-search>
+                    </div>
+                  </div>
+
+                  <nav style="margin-top: 2px" aria-label="Page navigation ">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link pe-auto" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Customer Name</th>
+                      <th>Customer Address</th>
+                      <th>Pan Number</th>
+                      <th>Fiscal Year</th>
+                      <th>Bill Number</th>
+                      <th>Date</th>
+                      <th>Total Amount</th>
+                      <th>Total Tax</th>
+                      <th class="last-child">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of creditNote">
+                      <td>{{ data.id }}</td>
+                      <td>{{ data.customerName }}</td>
+                      <td>{{ data.customerAddress }}</td>
+                      <td>{{ data.panNumber }}</td>
+                      <td>{{ data.fiscalYear }}</td>
+                      <td>{{ data.billNumber }}</td>
+                      <td>{{ data.nepaliDate }}</td>
+                      <td>{{ data.totalAmount }}</td>
+                      <td>{{ data.totalTax }}</td>
+
+                      <td class="last-child">
+                        <a (click)="printData(data)">
+                          <i class="fa fa-print"></i>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td style="font-weight: bold">Grand Total</td>
+                      <td>{{ grandTotal | number : "1.2-2" }}</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<a
+  type="button"
+  id="creditNoteDetailsPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#creditNoteDetails"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="creditNoteDetails"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Credit Note Details</h5>
+        <button
+          #closeButton
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body">
+          <div>
+            <form class="row g-3">
+              <table style="overflow-wrap: anyWhere">
+                <thead>
+                  <tr>
+                    <th>SN</th>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Credit Reason</th>
+                    <th>Credit Amount</th>
+                    <th>Credit Tax Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of creditNoteDtails">
+                    <td>{{ data.serialNumber }}</td>
+                    <td>{{ data.productId }}</td>
+                    <td>{{ data.productName }}</td>
+                    <td>{{ data.creditReason }}</td>
+                    <td>{{ data.creditAmount }}</td>
+                    <td>{{ data.creditTaxAmount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

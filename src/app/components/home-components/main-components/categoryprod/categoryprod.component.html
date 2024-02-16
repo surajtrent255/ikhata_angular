@@ -1,0 +1,144 @@
+<main id="main" class="main overflow-auto">
+  <div class="pagetitle">
+    <h1>Category</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a routerLink="/home/dashboard">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Category</li>
+      </ol>
+    </nav>
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mt-2 mb-2">
+              <h5 class="card-title">Existing Categories</h5>
+              <hr class="border-2" />
+            </div>
+            <!-- style="padding-left: 0.1rem;" -->
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-4 mt-2">
+                    <div class="input-group rounded">
+                      <input
+                        type="search"
+                        class="form-control rounded"
+                        placeholder="Search"
+                        name="searchInput"
+                        aria-label="Search"
+                        aria-describedby="search-addon"
+                      />
+                      <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <a
+                        style="cursor: pointer; margin-left: 6px"
+                        class="pe-auto mt-1 ml-2 text-decoration-underline"
+                      >
+                        clear Search</a
+                      >
+                    </div>
+
+                    <!-- <nav style="margin-top: 2px" aria-label="Page navigation ">
+                      <ul class="pagination">
+                        <li class="page-item">
+                          <a class="page-link pe-auto" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link">1</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link pe-auto" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </nav> -->
+                  </div>
+                  <div class="col-6 mt-2">
+                    <div>
+                      <a
+                        *ngIf="isAccountant || isMaster"
+                        (click)="enableCreateCategory()"
+                        style="cursor: pointer"
+                      >
+                        <img
+                          src="../../../../../../assets/img/createProduct.png"
+                        />
+                        <span> Create Cateogry </span>
+                      </a>
+
+                      <button
+                        style="display: none"
+                        class="createNewTableRecord"
+                        id="createNewCategory"
+                      ></button>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="table table-bordered">
+                  <app-select-category
+                    [nodes]="categoriesData"
+                  ></app-select-category>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <a
+  type="button"
+  id="cateogryCreationPopup"
+  data-bs-toggle="modal"
+  data-bs-target="#categoryCreation"
+  [hidden]="true"
+></a>
+
+<div
+  class="modal fade"
+  data-bs-backdrop="false"
+  id="categoryCreation"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-lg">
+    <div cdkDrag class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Category</h5>
+        <button
+          #closeButton
+          id="closeButton"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          (click)="disableCreateCategoryComp(true)"
+        ></button>
+      </div>
+      <app-create-category *ngIf="createCategoryShow" (categorySuccessInfoEvent)="fetchAllCategories()"></app-create-category>
+      <div class="card" style="margin-bottom: 0px">
+        <div class="card-body"></div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<app-create-category
+  [toggleCreateCategory]="toggleCreateCategory"
+  (emitToReset)="toggleCreateCategory = !toggleCreateCategory"
+  (categorySuccessInfoEvent)="createNewCategory($event)"
+  (disbaleShowCreateCategory)="disableCreateCategoryComp($event)"
+></app-create-category>
